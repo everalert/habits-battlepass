@@ -1,46 +1,65 @@
-import styles from '../css/Home.module.css'
-
 export default function Scoreboard() {
 	 return (
-		<main className={styles.main}>
-		<h1 className={styles.title}>
-			Welcome to <a href="https://nextjs.org">Next.js!</a>
-		</h1>
-
-		<p className={styles.description}>
-			Get started by editing{' '}
-			<code className={styles.code}>pages/index.js</code>
-		</p>
-
-		<div className={styles.grid}>
-			<a href="https://nextjs.org/docs" className={styles.card}>
-				<h2>Documentation &rarr;</h2>
-				<p>Find in-depth information about Next.js features and API.</p>
-			</a>
-
-			<a href="https://nextjs.org/learn" className={styles.card}>
-				<h2>Learn &rarr;</h2>
-				<p>Learn about Next.js in an interactive course with quizzes!</p>
-			</a>
-
-			<a
-				href="https://github.com/vercel/next.js/tree/canary/examples"
-				className={styles.card}
-			>
-				<h2>Examples &rarr;</h2>
-				<p>Discover and deploy boilerplate example Next.js projects.</p>
-			</a>
-
-			<a
-				href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-				className={styles.card}
-			>
-				<h2>Deploy &rarr;</h2>
-				<p>
-					Instantly deploy your Next.js site to a public URL with Vercel.
-				</p>
-			</a>
-		</div>
-	</main>
+		<main>
+			<div className="season">
+				<div className="seasonIcon">
+					<div className="iconText">77</div>
+					<div className="iconImage">SEASON SVG ICON</div>
+					<div className="iconProgressBar">RADIAL PROGRESS BAR (OVERALL+PAR COLOR)</div>
+					<div className="iconSubProgressBar">RADIAL PROGRESS BAR LEVEL</div>
+				</div>
+				<h1>ALIGNMENT</h1>
+				<h2>55 DAYS REMAIN</h2>
+			</div>
+			<div className="goalContainer">
+				<div className="goal">
+					<h1><span className="goalStart">START VALUE</span> to <span className="goalEnd">GOAL VALUE</span></h1>
+					<h2>CATEGORY NAME</h2>
+					<div className="categoryIcon">
+						<div className="iconImage">CATEGORY SVG</div>
+						<div className="iconProgressBar">RADIAL PROGRESS BAR HERE</div>
+					</div>
+					<div className="lagMeasureGraph">GRAPH STUFF HERE</div>
+					<div className="stats">
+						<div className="statItem">
+							<div className="statItemAbs"><span className="statItemValue">500</span><span className="statItemUnit">XP</span></div>
+							<div className="statItemPar"><span className="statItemText">PAR</span><span className="statItemSign">XP</span><span className="statItemValue">500</span><span className="statItemUnit">XP</span></div>
+						</div>
+						<div className="statItem">
+							<div className="statItemAbs"><span className="statItemValue">500</span><span className="statItemUnit">XP</span></div>
+							<div className="statItemPar"><span className="statItemText">PAR</span><span className="statItemSign">XP</span><span className="statItemValue">500</span><span className="statItemUnit">XP</span></div>
+						</div>
+						<div className="statItem">
+							<div className="statItemFrac"><span className="statItemValue">5</span><span className="statItemUnit">/</span><span className="statItemUnit">12</span></div>
+							<div className="statItemAbs"><span className="statItemValue">1,000</span><span className="statItemUnit">XP</span></div>
+							<div className="statItemLabel"><span className="statItemText">DAILY</span></div>
+						</div>
+						<div className="statItem">
+							<div className="statItemFrac"><span className="statItemValue">5</span><span className="statItemUnit">/</span><span className="statItemUnit">12</span></div>
+							<div className="statItemAbs"><span className="statItemValue">1,000</span><span className="statItemUnit">XP</span></div>
+							<div className="statItemLabel"><span className="statItemText">WEEK 7</span></div>
+						</div>
+					</div>
+					<div className="challenges">
+						<div className="challengesDaily">
+							<h3>DAILY</h3>
+							<div className="task">
+								<div className="taskText">CHALLENGE TEXT</div>
+								<div className="taskProgressText">CHALLENGE PROGRESS</div>
+								<div className="taskProgressBar">PROGRESS BAR</div>
+							</div>
+						</div>
+						<div className="challengesWeekly">
+							<h3>WEEKLY</h3>
+							<div className="task">
+								<div className="taskText">CHALLENGE TEXT</div>
+								<div className="taskProgressText">CHALLENGE PROGRESS</div>
+								<div className="taskProgressBar">PROGRESS BAR</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
 	)
 }
