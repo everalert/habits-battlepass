@@ -9,8 +9,8 @@ export default function Scoreboard() {
 				<div className="seasonIcon">
 					<div className="iconText">77</div>
 					<div className="iconImage">SEASON SVG ICON</div>
-					<div className="iconProgressBar"><RadialBar/></div>
-					<div className="iconSubProgressBar">RADIAL PROGRESS BAR LEVEL</div>
+					<div className="iconProgressBar"><RadialBar size={308} value={85000} thickness={40} /></div>
+					<div className="iconSubProgressBar"><RadialBar size={256} value={900} max={1000} thickness={4} corner={0} delay={250} /></div>
 				</div>
 				<h1>ALIGNMENT</h1>
 				<h2>55 DAYS REMAIN</h2>
@@ -21,7 +21,7 @@ export default function Scoreboard() {
 					<h2>CATEGORY NAME</h2>
 					<div className="categoryIcon">
 						<div className="iconImage">CATEGORY SVG</div>
-						<div className="iconProgressBar">RADIAL PROGRESS BAR HERE</div>
+						<div className="iconProgressBar"><RadialBar size={128} value={15000} max={25000} thickness={8} corner={1} delay={500} /></div>
 					</div>
 					<div className="lagMeasureGraph">GRAPH STUFF HERE</div>
 					<div className="stats">
