@@ -1,35 +1,56 @@
-import { useD3 } from '../hooks/useD3'
+import React from "react";
+import { useD3 } from '../hooks/useD3';
 import * as d3 from 'd3';
 
-const data = {name:'xp',value:75000};
+export default function RadialBar(props) {
+	const data = {
+		name: 'XP',
+		value: props.value ? props.value : 50000,
+		maxValue: props.max ? props.max : 100000,
+		interval: props.ivl ? Math.max(props.ivl, 0) : 0
+	};
+	const size = props.size ? props.size : 192;
+	const arcWidth = props.thickness ? Math.min(props.thickness, size) : 64;
+	const delay = props.delay ? Math.max(props.delay, 0) : 0;
 
-export default function RadialBar() {
+	const arcCornerRadius = 2;
+
 	const ref = useD3(
 		(svg) => {
-			const maxValue = 100000;
-			const height = 192;
-			const width = 192;
-
 			const PI = Math.PI;
-			const arcWidth = 64;
-			const innerRadius = (height-arcWidth)/2;
-			const outerRadius = height/2;
+			const innerRadius = (size-arcWidth)/2;
+			const outerRadius = size/2;
 
 			let svg2 = svg.select('.arc-container')
-				.append('g')
-				.attr('transform', 'translate(' + width / 2 + ',' + height / 2 + ')');
+				.attr('transform', 'translate(' + size / 2 + ',' + size / 2 + ')')
+				.select('.arcs');
 
 			let scale = d3.scaleLinear()
-			.domain([0, maxValue])
-			.range([0, 2 * PI]);
+				.domain([0, data.interval>0 ? data.interval : data.maxValue])
+				.range([0, 2 * PI]);
 
 			let arcGen = d3.arc()
-			.innerRadius(innerRadius)
-			.outerRadius(outerRadius)
-			// .startAngle(0)
-			// .endAngle(scale(75000));
+				.startAngle(0)
+				.innerRadius(innerRadius)
+				.outerRadius(outerRadius)
+				.cornerRadius(arcCornerRadius);
 
-			let radialAxis = svg2.append('g')
+			let arcTween = (d) => {
+				return (t) => {
+					const angle = d3.interpolate(d.startAngle, d.endAngle)(t);
+					arcGen.endAngle(angle);
+					return arcGen(null);
+				}
+			}
+
+			let colTween = (d) => {
+				return (t) => {
+					const colour = d3.interpolate(127, data.value/data.maxValue*128+127)(t);
+					return `rgb(0,0,${colour})`;
+				}
+			}
+
+			let radialAxis = svg2
 				.attr('class', 'r axis')
 				.selectAll('g')
 				.data(data)
@@ -42,16 +63,17 @@ export default function RadialBar() {
 			let arcs = svg2.append('g')
 				.attr('class', 'data')
 				.selectAll('path')
-				.data([{startAngle:0, endAngle:-scale(data.value)}])
+				.data([{startAngle:0, endAngle:-scale(data.value^data.interval)}])
 				.enter().append('path')
 				.attr('class', 'arc')
-				.style('fill', "#0000FF")
-				.attr('d', arcGen)
+				.attr('fill', "#0000FF")
+				//.attr('d', arcGen)
 			
-			// arcs.transition()
-			// 	.delay((d, i) => i * 200)
-			// 	.duration(1000)
-			// 	.attrTween('d', arcTween);
+			arcs.transition()
+				.delay(delay)
+				.duration(1000)
+				.attrTween("fill", colTween)
+				.attrTween('d', arcTween);
 			
 			// arcs.on('mousemove', showTooltip)
 			// arcs.on('mouseout', hideTooltip)
@@ -63,10 +85,10 @@ export default function RadialBar() {
 		<svg ref={ref} style={{
 			height: 192,
 			width: 192,
-			marginRight: "0px",
-			marginLeft: "0px",
 		}}>
-			<g className='arc-container'/>
+			<g className='arc-container'>
+				<g className='arcs'/>
+			</g>
 		</svg>
 	  );
 }
