@@ -18,8 +18,8 @@ export default function RadialBar(props) {
 	const ref = useD3(
 		(svg) => {
 			const PI = Math.PI;
-			const innerRadius = (size-arcWidth)/2;
 			const outerRadius = size/2;
+			const innerRadius = outerRadius-arcWidth;
 
 			let svg2 = svg.select('.arc-container')
 				.attr('transform', 'translate(' + size / 2 + ',' + size / 2 + ')')
