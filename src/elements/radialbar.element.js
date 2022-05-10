@@ -13,7 +13,7 @@ export default function RadialBar(props) {
 	const arcWidth = props.thickness ? Math.min(props.thickness, size) : 64;
 	const delay = props.delay ? Math.max(props.delay, 0) : 0;
 
-	const arcCornerRadius = 2;
+	const arcCornerRadius = props.corner ? Math.max(props.corner, 0) : 2;
 
 	const ref = useD3(
 		(svg) => {
@@ -83,8 +83,8 @@ export default function RadialBar(props) {
 
 	  return (
 		<svg ref={ref} style={{
-			height: 192,
-			width: 192,
+			height: size,
+			width: size,
 		}}>
 			<g className='arc-container'>
 				<g className='arcs'/>
