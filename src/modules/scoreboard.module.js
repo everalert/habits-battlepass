@@ -1,11 +1,15 @@
+import '../elements/radialbar.element'
+import RadialBar from '../elements/radialbar.element'
+
 export default function Scoreboard() {
+
 	 return (
 		<main>
 			<div className="season">
 				<div className="seasonIcon">
 					<div className="iconText">77</div>
 					<div className="iconImage">SEASON SVG ICON</div>
-					<div className="iconProgressBar">RADIAL PROGRESS BAR (OVERALL+PAR COLOR)</div>
+					<div className="iconProgressBar"><RadialBar/></div>
 					<div className="iconSubProgressBar">RADIAL PROGRESS BAR LEVEL</div>
 				</div>
 				<h1>ALIGNMENT</h1>
