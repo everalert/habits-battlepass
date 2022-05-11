@@ -1,4 +1,4 @@
-import '../elements/radialbar.element'
+import LineChart from '../elements/linechart.element'
 import RadialBar from '../elements/radialbar.element'
 
 export default function Scoreboard() {
@@ -23,7 +23,7 @@ export default function Scoreboard() {
 						<div className="iconImage">CATEGORY SVG</div>
 						<div className="iconProgressBar"><RadialBar size={128} value={15000} max={25000} thickness={8} corner={1} delay={500} /></div>
 					</div>
-					<div className="lagMeasureGraph">GRAPH STUFF HERE</div>
+					<div className="lagMeasureGraph"><LineChart/></div>
 					<div className="stats">
 						<div className="statItem">
 							<div className="statItemAbs"><span className="statItemValue">500</span><span className="statItemUnit">XP</span></div>

@@ -34,80 +34,61 @@ const data = [
 	{year: 2017, efficiency: 39.4, sales: 6081000},
 ];
 
-export default function RadialBar() {
+export default function LineChart() {
 	const ref = useD3(
 		(svg) => {
-		  const height = 128;
-		  const width = 500;
-		  const margin = { top: 20, right: 30, bottom: 30, left: 40 };
+			const height = 128;
+			const width = 160;
+			const margin = { top: 8, right: 0, bottom: 8, left: 0 };
+		
+			const years = data.map(d => d.year)
+			const efficiency = data.map(d => d.efficiency)
+			const sales = data.map(d => d.sales)
+
+			const x = d3.scaleLinear()
+				.domain([d3.min(years),d3.max(years)])
+				.range([0, width]);
+		
+			const y1 = d3.scaleLinear()
+				.domain([d3.min(sales),d3.max(sales)])
+				.range([height - margin.bottom, margin.top]);
 	
-		  const x = d3
-			.scaleBand()
-			.domain(data.map((d) => d.year))
-			.rangeRound([margin.left, width - margin.right])
-			.padding(0.1);
-	
-		  const y1 = d3
-			.scaleLinear()
-			.domain([0, d3.max(data, (d) => d.sales)])
-			.rangeRound([height - margin.bottom, margin.top]);
-	
-		  const xAxis = (g) =>
-			g.attr("transform", `translate(0,${height - margin.bottom})`).call(
-			  d3
-				.axisBottom(x)
-				.tickValues(
-				  d3
-					.ticks(...d3.extent(x.domain()), width / 40)
-					.filter((v) => x(v) !== undefined)
-				)
-				.tickSizeOuter(0)
-			);
-	
-		  const y1Axis = (g) =>
-			g
-			  .attr("transform", `translate(${margin.left},0)`)
-			  .style("color", "steelblue")
-			  .call(d3.axisLeft(y1).ticks(null, "s"))
-			  .call((g) => g.select(".domain").remove())
-			  .call((g) =>
-				g
-				  .append("text")
-				  .attr("x", -margin.left)
-				  .attr("y", 10)
-				  .attr("fill", "currentColor")
-				  .attr("text-anchor", "start")
-				  .text(data.y1)
-			  );
-	
-		  svg.select(".x-axis").call(xAxis);
-		  svg.select(".y-axis").call(y1Axis);
-	
-		  svg
-			.select(".plot-area")
-			.attr("fill", "steelblue")
-			.selectAll(".bar")
-			.data(data)
-			.join("rect")
-			.attr("class", "bar")
-			.attr("x", (d) => x(d.year))
-			.attr("width", x.bandwidth())
-			.attr("y", (d) => y1(d.sales))
-			.attr("height", (d) => y1(0) - y1(d.sales));
+			const y2 = d3.scaleLinear()
+				.domain([d3.min(efficiency),d3.max(efficiency)])
+				.range([height - margin.bottom, margin.top]);
+		
+			const lineGen1 = d3.line()
+				.x((d) => x(d.year))
+				.y((d) => y1(d.sales));
+		
+			const lineGen2 = d3.line()
+				.x((d) => x(d.year))
+				.y((d) => y2(d.efficiency));
+		
+			svg
+				.select(".plot-area")
+				.append('path')
+				.attr('d',lineGen1(data))
+				.style('fill','none')
+				.style('stroke','#888')
+			svg
+				.select(".plot-area")
+				.append('path')
+				.attr('d',lineGen2(data))
+				.style('fill','none')
+				.style('stroke','#AAA')
 		},
 		[data.length]
-	  );
+	);
 
-	  return (
+	return (
 		<svg ref={ref} style={{
 			height: 128,
-			width: "100%",
-			marginRight: "0px",
-			marginLeft: "0px",
+			width: 160,
+			margin: "0px",
+			padding: "0px",
 		}}>
 			<g className="plot-area" />
-			<g className="x-axis" />
-			<g className="y-axis" />
 		</svg>
-	  );
+	);
 }
