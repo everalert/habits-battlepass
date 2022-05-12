@@ -1,10 +1,11 @@
 import LineChart from '../elements/LineChart.element'
 import RadialBar from '../elements/RadialBar.element'
+import ItemValue from '../elements/ItemValue.element'
 
 export default function GoalPanel() {
 	 return (
 		<div className="goal">
-			<h1><span className="goalStart">START VALUE</span> to <span className="goalEnd">GOAL VALUE</span></h1>
+			<h1><ItemValue value={10000} unit='語'/> to <ItemValue value={15000} unit='語'/></h1>
 			<h2>CATEGORY NAME</h2>
 			<div className="categoryIcon">
 				<div className="iconImage">CATEGORY SVG</div>
@@ -13,21 +14,21 @@ export default function GoalPanel() {
 			<div className="lagMeasureGraph"><LineChart/></div>
 			<div className="stats">
 				<div className="statItem">
-					<div className="statItemAbs"><span className="statItemValue">500</span><span className="statItemUnit">XP</span></div>
+					<ItemValue value={500} unit='XP'/>
 					<div className="statItemPar"><span className="statItemText">PAR</span><span className="statItemSign">XP</span><span className="statItemValue">500</span><span className="statItemUnit">XP</span></div>
 				</div>
 				<div className="statItem">
-					<div className="statItemAbs"><span className="statItemValue">500</span><span className="statItemUnit">XP</span></div>
+					<ItemValue value={500} unit='XP'/>
 					<div className="statItemPar"><span className="statItemText">PAR</span><span className="statItemSign">XP</span><span className="statItemValue">500</span><span className="statItemUnit">XP</span></div>
 				</div>
 				<div className="statItem">
 					<div className="statItemFrac"><span className="statItemValue">5</span><span className="statItemUnit">/</span><span className="statItemUnit">12</span></div>
-					<div className="statItemAbs"><span className="statItemValue">1,000</span><span className="statItemUnit">XP</span></div>
+					<ItemValue value={1000} unit='XP'/>
 					<div className="statItemLabel"><span className="statItemText">DAILY</span></div>
 				</div>
 				<div className="statItem">
 					<div className="statItemFrac"><span className="statItemValue">5</span><span className="statItemUnit">/</span><span className="statItemUnit">12</span></div>
-					<div className="statItemAbs"><span className="statItemValue">1,000</span><span className="statItemUnit">XP</span></div>
+					<ItemValue value={1000} unit='XP'/>
 					<div className="statItemLabel"><span className="statItemText">WEEK 7</span></div>
 				</div>
 			</div>
