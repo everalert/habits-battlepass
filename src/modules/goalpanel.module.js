@@ -2,6 +2,7 @@ import LineChart from '../elements/LineChart.element'
 import RadialBar from '../elements/RadialBar.element'
 import ItemValue from '../elements/ItemValue.element'
 import ItemDelta from '../elements/ItemDelta.element'
+import StatPar from './stat/StatPar.module'
 
 export default function GoalPanel() {
 	 return (
@@ -14,14 +15,8 @@ export default function GoalPanel() {
 			</div>
 			<div className="lagMeasureGraph"><LineChart/></div>
 			<div className="stats">
-				<div className="statItem">
-					<ItemValue value={500} unit='XP'/>
-					<ItemDelta label='PAR' value={500} unit='XP' />
-				</div>
-				<div className="statItem">
-					<ItemValue value={500} unit='XP'/>
-					<ItemDelta label='PAR' value={500} unit='XP' />
-				</div>
+				<StatPar abs={500} rel={500} unit='XP' />
+				<StatPar abs={500} rel={500} unit='語' />
 				<div className="statItem">
 					<div className="statItemFrac"><span className="statItemValue">5</span><span className="statItemUnit">/</span><span className="statItemUnit">12</span></div>
 					<ItemValue value={1000} unit='XP'/>
