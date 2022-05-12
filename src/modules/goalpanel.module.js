@@ -3,7 +3,7 @@ import RadialBar from '../elements/RadialBar.element'
 import ItemValue from '../elements/item/ItemValue.element'
 import StatPar from './stat/StatPar.module'
 import StatTaskProgress from './stat/StatTaskProgress.module'
-import TaskChallenge from './task/TaskChallenge.module'
+import TaskCollection from './task/TaskCollection.module'
 
 export default function GoalPanel() {
 	 return (
@@ -22,14 +22,8 @@ export default function GoalPanel() {
 				<StatTaskProgress over={5} under={12} value={1000} unit='XP' label='WEEK 7' />
 			</div>
 			<div className="challenges">
-				<div className="challengesDaily">
-					<h3>DAILY</h3>
-					<TaskChallenge label='CHALLENGE' over={15} under={50} />
-				</div>
-				<div className="challengesWeekly">
-					<h3>WEEKLY</h3>
-					<TaskChallenge label='CHALLENGE' over={15} under={50} />
-				</div>
+				<TaskCollection label='DAILY' />
+				<TaskCollection label='WEEKLY' />
 			</div>
 		</div>
 	)
