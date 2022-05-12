@@ -1,5 +1,5 @@
-import ItemValue from '../../elements/ItemValue.element'
-import ItemDelta from '../../elements/ItemDelta.element'
+import ItemValue from '../../elements/item/ItemValue.element'
+import ItemDelta from '../../elements/item/ItemDelta.element'
 
 export default function StatPar(props) {
 	 return (

@@ -1,7 +1,7 @@
 import LineChart from '../elements/LineChart.element'
 import RadialBar from '../elements/RadialBar.element'
-import ItemValue from '../elements/ItemValue.element'
-import ItemDelta from '../elements/ItemDelta.element'
+import ItemValue from '../elements/item/ItemValue.element'
+import ItemDelta from '../elements/item/ItemDelta.element'
 import StatPar from './stat/StatPar.module'
 
 export default function GoalPanel() {
