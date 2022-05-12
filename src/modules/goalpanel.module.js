@@ -1,6 +1,7 @@
 import LineChart from '../elements/LineChart.element'
 import RadialBar from '../elements/RadialBar.element'
 import ItemValue from '../elements/ItemValue.element'
+import ItemDelta from '../elements/ItemDelta.element'
 
 export default function GoalPanel() {
 	 return (
@@ -15,11 +16,11 @@ export default function GoalPanel() {
 			<div className="stats">
 				<div className="statItem">
 					<ItemValue value={500} unit='XP'/>
-					<div className="statItemPar"><span className="statItemText">PAR</span><span className="statItemSign">XP</span><span className="statItemValue">500</span><span className="statItemUnit">XP</span></div>
+					<ItemDelta label='PAR' value={500} unit='XP' />
 				</div>
 				<div className="statItem">
 					<ItemValue value={500} unit='XP'/>
-					<div className="statItemPar"><span className="statItemText">PAR</span><span className="statItemSign">XP</span><span className="statItemValue">500</span><span className="statItemUnit">XP</span></div>
+					<ItemDelta label='PAR' value={500} unit='XP' />
 				</div>
 				<div className="statItem">
 					<div className="statItemFrac"><span className="statItemValue">5</span><span className="statItemUnit">/</span><span className="statItemUnit">12</span></div>
