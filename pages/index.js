@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import styles from '../src/css/Home.module.css'
-import Sidebar from '../src/modules/sidebar.module'
-import Scoreboard from '../src/modules/scoreboard.module'
+import Sidebar from '../src/modules/Sidebar.module'
+import Scoreboard from '../src/modules/Scoreboard.module'
 
 export default function Home() {
 	return (

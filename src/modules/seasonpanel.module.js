@@ -1,4 +1,4 @@
-import RadialBar from '../elements/radialbar.element'
+import RadialBar from '../elements/RadialBar.element'
 
 export default function SeasonPanel() {
 	 return (

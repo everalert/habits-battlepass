@@ -1,5 +1,5 @@
-import LineChart from '../elements/linechart.element'
-import RadialBar from '../elements/radialbar.element'
+import LineChart from '../elements/LineChart.element'
+import RadialBar from '../elements/RadialBar.element'
 
 export default function GoalPanel() {
 	 return (

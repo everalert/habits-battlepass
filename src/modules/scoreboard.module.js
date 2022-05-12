@@ -1,5 +1,5 @@
-import GoalPanel from './goalpanel.module'
-import SeasonPanel from './seasonpanel.module'
+import GoalPanel from './GoalPanel.module'
+import SeasonPanel from './SeasonPanel.module'
 
 export default function Scoreboard() {
 	 return (
