@@ -13,30 +13,22 @@ export default function LineChart() {
 			const height = 128;
 			const width = 160;
 			const margin = { top: 8, right: 0, bottom: 8, left: 0 };
-		
-			const date = data.map(d => d.date)
-			const par = data.map(d => d.par)
-			const value = data.map(d => d.value)
 
 			const x = d3.scaleLinear()
-				.domain([d3.min(date),d3.max(date)])
+				.domain(d3.extent(data.map(d => d.date)))
 				.range([0, width]);
 		
-			const y1 = d3.scaleLinear()
-				.domain([d3.min(value),d3.max(value)])
-				.range([height - margin.bottom, margin.top]);
-	
-			const y2 = d3.scaleLinear()
-				.domain([d3.min(par),d3.max(par)])
+			const y = d3.scaleLinear()
+				.domain(d3.extent(data.map(d => d.par)))
 				.range([height - margin.bottom, margin.top]);
 		
 			const lineGen1 = d3.line()
 				.x((d) => x(d.date))
-				.y((d) => y1(d.value));
+				.y((d) => y(d.value));
 		
 			const lineGen2 = d3.line()
 				.x((d) => x(d.date))
-				.y((d) => y2(d.par));
+				.y((d) => y(d.par));
 		
 			svg
 				.select(".plot-prediction")
