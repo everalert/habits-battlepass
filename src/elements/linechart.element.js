@@ -47,7 +47,7 @@ export default function LineChart() {
 				.select(".plot-value")
 				.attr('d',lineGen1(data))
 				.style('fill','none')
-				.style('stroke','#888')
+				.style('stroke','#8F8')
 		},
 		[data.length]
 	);
