@@ -1,7 +1,7 @@
 import LineChart from '../elements/LineChart.element'
 import RadialBar from '../elements/RadialBar.element'
 import ItemValue from '../elements/item/ItemValue.element'
-import ItemDelta from '../elements/item/ItemDelta.element'
+import ItemFrac from '../elements/item/ItemFrac.element'
 import StatPar from './stat/StatPar.module'
 
 export default function GoalPanel() {
@@ -18,12 +18,12 @@ export default function GoalPanel() {
 				<StatPar abs={500} rel={500} unit='XP' />
 				<StatPar abs={500} rel={500} unit='語' />
 				<div className="statItem">
-					<div className="statItemFrac"><span className="statItemValue">5</span><span className="statItemUnit">/</span><span className="statItemUnit">12</span></div>
+					<ItemFrac over={5} under={12} />
 					<ItemValue value={1000} unit='XP'/>
 					<div className="statItemLabel"><span className="statItemText">DAILY</span></div>
 				</div>
 				<div className="statItem">
-					<div className="statItemFrac"><span className="statItemValue">5</span><span className="statItemUnit">/</span><span className="statItemUnit">12</span></div>
+					<ItemFrac over={5} under={12} />
 					<ItemValue value={1000} unit='XP'/>
 					<div className="statItemLabel"><span className="statItemText">WEEK 7</span></div>
 				</div>
