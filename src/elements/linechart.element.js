@@ -12,7 +12,7 @@ export default function LineChart() {
 		(svg) => {
 			const height = 128;
 			const width = 160;
-			const margin = { top: 8, right: 0, bottom: 8, left: 0 };
+			const margin = { top: 16, right: 0, bottom: 16, left: 0 };
 
 			const x = d3.scaleLinear()
 				.domain(d3.extent(data.map(d => d.date)))
