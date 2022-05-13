@@ -1,11 +1,16 @@
-import ItemFrac from "../../elements/item/ItemFrac.element";
-
 export default function TaskChallenge(props) {
 	return (
-		<div className="task">
-			<div className="taskText">{props.label}</div>
-			<div className="taskProgressText"><ItemFrac over={props.over} under={props.under} /></div>
-			<div className="taskProgressBar">PROGRESS BAR</div>
+		<div className="clear-both flex flex-row-reverse gap-x-2">
+			<div className="text-lg font-bold text-center tracking-tighter block w-16 bg-gray-500">{props.reward}</div>
+			<div className="flex-grow">
+				<span className="tracking-tighter float-left">{props.label}</span>
+				<span className="text-sm float-right">
+					<span className="text-base font-bold">{props.over}</span>
+					<span>/</span>
+					<span>{props.under}</span>
+				</span>
+				<span className="clear-left block bg-gray-800 w-full h-2"></span>
+			</div>
 		</div>
 	);
 }
