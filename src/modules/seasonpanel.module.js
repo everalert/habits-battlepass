@@ -2,7 +2,7 @@ import RadialBar from '../elements/RadialBar.element'
 
 export default function SeasonPanel() {
 	 return (
-			<div className="my-12 text-center">
+			<div className="w-96 my-12 text-center">
 				<div className="relative w-72 h-72 mx-auto mb-6">
 					<div className="iconProgressBar">
 						<RadialBar size={288} value={85000} thickness={36} />
