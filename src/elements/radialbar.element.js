@@ -45,8 +45,8 @@ export default function RadialBar(props) {
 
 			let colTween = (d) => {
 				return (t) => {
-					const colour = d3.interpolate(127, data.value/data.maxValue*128+127)(t);
-					return `rgb(0,0,${colour})`;
+					const colour = d3.interpolate(64, data.value/data.maxValue*63+64)(t);
+					return `rgb(${colour},${colour},${colour})`;
 				}
 			}
 
@@ -66,7 +66,7 @@ export default function RadialBar(props) {
 				.data([{startAngle:0, endAngle:-scale(data.value^data.interval)}])
 				.enter().append('path')
 				.attr('class', 'arc')
-				.attr('fill', "#0000FF")
+				.attr('fill', "#000")
 				//.attr('d', arcGen)
 			
 			arcs.transition()
