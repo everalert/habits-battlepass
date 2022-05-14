@@ -1,7 +1,7 @@
 export default function TaskChallenge(props) {
 	return (
 		<div className="clear-both flex flex-row-reverse gap-x-2">
-			<div className="text-lg font-bold text-center tracking-tighter block w-16 bg-gray-500">{props.reward}</div>
+			<div className="text-lg font-bold text-center tracking-tighter block w-16 h-8 bg-gray-500 shrink-0">{props.reward}</div>
 			<div className="flex-grow">
 				<span className="tracking-tighter float-left">{props.label}</span>
 				<span className="text-sm float-right">
