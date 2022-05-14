@@ -8,7 +8,7 @@ export default function StatTaskProgress(props) {
 				<span className='text-lg'>{props.value}</span>
 				<span className='text-base ml-1'>{props.unit}</span>
 			</span>
-			<span className="block text-lg">{props.label}</span>
+			<span className="block text-lg italic -mt-1.5">{props.label}</span>
 		</div>
 	);
 }
