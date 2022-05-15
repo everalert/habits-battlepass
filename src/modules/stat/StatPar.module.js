@@ -1,4 +1,5 @@
 import ItemValue from '../../elements/item/ItemValue.element'
+import ItemNumber from '../../elements/item/ItemNumber.element';
 
 export default function StatPar(props) {
 	 return (
@@ -7,7 +8,7 @@ export default function StatPar(props) {
 			<div className='text-base -skew-x-12 -mt-1.5'>
 				<span className="text-sm">PAR</span>
 				<span className="ml-0.5">{props.rel>=0?'+':'-'}</span>
-				<span className="text-lg">{props.rel}</span>
+				<span className="text-lg"><ItemNumber num={Math.abs(props.rel)} /></span>
 				<span className="ml-0.5">{props.unit}</span>
 			</div>
 		</div>

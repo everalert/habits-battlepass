@@ -3,16 +3,17 @@ import RadialBar from '../elements/RadialBar.element'
 import StatPar from './stat/StatPar.module'
 import StatTaskProgress from './stat/StatTaskProgress.module'
 import TaskCollection from './task/TaskCollection.module'
+import ItemNumber from '../elements/item/ItemNumber.element'
 
 export default function GoalPanel() {
 	 return (
 		<div>
 			<div className='text-center mb-8'>
 				<h1 className="text-xl font-bold uppercase">
-					<span>10,000</span>
+					<span><ItemNumber num={10000} /></span>
 					<span className='text-lg ml-0.5'>語</span>
 					<span className='text-base mx-1'>to</span>
-					<span>15,000</span>
+					<span><ItemNumber num={15000} /></span>
 					<span className='text-lg ml-0.5'>語</span>
 				</h1>
 				<h2 className='text-sm -my-1.5 uppercase'>Japanese</h2>
