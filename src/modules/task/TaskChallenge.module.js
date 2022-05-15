@@ -10,9 +10,9 @@ export default function TaskChallenge(props) {
 					<span>/</span>
 					<span>{props.under}</span>
 				</span>
-				<div className="bg-zinc-900 w-full mt-[1.625rem] h-1.5 -skew-x-[24deg] overflow-hidden relative">
+				<div className="bg-zinc-900 w-full mt-[1.625rem] h-1.5 rounded -skew-x-[24deg] overflow-hidden relative">
 					<div
-						className='bg-zinc-500 w-full h-full absolute'
+						className='bg-zinc-500 w-full h-full absolute rounded-sm'
 						style={{left:`${-100+progress}%`}}></div>
 				</div>
 			</div>
