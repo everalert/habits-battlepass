@@ -24,8 +24,8 @@ const initialState = {
 		levelXP: 10000,
 		color1: '#000000',
 		color2: '#FFFFFF',
-		currentXP: 0,
-		currentLevel: 0
+		currentXP: 11500,
+		currentLevel: 10
 	}]
 }
 
