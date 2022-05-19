@@ -51,8 +51,8 @@ export default function GoalPanel(props) {
 				<StatTaskProgress over={0} under={goalWeeklyTasks.length} value={1000} unit='XP' label={`WEEK ${GetWeekOfSeason(season).no}`} />
 			</div>
 			<div className="flex flex-col gap-6">
-				<TaskCollection goal={goalId} period='daily' />
-				<TaskCollection goal={goalId} period='weekly' />
+				<TaskCollection goalId={goal.id} period='daily' />
+				<TaskCollection goalId={goal.id} period='weekly' />
 			</div>
 		</div>
 	)
