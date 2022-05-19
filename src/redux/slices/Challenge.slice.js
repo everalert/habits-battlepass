@@ -5,7 +5,7 @@ const initialState = {
 		{
 			id: 0,
 			goalId: 0,
-			taskLabel: 'drink {0} of water',
+			taskLabel: 'drink {UNIT} of water',
 			taskActivityId: 8,
 			taskAmount: 3000,
 			taskVariation: '',
@@ -16,7 +16,7 @@ const initialState = {
 		{
 			id: 1,
 			goalId: 0,
-			taskLabel: '{0} gym sessions',
+			taskLabel: '{UNIT} gym sessions',
 			taskActivityId: 7,
 			taskAmount: 3,
 			taskVariation: '',
@@ -28,7 +28,7 @@ const initialState = {
 		{
 			id: 2,
 			goalId: 1,
-			taskLabel: 'Add {0} Japanese Anki Cards',
+			taskLabel: 'Add {UNIT} Japanese Anki Cards',
 			taskActivityId: 5,
 			taskAmount: 10,
 			taskVariation: '',
@@ -39,7 +39,7 @@ const initialState = {
 		{
 			id: 3,
 			goalId: 1,
-			taskLabel: 'Watch {0} of anime',
+			taskLabel: 'Watch {UNIT} of anime',
 			taskActivityId: 9,
 			taskAmount: 7,
 			taskVariation: 'anime',
@@ -51,7 +51,7 @@ const initialState = {
 		{
 			id: 4,
 			goalId: 2,
-			taskLabel: '{0} GIT Commits',
+			taskLabel: '{UNIT} GIT Commits',
 			taskActivityId: 10,
 			taskAmount: 3,
 			taskVariation: '',
@@ -62,7 +62,7 @@ const initialState = {
 		{
 			id: 5,
 			goalId: 2,
-			taskLabel: '{0} working on projects',
+			taskLabel: '{UNIT} working on projects',
 			taskActivityId: 3,
 			taskAmount: 50400,
 			taskVariation: '',
@@ -74,7 +74,7 @@ const initialState = {
 		{
 			id: 6,
 			goalId: 3,
-			taskLabel: '{0} of practice',
+			taskLabel: '{UNIT} of SM64 practice',
 			taskActivityId: 1,
 			taskAmount: 7200,
 			taskVariation: '',
@@ -85,7 +85,7 @@ const initialState = {
 		{
 			id: 7,
 			goalId: 3,
-			taskLabel: '{0} of SM64 run attempts',
+			taskLabel: '{UNIT} of SM64 run attempts',
 			taskActivityId: 11,
 			taskAmount: 14400,
 			taskVariation: '',
