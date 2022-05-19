@@ -1,40 +1,35 @@
 import LineChart from '../elements/LineChart.element'
 import RadialBar from '../elements/RadialBar.element'
+import GoalPanelHeader from '../elements/goalPanel/GoalPanelHeader.element'
 import StatPar from './stat/StatPar.module'
 import StatTaskProgress from './stat/StatTaskProgress.module'
 import TaskCollection from './task/TaskCollection.module'
-import ItemNumber from '../elements/item/ItemNumber.element'
 import { useSelector } from 'react-redux'
-import { GetActivityUnit } from '../redux/helpers/Activity.helpers'
+import { GetActivityById, GetActivityUnit } from '../redux/helpers/Activity.helpers'
 import { GetDayOfSeason, GetWeekOfSeason } from '../redux/helpers/Season.helper'
-import { GetGoalProjectedXpAtTime, GetGoalSuccessXp } from '../redux/helpers/Goal.helper'
+import { GetGoalById, GetGoalProjectedXpAtTime, GetGoalSuccessXp } from '../redux/helpers/Goal.helper'
 import { GetCurrentUnixTimestamp } from '../helpers/Math.helper'
+import { GetAllDailyChallengesForGoal, GetAllWeeklyChallengesForGoal } from '../redux/helpers/Challenge.helper'
 
 export default function GoalPanel(props) {
 	const season = useSelector((state) => state.season.seasons.find(s => s.id === state.season.active));
 	const timestamp = GetCurrentUnixTimestamp()
 	
 	const goalId = props.goal && props.goal >= 0 ? props.goal : 0;
-	const goal = useSelector((state) => state.goal.goals.find(g => g.id === goalId))
-	const goalLagActivity = useSelector((state) => state.activity.activities.find(a => a.id === goal.goalLagActivityId))
+	const goal = GetGoalById(goalId)
+	const goalLagActivity = GetActivityById(goal.goalLagActivityId)
 	const goalLagUnit = GetActivityUnit(goalLagActivity)
-	const goalLeadActivity = useSelector((state) => state.activity.activities.find(a => a.id === goal.goalLeadActivityId))
+	//const goalLeadActivity = GetActivityById(goal.goalLeadActivityId)
 
 	const goalSuccessXp = GetGoalSuccessXp(goal)
 	const goalProjectedXp = Math.round(GetGoalProjectedXpAtTime(goal, timestamp))
 	const goalProjectedXpDelta = goal.currentXP-goalProjectedXp
+
+	const goalDailyTasks = GetAllDailyChallengesForGoal(goalId)
+	const goalWeeklyTasks = GetAllWeeklyChallengesForGoal(goalId)
 	return (
 		<div>
-			<div className='text-center mb-8'>
-				<h1 className="text-xl font-bold uppercase">
-					<span><ItemNumber num={goal.goalLagStartValue} /></span>
-					<span className='text-lg ml-0.5'>{goalLagUnit}</span>
-					<span className='text-base mx-1'>to</span>
-					<span><ItemNumber num={goal.goalLagEndValue} /></span>
-					<span className='text-lg ml-0.5'>{goalLagUnit}</span>
-				</h1>
-				<h2 className='text-sm -my-1.5 uppercase'>{goalLagActivity.label}</h2>
-			</div>
+			<GoalPanelHeader goal={goal} lagActivity={goalLagActivity} />
 			<div className='flex gap-4 justify-center'>
 				<div className='relative'>
 					<svg xmlns="http://www.w3.org/2000/svg" class="absolute h-32 w-32 left-0 top-0" viewBox="0 0 20 20" fill="currentColor">
@@ -52,12 +47,12 @@ export default function GoalPanel(props) {
 			<div className="grid grid-cols-2 gap-y-4 px-4 py-8">
 				<StatPar abs={goal.currentXP} rel={goalProjectedXpDelta} unit='XP' />
 				<StatPar abs={500} rel={500} unit={goalLagUnit} />
-				<StatTaskProgress over={5} under={12} value={1000} unit='XP' label={`DAY ${GetDayOfSeason(season).no}`} />
-				<StatTaskProgress over={5} under={12} value={1000} unit='XP' label={`WEEK ${GetWeekOfSeason(season).no}`} />
+				<StatTaskProgress over={0} under={goalDailyTasks.length} value={1000} unit='XP' label={`DAY ${GetDayOfSeason(season).no}`} />
+				<StatTaskProgress over={0} under={goalWeeklyTasks.length} value={1000} unit='XP' label={`WEEK ${GetWeekOfSeason(season).no}`} />
 			</div>
 			<div className="flex flex-col gap-6">
-				<TaskCollection label='DAILY' />
-				<TaskCollection label='WEEKLY' />
+				<TaskCollection goal={goalId} period='daily' />
+				<TaskCollection goal={goalId} period='weekly' />
 			</div>
 		</div>
 	)

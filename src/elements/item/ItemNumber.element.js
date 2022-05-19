@@ -1,7 +1,7 @@
 // TODO: accept props for decimal places
 
-export default function ItemNumber(props) {
+export default function ItemNumber({num}) {
 	return (
-		<>{props.num.toLocaleString(undefined)}</>
+		<>{typeof num === 'number' ? num.toLocaleString(undefined) : num}</>
 	)
 }

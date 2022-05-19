@@ -1,6 +1,10 @@
 import { useSelector } from "react-redux";
 import { GetSeasonProgressRatioAtTime, GetSeasonSuccessXp } from "./Season.helper";
 
+export function GetGoalById(id) {
+	return useSelector((state) => state.goal.goals.find(g => g.id === id))
+}
+
 export function GetGoalProjectedResultAtTime(goal, unixTimestamp) {
 	const season = useSelector((state) => state.season.seasons.find(s => s.id === goal.seasonId))
 	const ratio = GetSeasonProgressRatioAtTime(season, unixTimestamp)
