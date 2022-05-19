@@ -45,7 +45,7 @@ const initialState = {
 		{
 			id: 5,
 			label: 'Japanese Cards Added to Anki',
-			type: 'time', 
+			type: 'counter', 
 			unit: '',
 			isReportingIncremental: true,
 			variations: 'kanji,vocab,sentence' 
