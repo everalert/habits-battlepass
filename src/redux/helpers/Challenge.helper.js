@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { SecondsToHMMSS } from "../../helpers/Math.helper";
 import { FormatActivityValue, GetActivityById, GetActivityUnit } from "./Activity.helpers";
+import { GetLogEndValueForPeriod } from "./Log.helper";
 
 export function GetAllChallengesForGoal(goalId) {
 	return useSelector((state) => state.challenge.challenges.filter(c => c.goalId === goalId))
@@ -27,4 +28,15 @@ export function FormatChallengeLabel(challenge, timeFunc = SecondsToHMMSS, timeU
 	newLabel = taskLabel.replace('{UNIT}', `${activityValue.value} ${activityUnit}`);
 	newLabel = newLabel.replace('{ACTIVITY}', `${activity.label}`);
 	return newLabel;
+}
+
+export function GetChallengeProgressForPeriod(challenge, periodStart, periodEnd) {
+	let done = false;
+	let xp = 0;
+	const logged = GetLogEndValueForPeriod(challenge.taskActivityId, periodStart, periodEnd);
+	if (logged >= challenge.taskAmount) {
+		xp = challenge.taskXP;
+		done = true;
+	}
+	return { done: done, xp: xp };
 }

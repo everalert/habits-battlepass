@@ -1,4 +1,9 @@
+import { useSelector } from "react-redux"
 import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper"
+
+export function GetSeasonById(id) {
+	return useSelector((state) => state.season.seasons.find(s => s.id === id))
+}
 
 export function GetPeriodOfSeason(season, periodInSeconds) {
 	const timeNow = GetCurrentUnixTimestamp()

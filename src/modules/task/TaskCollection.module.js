@@ -1,24 +1,32 @@
 import TaskChallenge from "./TaskChallenge.module";
-import { FormatActivityValue, GetActivityById, GetActivityUnit } from "../../redux/helpers/Activity.helpers";
-import { FormatChallengeLabel, GetAllChallengesForGoalOfPeriod } from "../../redux/helpers/Challenge.helper";
+import { FormatActivityValue, GetActivityById } from "../../redux/helpers/Activity.helpers";
+import { FormatChallengeLabel, GetAllChallengesForGoalOfPeriod, GetChallengeProgressForPeriod } from "../../redux/helpers/Challenge.helper";
 import { SecondsToMinutes } from "../../helpers/Math.helper";
+import { GetDayOfSeason, GetSeasonById, GetWeekOfSeason } from "../../redux/helpers/Season.helper";
+import { GetGoalById } from "../../redux/helpers/Goal.helper";
+import { GetLogEndValueForPeriod } from "../../redux/helpers/Log.helper";
 
 export default function TaskCollection({goalId, period}) {
-	const tasks = GetAllChallengesForGoalOfPeriod(goalId, period)
+	const goal = GetGoalById(goalId);
+	const tasks = GetAllChallengesForGoalOfPeriod(goal.id, period);
+	const season = GetSeasonById(goal.seasonId);
+	const { start, end } = period === 'daily' ? GetDayOfSeason(season) : GetWeekOfSeason(season);
 	const timeFunc = s => Math.floor(SecondsToMinutes(s))
-	for (let t in tasks) {
-		let activity = GetActivityById(tasks[t].taskActivityId)
-		let formattedTarget = FormatActivityValue(activity, tasks[t].taskAmount, timeFunc)
-		let formattedProgress = FormatActivityValue(activity, 0, timeFunc)
-		let completionRate = 0/tasks[t].taskAmount*100
-		let formattedLabel = FormatChallengeLabel(tasks[t], timeFunc, 'min')
-		tasks[t] = Object.assign({
+	tasks.forEach((t,i) => {
+		let progress = GetLogEndValueForPeriod(t.taskActivityId, start, end);
+		let activity = GetActivityById(t.taskActivityId);
+		let formattedTarget = FormatActivityValue(activity, t.taskAmount, timeFunc);
+		let formattedProgress = FormatActivityValue(activity, progress, timeFunc);
+		let completionRate = Math.min(progress,t.taskAmount)/t.taskAmount*100;
+		let formattedLabel = FormatChallengeLabel(t, timeFunc, 'min');
+		tasks[i] = Object.assign({
 			'formattedTarget':formattedTarget,
 			'formattedProgress':formattedProgress,
 			'completionRate':completionRate,
 			'formattedLabel': formattedLabel
-		},tasks[t])
-	}
+		}, t);
+	});
+
 	return (
 		<div className="w-[19rem] mx-auto flex flex-col gap-2">
 			{tasks.map(t => (

@@ -7,7 +7,7 @@ import TaskCollection from './task/TaskCollection.module'
 import { useSelector } from 'react-redux'
 import { FormatActivityValue, GetActivityById, GetActivityUnitPrecision } from '../redux/helpers/Activity.helpers'
 import { GetDayOfSeason, GetWeekOfSeason } from '../redux/helpers/Season.helper'
-import { GetGoalById, GetGoalProjectedResultAtTime, GetGoalProjectedXpAtTime, GetGoalSuccessXp } from '../redux/helpers/Goal.helper'
+import { GetGoalById, GetGoalProgressForPeriod, GetGoalProjectedResultAtTime, GetGoalProjectedXpAtTime, GetGoalSuccessXp } from '../redux/helpers/Goal.helper'
 import { GetCurrentUnixTimestamp, RoundN } from '../helpers/Math.helper'
 import { GetAllDailyChallengesForGoal, GetAllWeeklyChallengesForGoal } from '../redux/helpers/Challenge.helper'
 import { GetLogEndValueForPeriod } from '../redux/helpers/Log.helper'
@@ -23,6 +23,8 @@ export default function GoalPanel(props) {
 	const weekOfSeason = GetWeekOfSeason(season);
 	const goalDailyTasks = GetAllDailyChallengesForGoal(goalId);
 	const goalWeeklyTasks = GetAllWeeklyChallengesForGoal(goalId);
+	const goalDailyProgress = GetGoalProgressForPeriod(goal, 'daily');
+	const goalWeeklyProgress = GetGoalProgressForPeriod(goal, 'weekly');
 
 	const goalLagActivity = GetActivityById(goal.goalLagActivityId);
 	const goalLagPrecision = GetActivityUnitPrecision(goalLagActivity);
@@ -61,8 +63,8 @@ export default function GoalPanel(props) {
 			<div className="grid grid-cols-2 gap-y-4 px-4 py-8">
 				<StatPar abs={goal.currentXP} rel={goalProjectedXpDelta} relRaw={goalProjectedXpDelta} relDir={1} unit='XP' />
 				<StatPar abs={goalLagValue} rel={goalLagProjectedResultDelta} relRaw={goalLagProjectedResultDeltaRaw} relDir={goalLagProjectedDir} unit={goalLagUnit} />
-				<StatTaskProgress over={0} under={goalDailyTasks.length} value={1000} unit='XP' label={`DAY ${dayOfSeason.no}`} />
-				<StatTaskProgress over={0} under={goalWeeklyTasks.length} value={1000} unit='XP' label={`WEEK ${weekOfSeason.no}`} />
+				<StatTaskProgress over={goalDailyProgress.done} under={goalDailyTasks.length} value={goalDailyProgress.xp} unit='XP' label={`DAY ${dayOfSeason.no}`} />
+				<StatTaskProgress over={goalWeeklyProgress.done} under={goalWeeklyTasks.length} value={goalWeeklyProgress.xp} unit='XP' label={`WEEK ${weekOfSeason.no}`} />
 			</div>
 			<div className="flex flex-col gap-6">
 				<TaskCollection goalId={goal.id} period='daily' />

@@ -23,6 +23,20 @@ const initialState = {
 			value: 111.6,
 			variation: ''
 		},
+		{
+			id: 3,
+			activityId: 5,
+			timestamp: 1653125233,
+			value: 20,
+			variation: ''
+		},
+		{
+			id: 3,
+			activityId: 9,
+			timestamp: 1653125233,
+			value: 5,
+			variation: ''
+		},
 	],
 }
 
