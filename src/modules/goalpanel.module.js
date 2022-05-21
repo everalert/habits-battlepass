@@ -31,6 +31,7 @@ export default function GoalPanel(props) {
 	const goalLagProjectedResult = GetGoalProjectedResultAtTime(goal, timestamp);
 	const goalLagProjectedResultDeltaRaw = goalLagResultRaw-goalLagProjectedResult;
 	const goalLagProjectedResultDelta = FormatActivityValue(goalLagActivity, goalLagProjectedResultDeltaRaw).value;
+	const goalLagProjectedDir = goalLagProjectedResult-goal.goalLagStartValue;
 	const goalLagUnit = goalLagResult.unit;
 
 	//const goalLeadActivity = GetActivityById(goal.goalLeadActivityId);
@@ -57,8 +58,8 @@ export default function GoalPanel(props) {
 				<div className='outline outline-1 outline-gray-800 rounded-lg'><LineChart/></div>
 			</div>
 			<div className="grid grid-cols-2 gap-y-4 px-4 py-8">
-				<StatPar abs={goal.currentXP} rel={goalProjectedXpDelta} relRaw={goalLagProjectedResultDeltaRaw} unit='XP' />
-				<StatPar abs={goalLagValue} rel={goalLagProjectedResultDelta} relRaw={goalLagProjectedResultDeltaRaw} unit={goalLagUnit} />
+				<StatPar abs={goal.currentXP} rel={goalProjectedXpDelta} relRaw={goalProjectedXpDelta} relDir={1} unit='XP' />
+				<StatPar abs={goalLagValue} rel={goalLagProjectedResultDelta} relRaw={goalLagProjectedResultDeltaRaw} relDir={goalLagProjectedDir} unit={goalLagUnit} />
 				<StatTaskProgress over={0} under={goalDailyTasks.length} value={1000} unit='XP' label={`DAY ${dayOfSeason.no}`} />
 				<StatTaskProgress over={0} under={goalWeeklyTasks.length} value={1000} unit='XP' label={`WEEK ${weekOfSeason.no}`} />
 			</div>
