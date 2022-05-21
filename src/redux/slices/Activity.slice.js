@@ -7,8 +7,9 @@ const initialState = {
 			label: 'SM64 Personal Best Total (16+70+120)',
 			type: 'time', 
 			unit: '',
-			isReportingIncremental: true,
-			variations: ''
+			isReportingIncremental: false,
+			variations: '',
+			note: ''
 		},
 		{
 			id: 1,
@@ -16,7 +17,8 @@ const initialState = {
 			type: 'time', 
 			unit: '',
 			isReportingIncremental: true,
-			variations: 'star,level,segment'
+			variations: 'star,level,segment',
+			note: ''
 		},
 		{
 			id: 2,
@@ -24,7 +26,8 @@ const initialState = {
 			type: 'counter', 
 			unit: '',
 			isReportingIncremental: true,
-			variations: 'software,hardware' 
+			variations: 'software,hardware' ,
+			note: ''
 		},
 		{
 			id: 3,
@@ -32,15 +35,17 @@ const initialState = {
 			type: 'time', 
 			unit: '',
 			isReportingIncremental: true,
-			variations: 'software,hardware' 
+			variations: 'software,hardware' ,
+			note: ''
 		},
 		{
 			id: 4,
-			label: 'Known Japanese Words in Anki',
+			label: 'Estimated Known Japanese Words',
 			type: 'counter', 
 			unit: '語',
-			isReportingIncremental: true,
-			variations: '' 
+			isReportingIncremental: false,
+			variations: '',
+			note: 'https://glenn-sun.github.io/japanese-vocab-test/'
 		},
 		{
 			id: 5,
@@ -48,15 +53,17 @@ const initialState = {
 			type: 'counter', 
 			unit: '',
 			isReportingIncremental: true,
-			variations: 'kanji,vocab,sentence' 
+			variations: 'kanji,vocab,sentence' ,
+			note: ''
 		},
 		{
 			id: 6,
 			label: 'Body Weight',
 			type: 'weight', 
 			unit: '',
-			isReportingIncremental: true,
-			variations: '' 
+			isReportingIncremental: false,
+			variations: '' ,
+			note: ''
 		},
 		{
 			id: 7,
@@ -64,7 +71,8 @@ const initialState = {
 			type: 'counter',
 			unit: '',
 			isReportingIncremental: true,
-			variations: 'weightlifting,cardio' 
+			variations: 'weightlifting,cardio' ,
+			note: ''
 		},
 		{
 			id: 8,
@@ -72,7 +80,8 @@ const initialState = {
 			type: 'counter',
 			unit: 'mL',
 			isReportingIncremental: true,
-			variations: '' 
+			variations: '' ,
+			note: ''
 		},
 		{
 			id: 9,
@@ -80,7 +89,8 @@ const initialState = {
 			type: 'counter',
 			unit: 'ep',
 			isReportingIncremental: true,
-			variations: 'anime,live-action' 
+			variations: 'anime,live-action' ,
+			note: ''
 		},
 		{
 			id: 10,
@@ -88,7 +98,8 @@ const initialState = {
 			type: 'counter',
 			unit: '',
 			isReportingIncremental: true,
-			variations: '' 
+			variations: '' ,
+			note: ''
 		},
 		{
 			id: 11,
@@ -96,7 +107,8 @@ const initialState = {
 			type: 'time', 
 			unit: '',
 			isReportingIncremental: true,
-			variations: '16star,70star,120star'
+			variations: '16star,70star,120star',
+			note: ''
 		},
 ],
 }

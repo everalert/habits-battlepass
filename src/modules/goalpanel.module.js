@@ -5,28 +5,40 @@ import StatPar from './stat/StatPar.module'
 import StatTaskProgress from './stat/StatTaskProgress.module'
 import TaskCollection from './task/TaskCollection.module'
 import { useSelector } from 'react-redux'
-import { GetActivityById, GetActivityUnit } from '../redux/helpers/Activity.helpers'
+import { FormatActivityValue, GetActivityById } from '../redux/helpers/Activity.helpers'
 import { GetDayOfSeason, GetWeekOfSeason } from '../redux/helpers/Season.helper'
-import { GetGoalById, GetGoalProjectedXpAtTime, GetGoalSuccessXp } from '../redux/helpers/Goal.helper'
+import { GetGoalById, GetGoalProjectedResultAtTime, GetGoalProjectedXpAtTime, GetGoalSuccessXp } from '../redux/helpers/Goal.helper'
 import { GetCurrentUnixTimestamp } from '../helpers/Math.helper'
 import { GetAllDailyChallengesForGoal, GetAllWeeklyChallengesForGoal } from '../redux/helpers/Challenge.helper'
+import { GetLogEndValueForPeriod } from '../redux/helpers/Log.helper'
 
 export default function GoalPanel(props) {
 	const season = useSelector((state) => state.season.seasons.find(s => s.id === state.season.active));
-	const timestamp = GetCurrentUnixTimestamp()
+	const timestamp = GetCurrentUnixTimestamp();
 	
 	const goalId = props.goal && props.goal >= 0 ? props.goal : 0;
-	const goal = GetGoalById(goalId)
-	const goalLagActivity = GetActivityById(goal.goalLagActivityId)
-	const goalLagUnit = GetActivityUnit(goalLagActivity)
-	//const goalLeadActivity = GetActivityById(goal.goalLeadActivityId)
+	const goal = GetGoalById(goalId);
 
-	const goalSuccessXp = GetGoalSuccessXp(goal)
-	const goalProjectedXp = Math.round(GetGoalProjectedXpAtTime(goal, timestamp))
-	const goalProjectedXpDelta = goal.currentXP-goalProjectedXp
+	const dayOfSeason = GetDayOfSeason(season);
+	const weekOfSeason = GetWeekOfSeason(season);
+	const goalDailyTasks = GetAllDailyChallengesForGoal(goalId);
+	const goalWeeklyTasks = GetAllWeeklyChallengesForGoal(goalId);
 
-	const goalDailyTasks = GetAllDailyChallengesForGoal(goalId)
-	const goalWeeklyTasks = GetAllWeeklyChallengesForGoal(goalId)
+	const goalLagActivity = GetActivityById(goal.goalLagActivityId);
+	const goalLagResultRaw = GetLogEndValueForPeriod(goalLagActivity.id, season.start, season.start+season.length);
+	const goalLagResult = FormatActivityValue(goalLagActivity, goalLagResultRaw);
+	const goalLagValue = goalLagResult.value;
+	const goalLagProjectedResult = GetGoalProjectedResultAtTime(goal, timestamp);
+	const goalLagProjectedResultDeltaRaw = goalLagResultRaw-goalLagProjectedResult;
+	const goalLagProjectedResultDelta = FormatActivityValue(goalLagActivity, goalLagProjectedResultDeltaRaw).value;
+	const goalLagUnit = goalLagResult.unit;
+
+	//const goalLeadActivity = GetActivityById(goal.goalLeadActivityId);
+
+	const goalSuccessXp = GetGoalSuccessXp(goal);
+	const goalProjectedXp = Math.round(GetGoalProjectedXpAtTime(goal, timestamp));
+	const goalProjectedXpDelta = goal.currentXP-goalProjectedXp;
+
 	return (
 		<div>
 			<GoalPanelHeader goal={goal} lagActivity={goalLagActivity} />
@@ -45,10 +57,10 @@ export default function GoalPanel(props) {
 				<div className='outline outline-1 outline-gray-800 rounded-lg'><LineChart/></div>
 			</div>
 			<div className="grid grid-cols-2 gap-y-4 px-4 py-8">
-				<StatPar abs={goal.currentXP} rel={goalProjectedXpDelta} unit='XP' />
-				<StatPar abs={500} rel={500} unit={goalLagUnit} />
-				<StatTaskProgress over={0} under={goalDailyTasks.length} value={1000} unit='XP' label={`DAY ${GetDayOfSeason(season).no}`} />
-				<StatTaskProgress over={0} under={goalWeeklyTasks.length} value={1000} unit='XP' label={`WEEK ${GetWeekOfSeason(season).no}`} />
+				<StatPar abs={goal.currentXP} rel={goalProjectedXpDelta} relRaw={goalLagProjectedResultDeltaRaw} unit='XP' />
+				<StatPar abs={goalLagValue} rel={goalLagProjectedResultDelta} relRaw={goalLagProjectedResultDeltaRaw} unit={goalLagUnit} />
+				<StatTaskProgress over={0} under={goalDailyTasks.length} value={1000} unit='XP' label={`DAY ${dayOfSeason.no}`} />
+				<StatTaskProgress over={0} under={goalWeeklyTasks.length} value={1000} unit='XP' label={`WEEK ${weekOfSeason.no}`} />
 			</div>
 			<div className="flex flex-col gap-6">
 				<TaskCollection goalId={goal.id} period='daily' />
