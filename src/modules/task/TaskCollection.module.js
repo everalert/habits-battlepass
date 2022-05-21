@@ -23,6 +23,7 @@ export default function TaskCollection({goalId, period}) {
 		<div className="w-[19rem] mx-auto flex flex-col gap-2">
 			{tasks.map(t => (
 				<TaskChallenge
+					key={t.id}
 					label={t.formattedLabel}
 					completionRate={t.completionRate}
 					progress={t.formattedProgress.value}
