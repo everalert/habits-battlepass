@@ -21,3 +21,7 @@ export function SecondsToMinutes(seconds) {
 	const {d, h, m, s, ms} = SecondsToTimeObject(seconds)
 	return d*1440+h*60+m+(s+ms)/60
 }
+
+export function RoundN(number, n) {
+	return parseFloat(number.toFixed(n))
+}

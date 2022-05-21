@@ -10,7 +10,7 @@ export default function StatPar({abs, rel, relRaw, relDir, unit}) {
 			<div className={`text-base -skew-x-12 -mt-1.5  ${relColor}`}>
 				<span className="text-sm">PAR</span>
 				<span className='ml-0.5'>{(dir ? relRaw >= 0 : relRaw > 0) ? '+' : '-'}</span>
-				<span className="text-lg"><ItemNumber num={typeof rel === 'number' ? Math.round(Math.abs(rel)*10)/10 : rel} /></span>
+				<span className="text-lg"><ItemNumber num={typeof rel === 'number' ? Math.abs(rel) : rel} /></span>
 				<span className="ml-0.5">{unit}</span>
 			</div>
 		</div>

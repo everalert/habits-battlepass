@@ -5,10 +5,10 @@ import StatPar from './stat/StatPar.module'
 import StatTaskProgress from './stat/StatTaskProgress.module'
 import TaskCollection from './task/TaskCollection.module'
 import { useSelector } from 'react-redux'
-import { FormatActivityValue, GetActivityById } from '../redux/helpers/Activity.helpers'
+import { FormatActivityValue, GetActivityById, GetActivityUnitPrecision } from '../redux/helpers/Activity.helpers'
 import { GetDayOfSeason, GetWeekOfSeason } from '../redux/helpers/Season.helper'
 import { GetGoalById, GetGoalProjectedResultAtTime, GetGoalProjectedXpAtTime, GetGoalSuccessXp } from '../redux/helpers/Goal.helper'
-import { GetCurrentUnixTimestamp } from '../helpers/Math.helper'
+import { GetCurrentUnixTimestamp, RoundN } from '../helpers/Math.helper'
 import { GetAllDailyChallengesForGoal, GetAllWeeklyChallengesForGoal } from '../redux/helpers/Challenge.helper'
 import { GetLogEndValueForPeriod } from '../redux/helpers/Log.helper'
 
@@ -25,11 +25,12 @@ export default function GoalPanel(props) {
 	const goalWeeklyTasks = GetAllWeeklyChallengesForGoal(goalId);
 
 	const goalLagActivity = GetActivityById(goal.goalLagActivityId);
-	const goalLagResultRaw = GetLogEndValueForPeriod(goalLagActivity.id, season.start, season.start+season.length);
+	const goalLagPrecision = GetActivityUnitPrecision(goalLagActivity);
+	const goalLagResultRaw = RoundN(GetLogEndValueForPeriod(goalLagActivity.id, season.start, season.start+season.length), goalLagPrecision);
 	const goalLagResult = FormatActivityValue(goalLagActivity, goalLagResultRaw);
 	const goalLagValue = goalLagResult.value;
-	const goalLagProjectedResult = GetGoalProjectedResultAtTime(goal, timestamp);
-	const goalLagProjectedResultDeltaRaw = goalLagResultRaw-goalLagProjectedResult;
+	const goalLagProjectedResult = RoundN(GetGoalProjectedResultAtTime(goal, timestamp), goalLagPrecision);
+	const goalLagProjectedResultDeltaRaw = (goalLagResultRaw-goalLagProjectedResult);
 	const goalLagProjectedResultDelta = FormatActivityValue(goalLagActivity, goalLagProjectedResultDeltaRaw).value;
 	const goalLagProjectedDir = goalLagProjectedResult-goal.goalLagStartValue;
 	const goalLagUnit = goalLagResult.unit;

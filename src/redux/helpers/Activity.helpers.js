@@ -16,6 +16,15 @@ export function GetActivityUnit(activity) {
 	}
 }
 
+export function GetActivityUnitPrecision(activity) {
+	switch (activity.type) {
+		case 'weight':
+			return 1;
+		default:
+			return 0;
+	}
+}
+
 export function FormatActivityValue(activity, value, timeFormatFunction = SecondsToHMMSS) {
 	let output = { value: 0, unit: '' }
 	switch (activity.type) {
