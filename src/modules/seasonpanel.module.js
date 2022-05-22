@@ -16,7 +16,7 @@ export default function SeasonPanel() {
 					<RadialBar size={288} value={season.currentXP} thickness={36} />
 				</div>
 				<svg xmlns="http://www.w3.org/2000/svg" className="w-64 h-64 absolute top-4 left-4" viewBox="0 0 20 20" fill="currentColor">
-					<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 0 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+					<path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 0 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
 				</svg>
 				<div className="w-48 h-48 absolute top-12 left-12">
 					<RadialBar size={192} value={season.currentXP%season.levelXP} max={season.levelXP} thickness={8} corner={1} delay={250} />
