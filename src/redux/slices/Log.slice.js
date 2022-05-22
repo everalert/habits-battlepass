@@ -1,4 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createAction, createSlice } from "@reduxjs/toolkit"
+import { replaceRecords } from "./Manager.slice";
 
 const initialState = {
 	logs: [
@@ -38,6 +39,13 @@ const initialState = {
 			variation: ''
 		},
 	],
+	base: {
+		id: 0,
+		activityId: 0,
+		timestamp: 0,
+		value: 0,
+		variation: ''
+	}
 }
 
 export const LogSlice = createSlice({
@@ -46,6 +54,11 @@ export const LogSlice = createSlice({
 	reducers: {
 		
 	},
+	extraReducers: (builder) => {
+		builder.addCase(replaceRecords, (state, action) => {
+			state.logs = action.payload.logs;
+		})
+	}
 })
 
 // export const {  } = LogSlice.actions

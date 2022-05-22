@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { replaceRecords } from "./Manager.slice"
 
 const initialState = {
 	goals: [
@@ -59,6 +60,20 @@ const initialState = {
 			seasonXpRatio: 0.25
 		},
 	],
+	base: {
+		id: 0,
+		seasonId: 0,
+		categoryId: 0,
+		goalLagActivityId: 0,
+		goalLagStartValue: 0,
+		goalLagEndValue: 0,
+		goalLagProjectionCurve: 'linear',
+		goalLeadActivityId: 0,
+		goalLeadActivityTarget: 0,
+		goalNote: '',
+		currentXP: 0 ,
+		seasonXpRatio: 1
+	}
 }
 
 export const GoalSlice = createSlice({
@@ -67,6 +82,11 @@ export const GoalSlice = createSlice({
 	reducers: {
 		
 	},
+	extraReducers: (builder) => {
+		builder.addCase(replaceRecords, (state, action) => {
+			state.goals = action.payload.goals;
+		})
+	}
 })
 
 // export const {  } = GoalSlice.actions

@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { replaceRecords } from "./Manager.slice";
 
 const initialState = {
 	challenges: [
@@ -94,6 +95,17 @@ const initialState = {
 			isTemplate: true
 		},
 	],
+	base: {
+		id: 0,
+		goalId: 0,
+		taskLabel: '{UNIT} of {ACTIVITY}',
+		taskActivityId: 0,
+		taskAmount: 0,
+		taskVariation: '',
+		taskXP: 0,
+		period: 'weekly',
+		isTemplate: true
+	}
 }
 
 export const ChallengeSlice = createSlice({
@@ -102,6 +114,11 @@ export const ChallengeSlice = createSlice({
 	reducers: {
 		
 	},
+	extraReducers: (builder) => {
+		builder.addCase(replaceRecords, (state, action) => {
+			state.challenges = action.payload.challenges;
+		})
+	}
 })
 
 // export const {  } = ChallengeSlice.actions

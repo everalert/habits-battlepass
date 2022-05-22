@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { replaceRecords } from "./Manager.slice";
 
 const initialState = {
 	activities: [
@@ -110,7 +111,16 @@ const initialState = {
 			variations: '16star,70star,120star',
 			note: ''
 		},
-],
+	],
+	base: {
+		id: 0,
+		label: '',
+		type: '', 
+		unit: '',
+		isReportingIncremental: true,
+		variations: '',
+		note: ''
+	}
 }
 
 export const ActivitySlice = createSlice({
@@ -119,6 +129,11 @@ export const ActivitySlice = createSlice({
 	reducers: {
 		
 	},
+	extraReducers: (builder) => {
+		builder.addCase(replaceRecords, (state, action) => {
+			state.activities = action.payload.activities;
+		})
+	}
 })
 
 //export const {  } = ActivitySlice.actions

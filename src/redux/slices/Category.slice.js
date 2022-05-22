@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { replaceRecords } from "./Manager.slice";
 
 const initialState = {
 	categories: [
@@ -27,6 +28,12 @@ const initialState = {
 			description: ''
 		},
 	],
+	base: {
+		id: 0,
+		name: '',
+		icon: '',
+		description: ''
+	}
 }
 
 export const CategorySlice = createSlice({
@@ -35,6 +42,11 @@ export const CategorySlice = createSlice({
 	reducers: {
 
 	},
+	extraReducers: (builder) => {
+		builder.addCase(replaceRecords, (state, action) => {
+			state.categories = action.payload.categories;
+		})
+	}
 })
 
 //export const {  } = CategorySlice.actions
