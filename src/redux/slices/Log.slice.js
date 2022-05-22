@@ -20,7 +20,7 @@ const initialState = {
 			id: 2,
 			activityId: 6,
 			timestamp: 1652709600,
-			value: 111.6,
+			value: 112.3,
 			variation: ''
 		},
 		{
@@ -31,7 +31,7 @@ const initialState = {
 			variation: ''
 		},
 		{
-			id: 3,
+			id: 4,
 			activityId: 9,
 			timestamp: 1653125233,
 			value: 5,
