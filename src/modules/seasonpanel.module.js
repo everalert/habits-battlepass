@@ -10,7 +10,7 @@ export default function SeasonPanel() {
 	const timeEnd = season.start+season.length
 	const timeRemain = timeEnd-timeNow
 	return (
-		<div className="w-96 my-12 text-center">
+		<div className="lg:w-96 my-12 text-center mx-auto">
 			<div className="relative w-72 h-72 mx-auto mb-6">
 				<div className="iconProgressBar">
 					<RadialBar size={288} value={season.currentXP} thickness={36} />
