@@ -56,11 +56,19 @@ export const LogSlice = createSlice({
 		addLog: (state, action) => {
 			const newLog = Object.assign(
 				{ ...state.base },
-				{ ...action.payload },
+				action.payload,
 				{ id: GetCurrentUnixTimestamp() }
 			)
 			state.logs.push(newLog);
-		}
+		},
+		editLog: (state, action) => {
+			const i = state.logs.findIndex(l => l.id === action.payload.id);
+			const newLog = Object.assign(
+				{ ...state.logs[i] },
+				action.payload.update
+			);
+			state.logs[i] = newLog;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(replaceRecords, (state, action) => {
@@ -69,6 +77,6 @@ export const LogSlice = createSlice({
 	}
 })
 
-export const { addLog } = LogSlice.actions
+export const { addLog, editLog } = LogSlice.actions
 
 export default LogSlice.reducer

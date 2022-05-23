@@ -136,6 +136,14 @@ export const ActivitySlice = createSlice({
 			)
 			state.activities.push(newActivity);
 		},
+		editActivity: (state, action) => {
+			const i = state.activities.findIndex(l => l.id === action.payload.id);
+			const newActivity = Object.assign(
+				{ ...state.activities[i] },
+				action.payload.update
+			);
+			state.activities[i] = newActivity;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(replaceRecords, (state, action) => {
@@ -144,6 +152,6 @@ export const ActivitySlice = createSlice({
 	}
 })
 
-export const { addActivity } = ActivitySlice.actions
+export const { addActivity, editActivity } = ActivitySlice.actions
 
 export default ActivitySlice.reducer

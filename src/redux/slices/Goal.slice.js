@@ -89,6 +89,14 @@ export const GoalSlice = createSlice({
 			)
 			state.goals.push(newGoal);
 		},
+		editGoal: (state, action) => {
+			const i = state.goals.findIndex(l => l.id === action.payload.id);
+			const newGoal = Object.assign(
+				{ ...state.goals[i] },
+				action.payload.update
+			);
+			state.goals[i] = newGoal;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(replaceRecords, (state, action) => {
@@ -97,6 +105,6 @@ export const GoalSlice = createSlice({
 	}
 })
 
-export const { addGoal } = GoalSlice.actions
+export const { addGoal, editGoal } = GoalSlice.actions
 
 export default GoalSlice.reducer

@@ -49,6 +49,14 @@ export const CategorySlice = createSlice({
 			)
 			state.categories.push(newCategory);
 		},
+		editCategory: (state, action) => {
+			const i = state.categories.findIndex(l => l.id === action.payload.id);
+			const newCategory = Object.assign(
+				{ ...state.categories[i] },
+				action.payload.update
+			);
+			state.categories[i] = newCategory;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(replaceRecords, (state, action) => {
@@ -57,6 +65,6 @@ export const CategorySlice = createSlice({
 	}
 })
 
-export const { addCategory } = CategorySlice.actions
+export const { addCategory, editCategory } = CategorySlice.actions
 
 export default CategorySlice.reducer

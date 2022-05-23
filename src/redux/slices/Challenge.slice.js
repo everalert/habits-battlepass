@@ -121,6 +121,14 @@ export const ChallengeSlice = createSlice({
 			)
 			state.challenges.push(newChallenge);
 		},
+		editChallenge: (state, action) => {
+			const i = state.challenges.findIndex(l => l.id === action.payload.id);
+			const newChallenge = Object.assign(
+				{ ...state.challenges[i] },
+				action.payload.update
+			);
+			state.challenges[i] = newChallenge;
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(replaceRecords, (state, action) => {
@@ -129,6 +137,6 @@ export const ChallengeSlice = createSlice({
 	}
 })
 
-export const { addChallenge } = ChallengeSlice.actions
+export const { addChallenge, editChallenge } = ChallengeSlice.actions
 
 export default ChallengeSlice.reducer
