@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { replaceRecords } from "./Manager.slice";
+import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
 
 const initialState = {
 	challenges: [
@@ -97,9 +98,9 @@ const initialState = {
 	],
 	base: {
 		id: 0,
-		goalId: 0,
+		goalId: -1,
 		taskLabel: '{UNIT} of {ACTIVITY}',
-		taskActivityId: 0,
+		taskActivityId: -1,
 		taskAmount: 0,
 		taskVariation: '',
 		taskXP: 0,
@@ -112,7 +113,14 @@ export const ChallengeSlice = createSlice({
 	name: 'Challenge',
 	initialState,
 	reducers: {
-		
+		addChallenge: (state, action) => {
+			const newChallenge = Object.assign(
+				{ ...state.base },
+				{ ...action.payload },
+				{ id: GetCurrentUnixTimestamp() }
+			)
+			state.challenges.push(newChallenge);
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(replaceRecords, (state, action) => {
@@ -121,6 +129,6 @@ export const ChallengeSlice = createSlice({
 	}
 })
 
-// export const {  } = ChallengeSlice.actions
+export const { addChallenge } = ChallengeSlice.actions
 
 export default ChallengeSlice.reducer

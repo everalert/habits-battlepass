@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { replaceRecords } from "./Manager.slice";
+import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
 
 const initialState = {
 	activities: [
@@ -127,7 +128,14 @@ export const ActivitySlice = createSlice({
 	name: 'Activity',
 	initialState,
 	reducers: {
-		
+		addActivity: (state, action) => {
+			const newActivity = Object.assign(
+				{ ...state.base },
+				{ ...action.payload },
+				{ id: GetCurrentUnixTimestamp() }
+			)
+			state.activities.push(newActivity);
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(replaceRecords, (state, action) => {
@@ -136,6 +144,6 @@ export const ActivitySlice = createSlice({
 	}
 })
 
-//export const {  } = ActivitySlice.actions
+export const { addActivity } = ActivitySlice.actions
 
 export default ActivitySlice.reducer

@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { replaceRecords } from "./Manager.slice";
+import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
 
 const initialState = {
 	categories: [
@@ -40,7 +41,14 @@ export const CategorySlice = createSlice({
 	name: 'Category',
 	initialState,
 	reducers: {
-
+		addCategory: (state, action) => {
+			const newCategory = Object.assign(
+				{ ...state.base },
+				{ ...action.payload },
+				{ id: GetCurrentUnixTimestamp() }
+			)
+			state.categories.push(newCategory);
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(replaceRecords, (state, action) => {
@@ -49,6 +57,6 @@ export const CategorySlice = createSlice({
 	}
 })
 
-//export const {  } = CategorySlice.actions
+export const { addCategory } = CategorySlice.actions
 
 export default CategorySlice.reducer

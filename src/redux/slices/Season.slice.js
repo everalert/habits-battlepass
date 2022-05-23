@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { replaceRecords } from "./Manager.slice"
+import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
 
 const initialState = {
 	active: 0,
@@ -61,6 +62,14 @@ export const SeasonSlice = createSlice({
 	name: 'Season',
 	initialState,
 	reducers: {
+		addSeason: (state, action) => {
+			const newSeason = Object.assign(
+				{ ...state.base },
+				{ ...action.payload },
+				{ id: GetCurrentUnixTimestamp() }
+			)
+			state.seasons.push(newSeason);
+		},
 		setLengthInDays: (state, action) => {
 			state.seasons[action.payload.seasonId].length = 86400 * action.payload.days
 		}
@@ -72,6 +81,6 @@ export const SeasonSlice = createSlice({
 	}
 })
 
-export const { setLengthInDays } = SeasonSlice.actions
+export const { addSeason, setLengthInDays } = SeasonSlice.actions
 
 export default SeasonSlice.reducer

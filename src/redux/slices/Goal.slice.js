@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { replaceRecords } from "./Manager.slice"
+import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
 
 const initialState = {
 	goals: [
@@ -62,13 +63,13 @@ const initialState = {
 	],
 	base: {
 		id: 0,
-		seasonId: 0,
-		categoryId: 0,
-		goalLagActivityId: 0,
+		seasonId: -1,
+		categoryId: -1,
+		goalLagActivityId: -1,
 		goalLagStartValue: 0,
 		goalLagEndValue: 0,
 		goalLagProjectionCurve: 'linear',
-		goalLeadActivityId: 0,
+		goalLeadActivityId: -1,
 		goalLeadActivityTarget: 0,
 		goalNote: '',
 		currentXP: 0 ,
@@ -80,7 +81,14 @@ export const GoalSlice = createSlice({
 	name: 'Goal',
 	initialState,
 	reducers: {
-		
+		addGoal: (state, action) => {
+			const newGoal = Object.assign(
+				{ ...state.base },
+				{ ...action.payload },
+				{ id: GetCurrentUnixTimestamp() }
+			)
+			state.goals.push(newGoal);
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(replaceRecords, (state, action) => {
@@ -89,6 +97,6 @@ export const GoalSlice = createSlice({
 	}
 })
 
-// export const {  } = GoalSlice.actions
+export const { addGoal } = GoalSlice.actions
 
 export default GoalSlice.reducer
