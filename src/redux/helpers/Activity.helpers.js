@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { SecondsToHMMSS } from "../../helpers/Math.helper";
+import { FormatNumber, SecondsToHMMSS } from "../../helpers/Math.helper";
 
 export function GetActivityById(id) {
 	return useSelector((state) => state.activity.activities.find(a => a.id === id))
@@ -37,7 +37,7 @@ export function FormatActivityValue(activity, value, timeFormatFunction = Second
 			break;
 		case 'counter':
 		default:
-			output.value = value;
+			output.value = FormatNumber(value);
 			output.unit = activity.unit;
 			break;
 	}

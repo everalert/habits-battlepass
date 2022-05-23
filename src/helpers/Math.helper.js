@@ -25,3 +25,7 @@ export function SecondsToMinutes(seconds) {
 export function RoundN(number, n) {
 	return parseFloat(number.toFixed(n))
 }
+
+export function FormatNumber(number) {
+	return number.toLocaleString(undefined);
+}
