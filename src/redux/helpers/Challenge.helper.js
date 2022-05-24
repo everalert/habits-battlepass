@@ -3,6 +3,10 @@ import { SecondsToHMMSS } from "../../helpers/Math.helper";
 import { FormatActivityValue, GetActivityById, GetActivityUnit } from "./Activity.helpers";
 import { GetLogEndValueForPeriod } from "./Log.helper";
 
+export function GetChallengeById(id) {
+	return useSelector((state) => state.challenge.challenges.find(c => c.id === id))
+}
+
 export function GetAllChallengesForGoal(goalId) {
 	return useSelector((state) => state.challenge.challenges.filter(c => c.goalId === goalId))
 }

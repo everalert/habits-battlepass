@@ -2,6 +2,11 @@ import { useSelector } from "react-redux";
 import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
 import { GetActivityById } from "./Activity.helpers";
 
+export function PrepareNewLog(timestamp = GetCurrentUnixTimestamp()) {
+	const base = {...useSelector((state) => state.log.base)};
+	return Object.assign(base, { timestamp:timestamp });
+}
+
 export function GetLogsByActivityIdForPeriod(activityId, startTime = 0, endTime = GetCurrentUnixTimestamp()) {
 	return useSelector((state) => state.log.logs.filter(l => l.activityId === activityId && l.timestamp >= startTime && l.timestamp < endTime))
 } 
