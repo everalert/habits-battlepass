@@ -19,6 +19,7 @@
 .DS_Store
 *.pem
 /_*
+/.vscode/*
 
 # debug
 npm-debug.log*
@@ -32,3 +33,4 @@ secrets.json
 
 # vercel
 .vercel
+
