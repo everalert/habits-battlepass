@@ -59,7 +59,7 @@ export default function InputQuickLog({ activity, variation }) {
 	}
 
 	return (
-		<form onSubmit={submitForm} className={`h-7 text-sm flex justify-center gap-2 absolute inset-x-0.5 transition-all delay-0 ${isFocused ? 'bottom-0.5 opacity-100' : '-bottom-0.5 opacity-0 group-hover:bottom-0.5 group-hover:opacity-100'}`}>
+		<form onSubmit={submitForm} className={`h-7 text-sm flex justify-center gap-2 absolute inset-x-0.5 transition-all top-1/2 ${isFocused ? '-mt-4 opacity-100' : '-mt-3 opacity-0 group-hover:-mt-4 group-hover:opacity-100'}`}>
 			<div className="flex rounded-md overflow-hidden">
 				{ !isTimeTask &&
 					<label className="flex items-center gap-0.5 px-0.5 text-zinc-500 caret-zinc-400 bg-zinc-200">
