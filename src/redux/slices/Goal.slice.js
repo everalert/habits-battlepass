@@ -9,11 +9,13 @@ const initialState = {
 			seasonId: 0,
 			categoryId: 0,
 			goalLagActivityId: 6, // body weight
+			goalLagActivityVariation: '',
 			goalLagStartValue: 112.3,
 			goalLagEndValue: 102.3,
 			goalLagProjectionCurve: 'linear',
 			goalLeadActivityId: 7, // gym sessions
 			goalLeadActivityTarget: 39,
+			goalLeadActivityVariation: '',
 			goalNote: '',
 			currentXP: 0,
 			seasonXpRatio: 0.25
@@ -23,11 +25,13 @@ const initialState = {
 			seasonId: 0,
 			categoryId: 2,
 			goalLagActivityId: 4, // number of known japanese words in anki (morphman)
+			goalLagActivityVariation: '',
 			goalLagStartValue: 8594,
 			goalLagEndValue: 9400,
 			goalLagProjectionCurve: 'linear',
 			goalLeadActivityId: 5, // japanese cards added to anki
 			goalLeadActivityTarget: 910,
+			goalLeadActivityVariation: '',
 			goalNote: '',
 			currentXP: 0 ,
 			seasonXpRatio: 0.25
@@ -37,11 +41,13 @@ const initialState = {
 			seasonId: 0,
 			categoryId: 1,
 			goalLagActivityId: 2, // number of completed projects
+			goalLagActivityVariation: '',
 			goalLagStartValue: 0,
 			goalLagEndValue: 6,
 			goalLagProjectionCurve: 'linear',
 			goalLeadActivityId: 3, // hours of project development
 			goalLeadActivityTarget: 180*3600,
+			goalLeadActivityVariation: '',
 			goalNote: '',
 			currentXP: 0 ,
 			seasonXpRatio: 0.25
@@ -51,11 +57,13 @@ const initialState = {
 			seasonId: 0,
 			categoryId: 3,
 			goalLagActivityId: 0, // sm64 16+70+120 pb total
+			goalLagActivityVariation: '',
 			goalLagStartValue: 4.5*3600,
 			goalLagEndValue: 3.0*3600,
 			goalLagProjectionCurve: 'linear',
 			goalLeadActivityId: 1, // sm64 practice playtime
 			goalLeadActivityTarget: 180*3600,
+			goalLeadActivityVariation: '',
 			goalNote: '',
 			currentXP: 0 ,
 			seasonXpRatio: 0.25
@@ -66,11 +74,13 @@ const initialState = {
 		seasonId: -1,
 		categoryId: -1,
 		goalLagActivityId: -1,
+		goalLagActivityVariation: '',
 		goalLagStartValue: 0,
 		goalLagEndValue: 0,
 		goalLagProjectionCurve: 'linear',
 		goalLeadActivityId: -1,
 		goalLeadActivityTarget: 0,
+		goalLeadActivityVariation: '',
 		goalNote: '',
 		currentXP: 0 ,
 		seasonXpRatio: 1
