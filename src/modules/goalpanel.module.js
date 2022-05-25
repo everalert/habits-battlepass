@@ -11,6 +11,7 @@ import { GetGoalById, GetGoalProgressForPeriod, GetGoalProjectedResultAtTime, Ge
 import { GetCurrentUnixTimestamp, RoundN } from '../helpers/Math.helper'
 import { GetAllDailyChallengesForGoal, GetAllWeeklyChallengesForGoal } from '../redux/helpers/Challenge.helper'
 import { GetLogEndValueForPeriod } from '../redux/helpers/Log.helper'
+import InputQuickLog from '../elements/input/InputQuickLog.element'
 
 export default function GoalPanel(props) {
 	const season = useSelector((state) => state.season.seasons.find(s => s.id === state.season.active));
@@ -37,8 +38,6 @@ export default function GoalPanel(props) {
 	const goalLagProjectedDir = goalLagProjectedResult-goal.goalLagStartValue;
 	const goalLagUnit = goalLagResult.unit;
 
-	//const goalLeadActivity = GetActivityById(goal.goalLeadActivityId);
-
 	const goalSuccessXp = GetGoalSuccessXp(goal);
 	const goalProjectedXp = Math.round(GetGoalProjectedXpAtTime(goal, timestamp));
 	const goalProjectedXpDelta = goal.currentXP-goalProjectedXp;
@@ -60,7 +59,8 @@ export default function GoalPanel(props) {
 				</div>
 				<div className='outline outline-1 outline-gray-800 rounded-lg'><LineChart/></div>
 			</div>
-			<div className="grid grid-cols-2 gap-y-4 px-4 py-8">
+			<div className="grid grid-cols-2 gap-y-4 px-4 py-8 group relative">
+				<InputQuickLog activity={goalLagActivity} variation={goal.goalLagActivityVariation} />
 				<StatPar abs={goal.currentXP} rel={goalProjectedXpDelta} relRaw={goalProjectedXpDelta} relDir={1} unit='XP' />
 				<StatPar abs={goalLagValue} rel={goalLagProjectedResultDelta} relRaw={goalLagProjectedResultDeltaRaw} relDir={goalLagProjectedDir} unit={goalLagUnit} />
 				<StatTaskProgress over={goalDailyProgress.done} under={goalDailyTasks.length} value={goalDailyProgress.xp} unit='XP' label={`DAY ${dayOfSeason.no}`} />
