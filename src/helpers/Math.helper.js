@@ -1,5 +1,5 @@
 export function GetCurrentUnixTimestamp() {
-	return Math.floor(new Date().getTime()/1000)
+	return Math.floor(Date.now()/1000)
 }
 
 export function SecondsToTimeObject(seconds) {
