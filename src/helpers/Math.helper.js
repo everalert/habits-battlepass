@@ -12,6 +12,10 @@ export function SecondsToTimeObject(seconds) {
 	}
 }
 
+export function TimeObjectToSeconds(timeObj) {
+	return timeObj.d*86400 + timeObj.h*3600 + timeObj.m*60 + timeObj.s + timeObj.ms/1000
+}
+
 export function SecondsToHMMSS(seconds) {
 	const {d, h, m, s} = SecondsToTimeObject(seconds)
 	return `${String(d*24+h)}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
@@ -28,4 +32,23 @@ export function RoundN(number, n) {
 
 export function FormatNumber(number) {
 	return number.toLocaleString(undefined);
+}
+
+export function strPadZero(n, len, str = '0') {
+	return n.toString().padStart(len, str);
+}
+
+export function strTruncToInt(n, len) {
+	let newVal = n.toString().replace(/[^0-9]+/g,'')
+	newVal = newVal.substring(Math.max(0,newVal.length-len), newVal.length);
+	return newVal==='' ? 0 : parseInt(newVal);
+}
+
+export function clamp(n, min, max) {
+	return Math.min(max, Math.max(min, n));
+}
+
+export function strToFloat(str) {
+	let newAmount = str.replace(/[^0-9\.]+/g, '').match(/([0-9]+\.)?[0-9]+/);
+	return newAmount!==null ? parseFloat(newAmount) : 0;
 }
