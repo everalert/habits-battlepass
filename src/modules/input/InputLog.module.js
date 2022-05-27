@@ -3,15 +3,15 @@ import { connect, useDispatch } from 'react-redux';
 import { GetCurrentUnixTimestamp } from '../../helpers/Math.helper';
 import { PrepareNewLog } from "../../redux/helpers/Log.helper";
 import { addLog } from '../../redux/slices/Log.slice';
-import InputActivityList from './InputActivityList.element';
-import InputActivityVariationList from './InputActivityVariationList.element';
-import InputAmount from './InputAmount.element';
-import InputAmountIncrementButton from './InputAmountButton.element';
-import InputDateTime from './InputDateTime.element';
-import InputDateTimeSelector from './InputDateTimeSelector.element';
-import InputDuration from './InputDuration.element';
-import InputResetButton from './InputResetButton.element';
-import InputSubmitButton from './InputSubmitButton.element';
+import InputActivityList from '../../elements/input/InputActivityList.element';
+import InputActivityVariationList from '../../elements/input/InputActivityVariationList.element';
+import InputAmount from '../../elements/input/InputAmount.element';
+import InputAmountIncrementButton from '../../elements/input/InputAmountButton.element';
+import InputDateTime from '../../elements/input/InputDateTime.element';
+import InputDateTimeSelector from '../../elements/input/InputDateTimeSelector.element';
+import InputDuration from '../../elements/input/InputDuration.element';
+import InputResetButton from '../../elements/input/InputResetButton.element';
+import InputSubmitButton from '../../elements/input/InputSubmitButton.element';
 
 
 const mapStateToProps = (state, ownProps) => {

@@ -1,6 +1,6 @@
 import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from "@heroicons/react/solid"
 import { useState } from "react"
-import InputLog from "../../elements/input/InputLog.element"
+import InputLog from "../input/InputLog.module"
 import { Dialog } from '@headlessui/react';
 
 export default function DialogAddEntry({ isOpen, setIsOpen }) {

@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux';
 import { PrepareNewLog } from "../../redux/helpers/Log.helper";
 import { addLog } from '../../redux/slices/Log.slice';
-import InputAmount from './InputAmount.element';
-import InputAmountIncrementButton from './InputAmountButton.element';
-import InputDuration from './InputDuration.element';
-import InputSubmitButton from './InputSubmitButton.element';
+import InputAmount from '../../elements/input/InputAmount.element';
+import InputAmountIncrementButton from '../../elements/input/InputAmountButton.element';
+import InputDuration from '../../elements/input/InputDuration.element';
+import InputSubmitButton from '../../elements/input/InputSubmitButton.element';
 
 
 export default function InputQuickLog({ activity, variation }) {

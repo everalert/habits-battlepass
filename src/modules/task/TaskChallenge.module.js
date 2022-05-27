@@ -1,4 +1,4 @@
-import InputQuickLog from '../../elements/input/InputQuickLog.element';
+import InputQuickLog from '../../modules/input/InputQuickLog.module';
 import ItemNumber from "../../elements/item/ItemNumber.element";
 import { FormatActivityValue, GetActivityById } from "../../redux/helpers/Activity.helpers";
 import { FormatChallengeLabel } from "../../redux/helpers/Challenge.helper";

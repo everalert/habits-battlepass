@@ -11,7 +11,7 @@ import { GetGoalById, GetGoalProgressForPeriod, GetGoalProjectedResultAtTime, Ge
 import { GetCurrentUnixTimestamp, RoundN } from '../helpers/Math.helper'
 import { GetAllDailyChallengesForGoal, GetAllWeeklyChallengesForGoal } from '../redux/helpers/Challenge.helper'
 import { GetLogEndValueForPeriod } from '../redux/helpers/Log.helper'
-import InputQuickLog from '../elements/input/InputQuickLog.element'
+import InputQuickLog from '../modules/input/InputQuickLog.module'
 
 export default function GoalPanel(props) {
 	const season = useSelector((state) => state.season.seasons.find(s => s.id === state.season.active));
