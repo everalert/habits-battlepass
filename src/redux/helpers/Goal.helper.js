@@ -1,14 +1,18 @@
 import { useSelector } from "react-redux";
-import { GetAllChallengesForGoalOfPeriod, GetAllDailyChallengesForGoal, GetAllWeeklyChallengesForGoal, GetChallengeProgressForPeriod } from "./Challenge.helper";
-import { GetLogEndValueForPeriod, GetLogsByActivityIdForPeriod } from "./Log.helper";
-import { GetDayOfSeason, GetPeriodOfSeason, GetSeasonById, GetSeasonProgressRatioAtTime, GetSeasonSuccessXp, GetWeekOfSeason } from "./Season.helper";
+import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
+import { GetAllChallengesForGoalOfPeriod, GetChallengeProgressForPeriod } from "./Challenge.helper";
+import { GetDayOfSeason, GetSeasonProgressRatioAtTime, GetSeasonSuccessXp, GetWeekOfSeason } from "./Season.helper";
 
 export function GetGoalById(id) {
 	return useSelector((state) => state.goal.goals.find(g => g.id === id))
 }
 
-export function GetGoalProjectedResultAtTime(goal, unixTimestamp) {
-	const season = useSelector((state) => state.season.seasons.find(s => s.id === goal.seasonId))
+export function PrepareNewGoal(timestamp = GetCurrentUnixTimestamp()) {
+	const base = {...useSelector((state) => state.goal.base)};
+	return Object.assign(base, { timestamp:timestamp });
+}
+
+export function GetGoalProjectedResultAtTime(season, goal, unixTimestamp) {
 	const ratio = GetSeasonProgressRatioAtTime(season, unixTimestamp)
 	const goalRange = goal.goalLagEndValue-goal.goalLagStartValue
 	switch (goal.goalLagProgressCurve) {
@@ -18,26 +22,24 @@ export function GetGoalProjectedResultAtTime(goal, unixTimestamp) {
 	}
 }
 
-export function GetGoalProjectedXpAtTime(goal, unixTimestamp) {
-	const season = useSelector((state) => state.season.seasons.find(s => s.id === goal.seasonId))
+export function GetGoalProjectedXpAtTime(goal, season, unixTimestamp) {
 	const nominalXp = GetSeasonSuccessXp(season) 
 	const ratio = GetSeasonProgressRatioAtTime(season, unixTimestamp)
 	return ratio*nominalXp*goal.seasonXpRatio
 }
 
-export function GetGoalSuccessXp(goal) {
-	const season = useSelector((state) => state.season.seasons.find(s => s.id === goal.seasonId))
+export function GetGoalSuccessXp(goal, season) {
 	return GetSeasonSuccessXp(season)*goal.seasonXpRatio
 }
 
-export function GetGoalProgressForPeriod(goal, periodName) {
-	const season = GetSeasonById(goal.seasonId);
+export function GetGoalProgressForPeriod(season, goal, challenges, activities, logs, periodName) {
 	const period = periodName === 'daily' ? GetDayOfSeason(season) : GetWeekOfSeason(season); 
-	const challenges = GetAllChallengesForGoalOfPeriod(goal.id, periodName);
+	const filteredchallenges = GetAllChallengesForGoalOfPeriod(challenges, goal.id, periodName);
 	let done = 0;
 	let xp = 0;
-	challenges.forEach(c => {
-		const progress = GetChallengeProgressForPeriod(c, period.start, period.end);
+	filteredchallenges.forEach(c => {
+		const isIncremental = activities.find(a => a.id === c.taskActivityId).isReportingIncremental;
+		const progress = GetChallengeProgressForPeriod(logs, c, isIncremental, period.start, period.end);
 		xp += progress.xp;
 		done += Number(progress.done);
 	});

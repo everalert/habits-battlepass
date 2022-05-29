@@ -1,46 +1,73 @@
+import { connect } from 'react-redux'
+import GoalPanelHeader from '../elements/goalPanel/GoalPanelHeader.element'
 import LineChart from '../elements/LineChart.element'
 import RadialBar from '../elements/RadialBar.element'
-import GoalPanelHeader from '../elements/goalPanel/GoalPanelHeader.element'
+import { GetCurrentUnixTimestamp, RoundN } from '../helpers/Math.helper'
+import InputQuickLog from '../modules/input/InputQuickLog.module'
+import { FormatActivityValue, GetActivityUnitPrecision } from '../redux/helpers/Activity.helpers'
+import { GetAllDailyChallengesForGoal, GetAllWeeklyChallengesForGoal } from '../redux/helpers/Challenge.helper'
+import { GetGoalProgressForPeriod, GetGoalProjectedResultAtTime, GetGoalProjectedXpAtTime, GetGoalSuccessXp } from '../redux/helpers/Goal.helper'
+import { GetLogEndValueForPeriod } from '../redux/helpers/Log.helper'
+import { GetDayOfSeason, GetWeekOfSeason } from '../redux/helpers/Season.helper'
 import StatPar from './stat/StatPar.module'
 import StatTaskProgress from './stat/StatTaskProgress.module'
 import TaskCollection from './task/TaskCollection.module'
-import { useSelector } from 'react-redux'
-import { FormatActivityValue, GetActivityById, GetActivityUnitPrecision } from '../redux/helpers/Activity.helpers'
-import { GetDayOfSeason, GetWeekOfSeason } from '../redux/helpers/Season.helper'
-import { GetGoalById, GetGoalProgressForPeriod, GetGoalProjectedResultAtTime, GetGoalProjectedXpAtTime, GetGoalSuccessXp } from '../redux/helpers/Goal.helper'
-import { GetCurrentUnixTimestamp, RoundN } from '../helpers/Math.helper'
-import { GetAllDailyChallengesForGoal, GetAllWeeklyChallengesForGoal } from '../redux/helpers/Challenge.helper'
-import { GetLogEndValueForPeriod } from '../redux/helpers/Log.helper'
-import InputQuickLog from '../modules/input/InputQuickLog.module'
 
-export default function GoalPanel(props) {
-	const season = useSelector((state) => state.season.seasons.find(s => s.id === state.season.active));
+
+const mapStateToProps = (state, ownProps) => {
 	const timestamp = GetCurrentUnixTimestamp();
-	
-	const goalId = props.goal && props.goal >= 0 ? props.goal : 0;
-	const goal = GetGoalById(goalId);
+	const season = state.season.seasons[state.season.active];
+	const goal = ownProps.goal;
+	const activities = state.activity.activities;
+	const challenges = state.challenge.challenges;
+	const logs = state.log.logs;
+	const lagActivity = state.activity.activities.find(a => a.id === goal.goalLagActivityId);
+	const lagPrecision = GetActivityUnitPrecision(lagActivity);
+	const lagResultRaw = RoundN(GetLogEndValueForPeriod(logs, lagActivity.id, lagActivity.isReportingIncremental, season.start, season.start+season.length), lagPrecision);
+	const lagResult = FormatActivityValue(lagActivity, lagResultRaw);
+	const lagProjectedResult = RoundN(GetGoalProjectedResultAtTime(season, goal, timestamp), lagPrecision);
+	const lagProjectedResultDeltaRaw = lagResultRaw-lagProjectedResult;
+	const goalProjectedXp = Math.round(GetGoalProjectedXpAtTime(goal, season, timestamp));
+	return {
+		season: season,
+		challenges: challenges,
+		dayOfSeason: GetDayOfSeason(season),
+		weekOfSeason: GetWeekOfSeason(season),
+		goalDailyTasks: GetAllDailyChallengesForGoal(challenges, goal.id),
+		goalWeeklyTasks: GetAllWeeklyChallengesForGoal(challenges, goal.id),
+		goalDailyProgress: GetGoalProgressForPeriod(season, goal, challenges, activities, logs, 'daily'),
+		goalWeeklyProgress: GetGoalProgressForPeriod(season, goal, challenges, activities, logs, 'weekly'),
+		goalLagActivity: lagActivity,
+		goalLagResultRaw: lagResultRaw,
+		goalLagProjectedResult: lagProjectedResult,
+		goalLagValue: lagResult.value,
+		goalLagUnit: lagResult.unit,
+		goalLagProjectedResultDeltaRaw: lagProjectedResultDeltaRaw,
+		goalLagProjectedResultDelta: FormatActivityValue(lagActivity, lagProjectedResultDeltaRaw).value,
+		goalLagProjectedDir: lagProjectedResult-goal.goalLagStartValue,
+		goalSuccessXp: GetGoalSuccessXp(goal, season),
+		goalProjectedXpDelta: goal.currentXP-goalProjectedXp,
+		...ownProps,
+	}
+}
 
-	const dayOfSeason = GetDayOfSeason(season);
-	const weekOfSeason = GetWeekOfSeason(season);
-	const goalDailyTasks = GetAllDailyChallengesForGoal(goalId);
-	const goalWeeklyTasks = GetAllWeeklyChallengesForGoal(goalId);
-	const goalDailyProgress = GetGoalProgressForPeriod(goal, 'daily');
-	const goalWeeklyProgress = GetGoalProgressForPeriod(goal, 'weekly');
 
-	const goalLagActivity = GetActivityById(goal.goalLagActivityId);
-	const goalLagPrecision = GetActivityUnitPrecision(goalLagActivity);
-	const goalLagResultRaw = RoundN(GetLogEndValueForPeriod(goalLagActivity.id, season.start, season.start+season.length), goalLagPrecision);
-	const goalLagResult = FormatActivityValue(goalLagActivity, goalLagResultRaw);
-	const goalLagValue = goalLagResult.value;
-	const goalLagProjectedResult = RoundN(GetGoalProjectedResultAtTime(goal, timestamp), goalLagPrecision);
-	const goalLagProjectedResultDeltaRaw = (goalLagResultRaw-goalLagProjectedResult);
-	const goalLagProjectedResultDelta = FormatActivityValue(goalLagActivity, goalLagProjectedResultDeltaRaw).value;
-	const goalLagProjectedDir = goalLagProjectedResult-goal.goalLagStartValue;
-	const goalLagUnit = goalLagResult.unit;
-
-	const goalSuccessXp = GetGoalSuccessXp(goal);
-	const goalProjectedXp = Math.round(GetGoalProjectedXpAtTime(goal, timestamp));
-	const goalProjectedXpDelta = goal.currentXP-goalProjectedXp;
+function GoalPanel({
+		goal,
+		dayOfSeason,
+		weekOfSeason,
+		goalDailyTasks,
+		goalWeeklyTasks,
+		goalDailyProgress,
+		goalWeeklyProgress,
+		goalLagActivity,
+		goalLagValue,
+		goalLagUnit,
+		goalLagProjectedResultDeltaRaw,
+		goalLagProjectedResultDelta,
+		goalLagProjectedDir,
+		goalSuccessXp,
+		goalProjectedXpDelta }) {
 
 	return (
 		<div>
@@ -67,9 +94,11 @@ export default function GoalPanel(props) {
 				<StatTaskProgress over={goalWeeklyProgress.done} under={goalWeeklyTasks.length} value={goalWeeklyProgress.xp} unit='XP' label={`WEEK ${weekOfSeason.no}`} />
 			</div>
 			<div className="flex flex-col gap-6">
-				<TaskCollection goalId={goal.id} period='daily' />
-				<TaskCollection goalId={goal.id} period='weekly' />
+				<TaskCollection tasks={goalDailyTasks} periodObj={dayOfSeason} />
+				<TaskCollection tasks={goalWeeklyTasks} periodObj={weekOfSeason} />
 			</div>
 		</div>
 	)
 }
+
+export default connect(mapStateToProps)(GoalPanel);

@@ -1,14 +1,24 @@
-import InputQuickLog from '../../modules/input/InputQuickLog.module';
+import { connect } from 'react-redux';
 import ItemNumber from "../../elements/item/ItemNumber.element";
-import { FormatActivityValue, GetActivityById } from "../../redux/helpers/Activity.helpers";
+import InputQuickLog from '../../modules/input/InputQuickLog.module';
+import { FormatActivityValue } from "../../redux/helpers/Activity.helpers";
 import { FormatChallengeLabel } from "../../redux/helpers/Challenge.helper";
 import { GetLogEndValueForPeriod } from "../../redux/helpers/Log.helper";
 
 
-export default function TaskChallenge({task, period, timeFunc}) {
+const mapStateToProps = (state, ownProps) => {
+	const activityId = ownProps.task.taskActivityId;
+	return {
+		logs: state.log.logs.filter(l => l.activityId === activityId),
+		activity: state.activity.activities.find(a => a.id === activityId),
+		...ownProps
+	}
+}
 
-	const logEndValue = GetLogEndValueForPeriod(task.taskActivityId, period.start, period.end);
-	const activity = GetActivityById(task.taskActivityId);
+
+function TaskChallenge({ logs, activity, task, periodObj, timeFunc }) {
+
+	const logEndValue = GetLogEndValueForPeriod(logs, activity.id, activity.isReportingIncremental, periodObj.start, periodObj.end);
 	const target = FormatActivityValue(activity, task.taskAmount, timeFunc);
 	const progress = FormatActivityValue(activity, logEndValue, timeFunc);
 	const completionRate = Math.min(logEndValue,task.taskAmount)/task.taskAmount*100;
@@ -36,3 +46,5 @@ export default function TaskChallenge({task, period, timeFunc}) {
 	);
 
 }
+
+export default connect(mapStateToProps)(TaskChallenge);

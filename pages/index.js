@@ -1,11 +1,24 @@
 import Sidebar from '../src/modules/Sidebar.module'
 import Scoreboard from '../src/modules/Scoreboard.module'
+import { connect } from 'react-redux'
 
-export default function Home() {
+
+const mapStateToProps = (state) => {
+	return {
+		seasonId: state.season.active
+	}
+}
+
+
+function Home({ seasonId }) {
+
 	return (
 		<div>
-			<Scoreboard/>
+			<Scoreboard seasonId={seasonId} />
 			<Sidebar/>
 		</div>
 	)
+
 }
+
+export default connect(mapStateToProps)(Home);

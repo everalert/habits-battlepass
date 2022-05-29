@@ -7,20 +7,24 @@ export function GetChallengeById(id) {
 	return useSelector((state) => state.challenge.challenges.find(c => c.id === id))
 }
 
+export function PrepareNewChallenge() {
+	return {...useSelector((state) => state.challenge.base)};
+}
+
 export function GetAllChallengesForGoal(goalId) {
 	return useSelector((state) => state.challenge.challenges.filter(c => c.goalId === goalId))
 }
 
-export function GetAllChallengesForGoalOfPeriod(goalId, period) {
-	return useSelector((state) => state.challenge.challenges.filter(c => c.goalId === goalId && c.period === period))
+export function GetAllChallengesForGoalOfPeriod(challenges, goalId, period) {
+	return challenges.filter(c => c.goalId === goalId && c.period === period)
 }
 
-export function GetAllDailyChallengesForGoal(goalId) {
-	return GetAllChallengesForGoalOfPeriod(goalId,'daily')
+export function GetAllDailyChallengesForGoal(challenges, goalId) {
+	return GetAllChallengesForGoalOfPeriod(challenges, goalId,'daily')
 }
 
-export function GetAllWeeklyChallengesForGoal(goalId) {
-	return GetAllChallengesForGoalOfPeriod(goalId,'weekly')
+export function GetAllWeeklyChallengesForGoal(challenges, goalId) {
+	return GetAllChallengesForGoalOfPeriod(challenges, goalId,'weekly')
 }
 
 export function FormatChallengeLabel(challenge, timeFunc = SecondsToHMMSS, timeUnit = '') {
@@ -34,10 +38,10 @@ export function FormatChallengeLabel(challenge, timeFunc = SecondsToHMMSS, timeU
 	return newLabel;
 }
 
-export function GetChallengeProgressForPeriod(challenge, periodStart, periodEnd) {
+export function GetChallengeProgressForPeriod(logs, isIncremental, challenge, periodStart, periodEnd) {
 	let done = false;
 	let xp = 0;
-	const logged = GetLogEndValueForPeriod(challenge.taskActivityId, periodStart, periodEnd);
+	const logged = GetLogEndValueForPeriod(logs, challenge.taskActivityId, isIncremental, periodStart, periodEnd);
 	if (logged >= challenge.taskAmount) {
 		xp = challenge.taskXP;
 		done = true;

@@ -3,6 +3,10 @@ import { replaceRecords } from "./Manager.slice";
 import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
 
 const initialState = {
+	opts: {
+		period: ['daily','weekly'],
+		labelInsert: ['{UNIT}','{ACTIVITY}'],
+	},
 	challenges: [
 		{
 			id: 0,
