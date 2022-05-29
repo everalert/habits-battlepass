@@ -24,7 +24,7 @@ export default function InputDateTimeSelector({ timestamp, setParentTimestamp })
 	}, [datefill]);
 
 	return (
-		<div onClick={incDatefill} className="h-7 w-20 pt-1 text-center font-bold uppercase bg-indigo-500 hover:bg-indigo-800 active:bg-indigo-900 hover:cursor-pointer rounded aspect-square select-none">{ dateopts[datefill] }</div>
+		<input type='button' value={dateopts[datefill]} onClick={incDatefill} className="h-7 w-20 text-center font-bold uppercase bg-indigo-700 hover:bg-indigo-600 active:bg-indigo-800 hover:cursor-pointer rounded aspect-square select-none" />
 	)
 
 }

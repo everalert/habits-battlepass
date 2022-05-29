@@ -64,26 +64,26 @@ function InputLog({ firstActivity, setParentOpen }) {
 
 	return (
 		<form onSubmit={submitForm} className='text-sm flex flex-col justify-center gap-2'>
-			<h2 className='-mb-1.5'>Activity</h2>
-			<InputActivityList selectedActivity={selectedActivity} setParentActivity={setSelectedActivity} />
 			<h2 className='-mb-1.5'>Date & Time</h2>
 			<div className='flex gap-1'>
 				<InputDateTime timestamp={timestamp} setParentTimestamp={setTimestamp} />
 				<InputDateTimeSelector timestamp={timestamp} setParentTimestamp={setTimestamp} />
 			</div>
+			<h2 className='-mb-1.5'>Activity</h2>
+			<InputActivityList selectedActivity={selectedActivity} setParentActivity={setSelectedActivity} />
+			<h2 className='-mb-1.5'>Variation</h2>
+			<InputActivityVariationList activity={selectedActivity} setParentVariation={setSelectedVariation} />
 			{ !isTimeTask && <>
-				<h2 className='-mb-1.5'>Amount</h2>
+				<h2 className='-mb-1.5'>Amount to Log</h2>
 				<div className='flex gap-1'>
 					<InputAmount amount={amountInput} setParentAmount={setAmountInput} />
 					<InputAmountIncrementButton amount={amountInput} setParentAmount={setAmountInput} />
 				</div>
 			</> }
 			{ isTimeTask && <>
-				<h2 className='-mb-1.5'>Duration</h2>
+				<h2 className='-mb-1.5'>Duration to Log</h2>
 				<InputDuration timestamp={durationInput} setParentTimestamp={setDurationInput} />
 			</> }
-			<h2 className='-mb-1.5'>Variation</h2>
-			<InputActivityVariationList activity={selectedActivity} setParentVariation={setSelectedVariation} />
 			<div className='flex gap-3 ml-auto mt-1'>
 				<InputResetButton resetFunc={resetForm} />
 				<InputSubmitButton submitFunc={submitForm} />

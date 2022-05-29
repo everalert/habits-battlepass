@@ -36,7 +36,7 @@ function InputActivityVariationList({ activity, setParentVariation }) {
 	return (
 		<div className='relative text-zinc-900'>
 			<Listbox value={selectedVariation} onChange={setSelectedVariation}>
-				<Listbox.Button className='relative w-full cursor-pointer rounded bg-zinc-300 py-1 pl-3 pr-10 text-left shadow-md focus:outline- sm:text-sm'>
+				<Listbox.Button className='relative w-full cursor-pointer rounded bg-zinc-300 py-1 pl-3 pr-10 text-left ring-2 ring-black ring-opacity-5 focus:outline- sm:text-sm'>
 					{ variations[0] === '' ? 
 						<span className='block truncate text-zinc-400'>No Variations Available</span>
 						: <span className='block truncate text-zinc-900'>{selectedVariation}</span>
@@ -46,7 +46,7 @@ function InputActivityVariationList({ activity, setParentVariation }) {
 					</span>
 				</Listbox.Button>
 				{ variations[0] !== '' &&
-					<Listbox.Options className='absolute mt-1 max-h-32 w-full overflow-auto rounded bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
+					<Listbox.Options className='absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded bg-white py-1 text-base ring-2 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
 						{variations.map((v, i) => (
 							<Listbox.Option key={i} value={v} className={({ active }) => `relative cursor-default select-none py-1 pl-10 pr-4 ${active ? 'bg-zinc-200 text-zinc-900' : 'text-zinc-600'}`}>
 								{({ selected }) => (<>

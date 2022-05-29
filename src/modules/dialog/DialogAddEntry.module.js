@@ -2,6 +2,7 @@ import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from "@heroicons/react/
 import { useState } from "react"
 import InputLog from "../input/InputLog.module"
 import { Dialog } from '@headlessui/react';
+import InputChallenge from "../input/InputChallenge.module";
 
 export default function DialogAddEntry({ isOpen, setIsOpen }) {
 
@@ -10,8 +11,8 @@ export default function DialogAddEntry({ isOpen, setIsOpen }) {
 		{ name:'Category', content:(<>CATEGORY</>) },
 		{ name:'Activity', content:(<>ACTIVITY</>) },
 		{ name:'Goal', content:(<>GOAL</>) },
-		{ name:'Challenge', content:(<>CHALLENGE</>) },
-		{ name:'Log', content:<InputLog setParentOpen={setIsOpen} /> },
+		{ name:'Challenge', content: <InputChallenge setParentOpen={setIsOpen} /> },
+		{ name:'Log', content: <InputLog setParentOpen={setIsOpen} /> },
 	]
 
 	const [tab, setTab] = useState(0);
@@ -23,9 +24,9 @@ export default function DialogAddEntry({ isOpen, setIsOpen }) {
 	const mainBtnStyle = 'bg-slate-600 hover:bg-slate-500 active:bg-slate-700'
 
 	return (
-		<Dialog open={isOpen} onClose={setIsOpen} className="fixed top-0 left-1/2 flex flex-col gap-4 -ml-48 my-8 w-96 bg-zinc-900 rounded-xl ring-2 ring-black/10">
-			<Dialog.Overlay className="fixed inset-0 overflow-scroll scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-zinc-900 bg-zinc-900/75"/>
-			<div className="relative">
+		<Dialog open={isOpen} onClose={setIsOpen}>
+			<Dialog.Overlay className="fixed inset-0 overflow-scroll backdrop-blur-sm scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-zinc-900 bg-zinc-700/50"/>
+			<div className="fixed top-0 left-1/2 flex flex-col gap-4 -ml-48 my-8 w-96 bg-zinc-900 rounded-xl ring-2 ring-black/10">
 				<h1 className="mx-4 mt-4 text-xl text-center uppercase font-bold">Add Entry</h1>
 				<ul className="flex flex-wrap justify-center mx-4 divide-x divide-neutral-900 select-none">
 					<li className="w-8 h-8 rounded-l-lg overflow-hidden" onClick={()=>decrementTab()}>
