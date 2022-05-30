@@ -7,9 +7,8 @@ export function GetGoalById(id) {
 	return useSelector((state) => state.goal.goals.find(g => g.id === id))
 }
 
-export function PrepareNewGoal(timestamp = GetCurrentUnixTimestamp()) {
-	const base = {...useSelector((state) => state.goal.base)};
-	return Object.assign(base, { timestamp:timestamp });
+export function PrepareNewGoal() {
+	return {...useSelector((state) => state.goal.base)};
 }
 
 export function GetGoalProjectedResultAtTime(season, goal, unixTimestamp) {
