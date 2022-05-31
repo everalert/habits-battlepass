@@ -51,7 +51,7 @@ export default function InputDateTime({ timestamp = GetCurrentUnixTimestamp(), s
 	}, [timestamp])
 
 	return (
-		<label className="h-7 flex items-center gap-0.5 px-2 rounded font-mono text-zinc-600 caret-zinc-500 bg-zinc-300">
+		<label className="h-7 mr-auto flex items-center gap-0.5 px-2 rounded font-mono text-zinc-600 caret-zinc-500 bg-zinc-300">
 			<input type="text" placeholder="Y" value={pad(date.getFullYear(),4)} onChange={(e)=>setDateYYYY(e.target.value)} className="w-8 mt-0.5 placeholder:text-zinc-400 bg-transparent focus:outline-none focus:text-zinc-900 text-center" />/
 			<input type="text" placeholder="M" value={pad(date.getMonth()+1,2)} onChange={(e)=>setDateMM(e.target.value)} className="w-4 mt-0.5 placeholder:text-zinc-400 bg-transparent focus:outline-none focus:text-zinc-900 text-center" />/
 			<input type="text" placeholder="D" value={pad(date.getDate(),2)} onChange={(e)=>setDateDD(e.target.value)} className="w-4 mt-0.5 placeholder:text-zinc-400 bg-transparent focus:outline-none focus:text-zinc-900 text-center" />
