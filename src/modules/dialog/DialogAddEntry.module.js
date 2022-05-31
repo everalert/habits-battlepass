@@ -1,6 +1,7 @@
 import { Dialog } from '@headlessui/react';
 import { ChevronDoubleLeftIcon, ChevronDoubleRightIcon } from "@heroicons/react/solid";
 import { useState } from "react";
+import InputActivity from '../input/InputActivity.module';
 import InputChallenge from "../input/InputChallenge.module";
 import InputGoal from "../input/InputGoal.module";
 import InputLog from "../input/InputLog.module";
@@ -10,8 +11,8 @@ export default function DialogAddEntry({ isOpen, setIsOpen }) {
 	const tabs = [
 		{ name:'Season', content:(<>SEASON</>) },
 		{ name:'Category', content:(<>CATEGORY</>) },
-		{ name:'Activity', content:(<>ACTIVITY</>) },
-		{ name:'Goal', content:(<InputGoal setParentOpen={setIsOpen} />) },
+		{ name:'Activity', content: <InputActivity setParentOpen={setIsOpen} /> },
+		{ name:'Goal', content: <InputGoal setParentOpen={setIsOpen} /> },
 		{ name:'Challenge', content: <InputChallenge setParentOpen={setIsOpen} /> },
 		{ name:'Log', content: <InputLog setParentOpen={setIsOpen} /> },
 	]
