@@ -4,6 +4,9 @@ import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
 
 const initialState = {
 	active: 0,
+	opts: {
+
+	},
 	seasons: [
 		{
 			id: 0,
@@ -36,17 +39,17 @@ const initialState = {
 		start: 0, // unix timestamp
 		length: 91*86400,
 		title: 'Season',
-		description: 'Description',
-		reward1Label: 'reward1',
+		description: '',
+		reward1Label: '',
 		reward1Claimed: false,
 		reward1Level: 25,
-		reward2Label: 'reward2',
+		reward2Label: '',
 		reward2Claimed: false,
 		reward2Level: 50,
-		reward3Label: 'reward3',
+		reward3Label: '',
 		reward3Claimed: false,
 		reward3Level: 100,
-		reward4Label: 'reward4',
+		reward4Label: '',
 		reward4Claimed: false,
 		reward4Level: 120,
 		levelMax: 130,

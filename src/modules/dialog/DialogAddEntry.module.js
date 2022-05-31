@@ -6,11 +6,12 @@ import InputCategory from '../input/InputCategory.module';
 import InputChallenge from "../input/InputChallenge.module";
 import InputGoal from "../input/InputGoal.module";
 import InputLog from "../input/InputLog.module";
+import InputSeason from '../input/InputSeason.module';
 
 export default function DialogAddEntry({ isOpen, setIsOpen }) {
 
 	const tabs = [
-		{ name:'Season', content:(<>SEASON</>) },
+		{ name:'Season', content: <InputSeason setParentOpen={setIsOpen} /> },
 		{ name:'Category', content: <InputCategory setParentOpen={setIsOpen} /> },
 		{ name:'Activity', content: <InputActivity setParentOpen={setIsOpen} /> },
 		{ name:'Goal', content: <InputGoal setParentOpen={setIsOpen} /> },
@@ -28,8 +29,8 @@ export default function DialogAddEntry({ isOpen, setIsOpen }) {
 
 	return (
 		<Dialog open={isOpen} onClose={setIsOpen}>
-			<Dialog.Overlay className="fixed inset-0 overflow-scroll backdrop-blur-sm scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-zinc-900 bg-zinc-700/50"/>
-			<div className="fixed top-0 left-1/2 flex flex-col gap-4 -ml-48 my-8 w-96 bg-zinc-900 rounded-xl ring-2 ring-black/10">
+			<Dialog.Overlay className="fixed inset-0 backdrop-blur-sm scrollbar-thin scrollbar-thumb-zinc-800 scrollbar-track-zinc-900 bg-zinc-700/50"/>
+			<div className="fixed inset-y-0 left-1/2 flex flex-col gap-4 -ml-48 my-8 w-96 bg-zinc-900 rounded-xl ring-2 ring-black/10 overflow-y-auto scrollbar-thin scrollbar-thumb-rounded-md scrollbar-thumb-zinc-800">
 				<h1 className="mx-4 mt-4 text-xl text-center uppercase font-bold">Add Entry</h1>
 				<ul className="flex flex-wrap justify-center mx-4 divide-x divide-neutral-900 select-none">
 					<li className="w-8 h-8 rounded-l-lg overflow-hidden" onClick={()=>decrementTab()}>
