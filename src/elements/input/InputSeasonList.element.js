@@ -12,6 +12,11 @@ const mapStateToProps = (state, ownProps) => {
 
 
 function InputSeasonList({ seasons, selectedSeason, setParentSeason }) {
+
+	useEffect(()=>{
+		if (!seasons.includes(selectedSeason))
+			setParentSeason(seasons[0]);
+	}, [seasons])
 	
 	return (
 		<div className='relative text-zinc-900'>

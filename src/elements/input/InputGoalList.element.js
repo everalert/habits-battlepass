@@ -12,6 +12,11 @@ const mapStateToProps = (state, ownProps) => {
 
 
 function InputGoalList({ goals, selectedGoal, setParentGoal }) {
+
+	useEffect(()=>{
+		if (!goals.includes(selectedGoal))
+			setParentGoal(goals[0]);
+	}, [goals])
 	
 	const label = (goal) => `${goal.goalLagActivityId} (${goal.goalLagStartValue} to ${goal.goalLagEndValue})`
 

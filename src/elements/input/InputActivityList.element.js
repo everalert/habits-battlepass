@@ -12,6 +12,11 @@ const mapStateToProps = (state, ownProps) => {
 
 
 function InputActivityList({ activities, selectedActivity, setParentActivity }) {
+
+	useEffect(()=>{
+		if (!activities.includes(selectedActivity))
+			setParentActivity(activities[0]);
+	}, [activities])
 	
 	return (
 		<div className='relative text-zinc-900'>
