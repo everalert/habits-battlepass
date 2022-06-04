@@ -20,7 +20,7 @@ function InputActivityTypeSelector({ type, setParentType, typeList }) {
 	}, [typeIdx])
 
 	return (
-		<input type='button' value={typeList[typeIdx]} onClick={incTypeIdx} className="h-7 w-24 text-center font-bold uppercase bg-indigo-700 hover:bg-indigo-600 active:bg-indigo-800 hover:cursor-pointer rounded aspect-square select-none" />
+		<input type='button' value={typeList[typeIdx] ?? ''} onClick={incTypeIdx} className="h-7 w-24 text-center font-bold uppercase bg-indigo-700 hover:bg-indigo-600 active:bg-indigo-800 hover:cursor-pointer rounded aspect-square select-none" />
 	)
 
 }
