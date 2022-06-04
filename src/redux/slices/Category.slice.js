@@ -60,6 +60,9 @@ export const CategorySlice = createSlice({
 			);
 			state.categories[i] = newCategory;
 		},
+		deleteCategory: (state, action) => {
+			state.categories = state.categories.filter(c => c.id !== action.payload.id)
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(replaceRecords, (state, action) => {
@@ -68,6 +71,6 @@ export const CategorySlice = createSlice({
 	}
 })
 
-export const { addCategory, editCategory } = CategorySlice.actions
+export const { addCategory, editCategory, deleteCategory } = CategorySlice.actions
 
 export default CategorySlice.reducer

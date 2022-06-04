@@ -110,6 +110,9 @@ export const GoalSlice = createSlice({
 			);
 			state.goals[i] = newGoal;
 		},
+		deleteGoal: (state, action) => {
+			state.goals = state.goals.filter(g => g.id !== action.payload.id)
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(replaceRecords, (state, action) => {
@@ -118,6 +121,6 @@ export const GoalSlice = createSlice({
 	}
 })
 
-export const { addGoal, editGoal } = GoalSlice.actions
+export const { addGoal, editGoal, deleteGoal } = GoalSlice.actions
 
 export default GoalSlice.reducer

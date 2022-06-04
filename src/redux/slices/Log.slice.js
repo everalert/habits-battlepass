@@ -1,5 +1,6 @@
 import { createAction, createSlice } from "@reduxjs/toolkit"
 import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
+import { GetFirstActivity } from "../helpers/Activity.helpers";
 import { replaceRecords } from "./Manager.slice";
 
 const initialState = {
@@ -43,7 +44,7 @@ const initialState = {
 	base: {
 		id: 0,
 		activityId: -1,
-		timestamp: 0,
+		timestamp: GetCurrentUnixTimestamp(),
 		value: 0,
 		variation: ''
 	}
@@ -69,6 +70,9 @@ export const LogSlice = createSlice({
 			);
 			state.logs[i] = newLog;
 		},
+		deleteLog: (state, action) => {
+			state.logs = state.logs.filter(l => l.id !== action.payload.id)
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(replaceRecords, (state, action) => {
@@ -77,6 +81,6 @@ export const LogSlice = createSlice({
 	}
 })
 
-export const { addLog, editLog } = LogSlice.actions
+export const { addLog, editLog, deleteLog } = LogSlice.actions
 
 export default LogSlice.reducer

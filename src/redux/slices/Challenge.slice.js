@@ -133,6 +133,9 @@ export const ChallengeSlice = createSlice({
 			);
 			state.challenges[i] = newChallenge;
 		},
+		deleteChallenge: (state, action) => {
+			state.challenges = state.challenges.filter(c => c.id !== action.payload.id)
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(replaceRecords, (state, action) => {
@@ -141,6 +144,6 @@ export const ChallengeSlice = createSlice({
 	}
 })
 
-export const { addChallenge, editChallenge } = ChallengeSlice.actions
+export const { addChallenge, editChallenge, deleteChallenge } = ChallengeSlice.actions
 
 export default ChallengeSlice.reducer

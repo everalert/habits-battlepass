@@ -81,6 +81,9 @@ export const SeasonSlice = createSlice({
 			);
 			state.seasons[i] = newSeason;
 		},
+		deleteSeason: (state, action) => {
+			state.seasons = state.seasons.filter(s => s.id !== action.payload.id)
+		},
 		setLengthInDays: (state, action) => {
 			state.seasons[action.payload.seasonId].length = 86400 * action.payload.days
 		}
@@ -92,6 +95,6 @@ export const SeasonSlice = createSlice({
 	}
 })
 
-export const { addSeason, editSeason, setLengthInDays } = SeasonSlice.actions
+export const { addSeason, editSeason, deleteSeason, setLengthInDays } = SeasonSlice.actions
 
 export default SeasonSlice.reducer

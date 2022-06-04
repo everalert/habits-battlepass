@@ -147,6 +147,9 @@ export const ActivitySlice = createSlice({
 			);
 			state.activities[i] = newActivity;
 		},
+		deleteActivity: (state, action) => {
+			state.activities = state.activities.filter(a => a.id !== action.payload.id)
+		},
 	},
 	extraReducers: (builder) => {
 		builder.addCase(replaceRecords, (state, action) => {
@@ -155,6 +158,6 @@ export const ActivitySlice = createSlice({
 	}
 })
 
-export const { addActivity, editActivity } = ActivitySlice.actions
+export const { addActivity, editActivity, deleteActivity } = ActivitySlice.actions
 
 export default ActivitySlice.reducer
