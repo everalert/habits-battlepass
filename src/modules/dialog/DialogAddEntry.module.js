@@ -3,7 +3,7 @@ import InputActivity from '../input/InputActivity.module';
 import InputCategory from '../input/InputCategory.module';
 import InputChallenge from "../input/InputChallenge.module";
 import InputGoal from "../input/InputGoal.module";
-import InputLog from "../input/InputLog.module";
+import InputLogAdd from '../input/InputLogAdd.module';
 import InputSeason from '../input/InputSeason.module';
 
 export default function DialogAddEntry({ isOpen, setIsOpen }) {
@@ -14,7 +14,7 @@ export default function DialogAddEntry({ isOpen, setIsOpen }) {
 		{ name:'Activity',  content: <InputActivity setParentOpen={setIsOpen} /> },
 		{ name:'Goal',      content: <InputGoal setParentOpen={setIsOpen} /> },
 		{ name:'Challenge', content: <InputChallenge setParentOpen={setIsOpen} /> },
-		{ name:'Log',       content: <InputLog setParentOpen={setIsOpen} /> },
+		{ name:'Log',       content: <InputLogAdd setParentOpen={setIsOpen} /> },
 	]
 	
 	const baseBtnStyle = 'mb-px mx-px px-3 py-1 text-center font-medium uppercase cursor-pointer'

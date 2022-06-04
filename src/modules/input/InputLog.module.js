@@ -1,74 +1,62 @@
 import { useEffect, useState } from "react";
-import { connect, useDispatch } from 'react-redux';
-import { GetCurrentUnixTimestamp } from '../../helpers/Math.helper';
-import { PrepareNewLog } from "../../redux/helpers/Log.helper";
-import { addLog } from '../../redux/slices/Log.slice';
+import { connect } from 'react-redux';
 import InputActivityList from '../../elements/input/InputActivityList.element';
 import InputActivityVariationList from '../../elements/input/InputActivityVariationList.element';
 import InputAmount from '../../elements/input/InputAmount.element';
 import InputAmountIncrementButton from '../../elements/input/InputAmountButton.element';
-import InputDateTime from '../../elements/input/InputDateTime.element';
-import InputDateTimeSelector from '../../elements/input/InputDateTimeSelector.element';
+import InputDateTimeSelectorCombo from "../../elements/input/InputDateTimeSelectorCombo.element";
 import InputDuration from '../../elements/input/InputDuration.element';
-import InputResetButton from '../../elements/input/InputResetButton.element';
-import InputSubmitButton from '../../elements/input/InputSubmitButton.element';
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		firstActivity: state.activity.activities[0],
+		activity: state.activity.activities.find(a => a.id === ownProps.logObj.activityId),
+		activities: state.activity.activities,
 		...ownProps
 	}
 }
 
 
-function InputLog({ firstActivity, setParentOpen }) {
+function InputLog({ activity, activities, logObj, setLogObj }) {
 
-	const dispatch = useDispatch();
-	const blankLog = PrepareNewLog();
-
-	const [selectedActivity, setSelectedActivity] = useState(firstActivity);
-	const [selectedVariation, setSelectedVariation] = useState('')
+	const [selectedActivity, setSelectedActivity] = useState(activity);
+	const [selectedVariation, setSelectedVariation] = useState(logObj.variation);
 	const [isTimeTask, setIsTimeTask] = useState(selectedActivity.type === 'time');
+
+	const [timestamp, setTimestamp] = useState(logObj.timestamp);
+
+	const [durationInput, setDurationInput] = useState(logObj.value);
+	const [amountInput, setAmountInput] = useState(logObj.value);
+
+	useEffect(()=>{
+		setSelectedActivity(activities.find(a => a.id === logObj.activityId));
+		setSelectedVariation(logObj.variation);
+		setTimestamp(logObj.timestamp);
+		setDurationInput(logObj.value);
+		setAmountInput(logObj.value);
+	}, [logObj])
+
+	useEffect(()=>{
+		setLogObj(Object.assign({...logObj}, {timestamp: timestamp}));
+	}, [timestamp]);
+
+	useEffect(()=>{
+		setLogObj(Object.assign({...logObj}, {variation: selectedVariation}));
+	}, [selectedVariation]);
+
+	useEffect(()=>{
+		setLogObj(Object.assign({...logObj}, {value: isTimeTask ? durationInput : amountInput}));
+	}, [durationInput, amountInput, isTimeTask]);
 	
 	useEffect(()=>{
-		setIsTimeTask(selectedActivity.type === 'time')
+		setLogObj(Object.assign({...logObj}, {activityId: selectedActivity.id}));
+		setIsTimeTask(selectedActivity.type === 'time');
 	}, [selectedActivity]);
 
-	const [timestamp, setTimestamp] = useState(GetCurrentUnixTimestamp())
-
-	const [durationInput, setDurationInput] = useState(0);
-	const [amountInput, setAmountInput] = useState(0);
-
-	const resetForm = () => {
-		setSelectedActivity(firstActivity);
-		setTimestamp(GetCurrentUnixTimestamp());
-		setDurationInput(0);
-		setAmountInput(0);
-	}
-
-	const submitForm = (event) => {
-		event.preventDefault();
-		const value = isTimeTask ? durationInput : amountInput;
-		if ((selectedActivity.isReportingIncremental && value > 0) || !selectedActivity.isReportingIncremental) {
-			const newLog = Object.assign(blankLog,{
-				activityId: selectedActivity.id,
-				value: value,
-				variation: selectedVariation
-			});
-			dispatch(addLog(newLog));
-			resetForm();
-			setParentOpen(false);
-		}
-	}
-
 	return (
-		<form onSubmit={submitForm} className='text-sm flex flex-col justify-center gap-2'>
+		<>
 			<h2 className='-mb-1.5'>Date & Time</h2>
-			<div className='flex gap-1'>
-				<InputDateTime timestamp={timestamp} setParentTimestamp={setTimestamp} />
-				<InputDateTimeSelector timestamp={timestamp} setParentTimestamp={setTimestamp} />
-			</div>
+			<InputDateTimeSelectorCombo timestamp={timestamp} setParentTimestamp={setTimestamp} />
 			<h2 className='-mb-1.5'>Activity</h2>
 			<InputActivityList selectedActivity={selectedActivity} setParentActivity={setSelectedActivity} />
 			<h2 className='-mb-1.5'>Variation</h2>
@@ -84,11 +72,7 @@ function InputLog({ firstActivity, setParentOpen }) {
 				<h2 className='-mb-1.5'>Duration to Log</h2>
 				<InputDuration timestamp={durationInput} setParentTimestamp={setDurationInput} />
 			</> }
-			<div className='flex gap-3 ml-auto mt-1'>
-				<InputResetButton resetFunc={resetForm} />
-				<InputSubmitButton submitFunc={submitForm} />
-			</div>
-		</form>
+		</>
 	)
 
 }
