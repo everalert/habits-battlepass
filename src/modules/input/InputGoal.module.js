@@ -1,110 +1,131 @@
 import { useEffect, useState } from "react";
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import InputActivityList from '../../elements/input/InputActivityList.element';
 import InputActivityVariationList from '../../elements/input/InputActivityVariationList.element';
 import InputAmount from '../../elements/input/InputAmount.element';
 import InputCategoryList from "../../elements/input/InputCategoryList.element";
 import InputDuration from '../../elements/input/InputDuration.element';
 import InputGoalProjectionCurveList from "../../elements/input/InputGoalProjectionCurveList.element";
-import InputResetButton from '../../elements/input/InputResetButton.element';
 import InputSeasonList from "../../elements/input/InputSeasonList.element";
-import InputSubmitButton from '../../elements/input/InputSubmitButton.element';
 import InputText from "../../elements/input/InputText.element";
-import { PrepareNewGoal } from "../../redux/helpers/Goal.helper";
-import { addGoal } from "../../redux/slices/Goal.slice";
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		firstActivity: state.activity.activities[0],
-		firstCategory: state.category.categories[0],
-		firstSeason: state.season.seasons[0],
+		season: state.season.seasons.find(s => s.id === ownProps.goalObj.seasonId),
+		seasons: state.season.seasons,
+		category: state.category.categories.find(c => c.id === ownProps.goalObj.categoryId),
+		categories: state.category.categories,
+		activityLG: state.activity.activities.find(l => l.id === ownProps.goalObj.goalLagActivityId),
+		activityLE: state.activity.activities.find(l => l.id === ownProps.goalObj.goalLeadActivityId),
+		activities: state.activity.activities,
 		...state.goal.opts,
 		...ownProps
 	}
 }
 
 
-function InputGoal({ firstActivity, firstCategory, firstSeason, projectionCurve, setParentOpen }) {
+function InputGoal({ season, seasons, category, categories, activityLG, activityLE, activities, goalObj, setGoalObj }) {
 
-	const dispatch = useDispatch();
-	const blankGoal = PrepareNewGoal();
+	const [selectedSeason, setSelectedSeason] = useState(season);
+	const [selectedCategory, setSelectedCategory] = useState(category);
+	const [selectedActivityLG, setSelectedActivityLG] = useState(activityLG);
+	const [selectedActivityLE, setSelectedActivityLE] = useState(activityLE);
 
-	const [selectedSeason, setSelectedSeason] = useState(firstSeason);
-	const [selectedCategory, setSelectedCategory] = useState(firstCategory);
-
-	const [selectedActivityLG, setSelectedActivityLG] = useState(firstActivity);
-	const [selectedVariationLG, setSelectedVariationLG] = useState('');
+	const [selectedVariationLG, setSelectedVariationLG] = useState(goalObj.goalLagActivityVariation);
+	const [selectedVariationLE, setSelectedVariationLE] = useState(goalObj.goalLeadActivityVariation);
 	const [isTimeTaskLG, setIsTimeTaskLG] = useState(selectedActivityLG.type === 'time');
-	const [selectedActivityLE, setSelectedActivityLE] = useState(firstActivity);
-	const [selectedVariationLE, setSelectedVariationLE] = useState('');
 	const [isTimeTaskLE, setIsTimeTaskLE] = useState(selectedActivityLE.type === 'time');
 
-	useEffect(()=>{
-		setIsTimeTaskLG(selectedActivityLG.type === 'time')
-	}, [selectedActivityLG]);
+	const [noteInput, setNoteInput] = useState(goalObj.goalNote);
+	
+	const [durationInputLGS, setDurationInputLGS] = useState(goalObj.goalLagStartValue); 
+	const [durationInputLGE, setDurationInputLGE] = useState(goalObj.goalLagEndValue);
+	const [durationInputLE, setDurationInputLE] = useState(goalObj.goalLeadActivityTarget);
+
+	const [amountInputLGS, setAmountInputLGS] = useState(goalObj.goalLagStartValue); 
+	const [amountInputLGE, setAmountInputLGE] = useState(goalObj.goalLagEndValue);
+	const [amountInputLE, setAmountInputLE] = useState(goalObj.goalLeadActivityTarget);
+	
+	const [xpCurrentInput, setXpCurrentInput] = useState(goalObj.xpCurrentInput);
+	const [xpRatioInput, setXpRatioInput] = useState(goalObj.seasonXpRatio);
+	const [curveInput, setCurveInput] = useState(goalObj.goalLagProjectionCurve);
 
 	useEffect(()=>{
-		setIsTimeTaskLE(selectedActivityLE.type === 'time')
-	}, [selectedActivityLE]);
+		setSelectedSeason(seasons.find(s => s.id === goalObj.seasonId));
+		setSelectedCategory(categories.find(c => c.id === goalObj.categoryId));
+		setSelectedActivityLG(activities.find(a => a.id === goalObj.goalLagActivityId));
+		setSelectedActivityLE(activities.find(a => a.id === goalObj.goalLeadActivityId));
+		setSelectedVariationLG(goalObj.goalLagActivityVariation);
+		setSelectedVariationLE(goalObj.goalLeadActivityVariation);
+		setDurationInputLGS(goalObj.goalLagStartValue);
+		setDurationInputLGE(goalObj.goalLagEndValue);
+		setDurationInputLE(goalObj.goalLeadActivityTarget);
+		setAmountInputLGS(goalObj.goalLagStartValue);
+		setAmountInputLGE(goalObj.goalLagEndValue);
+		setAmountInputLE(goalObj.goalLeadActivityTarget);
+		setXpCurrentInput(goalObj.currentXP);
+		setXpRatioInput(goalObj.seasonXpRatio);
+		setCurveInput(goalObj.goalLagProjectionCurve);
+		setNoteInput(goalObj.goalNote);
+	}, [goalObj])
 
-	const [noteInput, setNoteInput] = useState(blankGoal.goalNote);
-	const [durationInputLGS, setDurationInputLGS] = useState(0); // TODO: pre-fill with current reported value
-	const [durationInputLGE, setDurationInputLGE] = useState(0);
-	const [durationInputLE, setDurationInputLE] = useState(0);
-	const [amountInputLGS, setAmountInputLGS] = useState(0); // TODO: pre-fill with current reported value
-	const [amountInputLGE, setAmountInputLGE] = useState(0);
-	const [amountInputLE, setAmountInputLE] = useState(0);
-	const [xpCurrentInput, setXpCurrentInput] = useState(0);
-	const [xpRatioInput, setXpRatioInput] = useState(0);
-	const [curveInput, setCurveInput] = useState(projectionCurve[0]);
+	useEffect(()=>{
+		setGoalObj(Object.assign({...goalObj}, {seasonId: selectedSeason.id}))
+	}, [selectedSeason])
 
-	const resetForm = () => {
-		setSelectedSeason(firstSeason);
-		setSelectedCategory(firstCategory);
-		setSelectedActivityLG(firstActivity);
-		setSelectedActivityLE(firstActivity);
-		setSelectedVariationLG('');
-		setSelectedVariationLE('');
-		setDurationInputLGS(0);
-		setDurationInputLGE(0);
-		setDurationInputLE(0);
-		setAmountInputLGS(0);
-		setAmountInputLGE(0);
-		setAmountInputLE(0);
-		setXpCurrentInput(0);
-		setXpRatioInput(0);
-		setCurveInput(projectionCurve[0]);
-	}
+	useEffect(()=>{
+		setGoalObj(Object.assign({...goalObj}, {categoryId: selectedCategory.id}))
+	}, [selectedCategory])
 
-	const submitForm = (event) => {
-		event.preventDefault();
-		const valueLGS = isTimeTaskLG ? durationInputLGS : amountInputLGS;
-		const valueLGE = isTimeTaskLG ? durationInputLGE : amountInputLGE;
-		const valueLE = isTimeTaskLE ? durationInputLE : amountInputLE;
+	useEffect(()=>{
+		setGoalObj(Object.assign({...goalObj}, {goalLagActivityId: selectedActivityLG.id}))
+		setIsTimeTaskLG(selectedActivityLG.type === 'time');
+	}, [selectedActivityLG])
 
-		const newGoal = Object.assign(blankGoal,{
-			seasonId: selectedSeason.id,
-			categoryId: selectedCategory.id,
-			goalLagActivityId: selectedActivityLG.id,
-			goalLagActivityVariation: selectedVariationLG,
-			goalLagStartValue: valueLGS,
-			goalLagEndValue: valueLGE,
-			goalLagProjectionCurve: curveInput,
-			goalLeadActivityId: selectedActivityLE.id,
-			goalLeadActivityTarget: valueLE,
-			goalLeadActivityVariation: selectedVariationLE,
-			goalNote: noteInput,
-			currentXP: xpCurrentInput,
-			seasonXpRatio: xpRatioInput
-		});
-		dispatch(addGoal(newGoal));
-		resetForm();
-		setParentOpen(false);
-	}
+	useEffect(()=>{
+		setGoalObj(Object.assign({...goalObj}, {goalLeadActivityId: selectedActivityLE.id}))
+		setIsTimeTaskLE(selectedActivityLE.type === 'time');
+	}, [selectedActivityLE])
+
+	useEffect(()=>{
+		setGoalObj(Object.assign({...goalObj}, {goalLagEndValue: isTimeTaskLG ? durationInputLGE : amountInputLGE}))
+	}, [isTimeTaskLG, durationInputLGE, amountInputLGE])
+
+	useEffect(()=>{
+		setGoalObj(Object.assign({...goalObj}, {goalLagStartValue: isTimeTaskLG ? durationInputLGS : amountInputLGS}))
+	}, [isTimeTaskLG, durationInputLGS, amountInputLGS])
+
+	useEffect(()=>{
+		setGoalObj(Object.assign({...goalObj}, {goalLeadActivityTarget: isTimeTaskLE ? durationInputLE : amountInputLE}))
+	}, [isTimeTaskLE, durationInputLE, amountInputLE])
+
+	useEffect(()=>{
+		setGoalObj(Object.assign({...goalObj}, {goalLagActivityVariation: selectedVariationLG}))
+	}, [selectedVariationLG])
+
+	useEffect(()=>{
+		setGoalObj(Object.assign({...goalObj}, {goalLeadActivityVariation: selectedVariationLE}))
+	}, [selectedVariationLE])
+
+	useEffect(()=>{
+		setGoalObj(Object.assign({...goalObj}, {currentXP: xpCurrentInput}))
+	}, [xpCurrentInput])
+
+	useEffect(()=>{
+		setGoalObj(Object.assign({...goalObj}, {seasonXpRatio: xpRatioInput}))
+	}, [xpRatioInput])
+
+	useEffect(()=>{
+		setGoalObj(Object.assign({...goalObj}, {goalLagProjectionCurve: curveInput}))
+	}, [curveInput])
+
+	useEffect(()=>{
+		setGoalObj(Object.assign({...goalObj}, {goalNote: noteInput}))
+	}, [noteInput])
 
 	return (
-		<form onSubmit={submitForm} className='text-sm flex flex-col justify-center gap-2'>
+		<>
 			<h2 className='-mb-1.5 flex gap-2'>Goal Text</h2>
 			<InputText text={noteInput} setParentText={setNoteInput} />
 			<h2 className='-mb-1.5'>Season</h2>
@@ -124,7 +145,7 @@ function InputGoal({ firstActivity, firstCategory, firstSeason, projectionCurve,
 				</> }
 			</div>
 			<div className="mr-auto flex gap-2 items-center">
-				<InputGoalProjectionCurveList curve={curveInput} setParentCurve={setCurveInput} /> goal projection
+				<InputGoalProjectionCurveList curve={curveInput} setParentCurve={setCurveInput} /> Projection
 			</div>
 			<h2 className='-mb-1.5'>Lead Measure</h2>
 			<InputActivityList selectedActivity={selectedActivityLE} setParentActivity={setSelectedActivityLE} />
@@ -137,11 +158,7 @@ function InputGoal({ firstActivity, firstCategory, firstSeason, projectionCurve,
 			<InputAmount amount={xpCurrentInput} setParentAmount={setXpCurrentInput} />
 			<h2 className='-mb-1.5'>XP Ratio</h2>
 			<InputAmount amount={xpRatioInput} setParentAmount={setXpRatioInput} />
-			<div className='flex gap-3 ml-auto mt-1'>
-				<InputResetButton resetFunc={resetForm} />
-				<InputSubmitButton submitFunc={submitForm} />
-			</div>
-		</form>
+		</>
 	)
 
 }

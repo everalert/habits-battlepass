@@ -1,60 +1,61 @@
-import { useState } from "react";
-import { connect, useDispatch } from 'react-redux';
+import { useEffect, useState } from "react";
+import { connect } from 'react-redux';
 import InputActivityTypeSelector from "../../elements/input/InputActivityTypeSelector.element";
 import InputBool from "../../elements/input/InputBool.element";
-import InputResetButton from '../../elements/input/InputResetButton.element';
-import InputSubmitButton from '../../elements/input/InputSubmitButton.element';
 import InputText from "../../elements/input/InputText.element";
-import { addActivity } from "../../redux/slices/Activity.slice";
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		base: { ...state.activity.base },
-		...state.activity.opts,
 		...ownProps
 	}
 }
 
 
-function InputActivity({ base, type: typeList, setParentOpen }) {
+function InputActivity({ activityObj, setActivityObj }) {
 
-	const dispatch = useDispatch();
+	const [noteInput, setNoteInput] = useState(activityObj.note);
+	const [labelInput, setLabelInput] = useState(activityObj.label);
+	const [typeInput, setTypeInput] = useState(activityObj.type);
+	const [unitInput, setUnitInput] = useState(activityObj.unit);
+	const [variationsInput, setVariationsInput] = useState(activityObj.variations);
+	const [isReportingIncrementalUnit, setIsReportingIncrementalUnit] = useState(activityObj.isReportingIncremental);
 
-	const [noteInput, setNoteInput] = useState(base.note);
-	const [labelInput, setLabelInput] = useState(base.label);
-	const [typeInput, setTypeInput] = useState(typeList[0]);
-	const [unitInput, setUnitInput] = useState(base.unit);
-	const [variationsInput, setVariationsInput] = useState(base.variations);
-	const [isReportingIncrementalUnit, setIsReportingIncrementalUnit] = useState(base.isReportingIncremental);
+	useEffect(() => {
+		setNoteInput(activityObj.note);
+		setLabelInput(activityObj.label);
+		setTypeInput(activityObj.type);
+		setUnitInput(activityObj.unit);
+		setVariationsInput(activityObj.variations);
+		setIsReportingIncrementalUnit(activityObj.isReportingIncremental);
+	}, [activityObj])
 
-	const resetForm = () => {
-		setNoteInput(base.note);
-		setLabelInput(base.label);
-		setTypeInput(typeList[0]);
-		setUnitInput(base.unit);
-		setVariationsInput(base.variations);
-		setIsReportingIncrementalUnit(base.isReportingIncremental);
-	}
+	useEffect(()=>{
+		setActivityObj(Object.assign({...activityObj}, { note: noteInput }));
+	}, [noteInput])
 
-	const submitForm = (event) => {
-		event.preventDefault();
+	useEffect(()=>{
+		setActivityObj(Object.assign({...activityObj}, { label: labelInput }));
+	}, [labelInput])
 
-		const newActivity = Object.assign(base,{
-			label: labelInput,
-			type: typeInput, 
-			unit: unitInput,
-			isReportingIncremental: isReportingIncrementalUnit,
-			variations: variationsInput,
-			note: noteInput
-		});
-		dispatch(addActivity(newActivity));
-		resetForm();
-		setParentOpen(false);
-	}
+	useEffect(()=>{
+		setActivityObj(Object.assign({...activityObj}, { type: typeInput }));
+	}, [typeInput])
+
+	useEffect(()=>{
+		setActivityObj(Object.assign({...activityObj}, { unit: unitInput }));
+	}, [unitInput])
+
+	useEffect(()=>{
+		setActivityObj(Object.assign({...activityObj}, { variations: variationsInput }));
+	}, [variationsInput])
+
+	useEffect(()=>{
+		setActivityObj(Object.assign({...activityObj}, { isReportingIncremental: isReportingIncrementalUnit }));
+	}, [isReportingIncrementalUnit])
 
 	return (
-		<form onSubmit={submitForm} className='text-sm flex flex-col justify-center gap-2'>
+		<>
 			<h2 className='-mb-1.5 flex gap-2'>Label</h2>
 			<InputText text={labelInput} setParentText={setLabelInput} />
 			<h2 className='-mb-1.5 flex gap-2'>Unit</h2>
@@ -69,11 +70,7 @@ function InputActivity({ base, type: typeList, setParentOpen }) {
 			<InputBool bool={isReportingIncrementalUnit} setParentBool={setIsReportingIncrementalUnit} />
 			<h2 className='-mb-1.5 flex gap-2'>Note</h2>
 			<InputText text={noteInput} setParentText={setNoteInput} />
-			<div className='flex gap-3 ml-auto mt-1'>
-				<InputResetButton resetFunc={resetForm} />
-				<InputSubmitButton submitFunc={submitForm} />
-			</div>
-		</form>
+		</>
 	)
 
 }

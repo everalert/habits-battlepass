@@ -36,7 +36,7 @@ const initialState = {
 	],
 	base: {
 		id: 0,
-		start: 0, // unix timestamp
+		start: GetCurrentUnixTimestamp(),
 		length: 91*86400,
 		title: 'Season',
 		description: '',

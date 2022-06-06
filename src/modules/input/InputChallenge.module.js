@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { connect, useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
 import InputActivityList from '../../elements/input/InputActivityList.element';
 import InputActivityVariationList from '../../elements/input/InputActivityVariationList.element';
 import InputAmount from '../../elements/input/InputAmount.element';
@@ -7,77 +7,86 @@ import InputBool from "../../elements/input/InputBool.element";
 import InputDuration from '../../elements/input/InputDuration.element';
 import InputGoalList from '../../elements/input/InputGoalList.element';
 import InputPeriodSelector from "../../elements/input/InputPeriodSelector.element";
-import InputResetButton from '../../elements/input/InputResetButton.element';
-import InputSubmitButton from '../../elements/input/InputSubmitButton.element';
 import InputText from "../../elements/input/InputText.element";
-import { PrepareNewChallenge } from "../../redux/helpers/Challenge.helper";
-import { addChallenge } from "../../redux/slices/Challenge.slice";
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		firstActivity: state.activity.activities[0],
-		firstGoal: state.goal.goals[0],
+		activity: state.activity.activities.find(a => a.id === ownProps.challengeObj.taskActivityId),
+		activities: state.activity.activities,
+		goal: state.goal.goals.find(g => g.id === ownProps.challengeObj.goalId),
+		goals: state.goal.goals,
 		...state.challenge.opts,
 		...ownProps
 	}
 }
 
 
-function InputChallenge({ firstActivity, firstGoal, period, labelInsert, setParentOpen }) {
+function InputChallenge({ activity, activities, goal, goals, labelInsert, challengeObj, setChallengeObj }) {
 
-	const dispatch = useDispatch();
-	const blankChallenge = PrepareNewChallenge();
-
-
-	const [selectedGoal, setSelectedGoal] = useState(firstGoal);
-
-	const [selectedActivity, setSelectedActivity] = useState(firstActivity);
-	const [selectedVariation, setSelectedVariation] = useState('');
+	const [selectedGoal, setSelectedGoal] = useState(goal);
+	const [selectedActivity, setSelectedActivity] = useState(activity);
+	const [selectedVariation, setSelectedVariation] = useState(challengeObj.taskVariation);
 	const [isTimeTask, setIsTimeTask] = useState(selectedActivity.type === 'time');
 
 	useEffect(()=>{
 		setIsTimeTask(selectedActivity.type === 'time')
 	}, [selectedActivity]);
 
-	const [labelInput, setLabelInput] = useState(blankChallenge.taskLabel);
-	const [durationInput, setDurationInput] = useState(0);
-	const [amountInput, setAmountInput] = useState(0);
-	const [xpInput, setXpInput] = useState(0);
-	const [periodInput, setPeriodInput] = useState(period[0]);
-	const [isTemplateInput, setIsTemplateInput] = useState(true);
+	const [labelInput, setLabelInput] = useState(challengeObj.taskLabel);
+	const [durationInput, setDurationInput] = useState(challengeObj.taskAmount);
+	const [amountInput, setAmountInput] = useState(challengeObj.taskAmount);
+	const [xpInput, setXpInput] = useState(challengeObj.taskXP);
+	const [periodInput, setPeriodInput] = useState(challengeObj.period);
+	const [isTemplateInput, setIsTemplateInput] = useState(challengeObj.isTemplate);
 
-	const resetForm = () => {
-		setSelectedGoal(firstGoal);
-		setSelectedActivity(firstActivity);
-		setDurationInput(0);
-		setAmountInput(0);
-		setXpInput(0);
-		setIsTemplateInput(true);
-	}
+	useEffect(()=>{
+		setLabelInput(challengeObj.taskLabel);
+		setSelectedGoal(goals.find(g => g.id === challengeObj.goalId));
+		setSelectedActivity(activities.find(a => a.id === challengeObj.taskActivityId));
+		setSelectedVariation(challengeObj.taskVariation);
+		setDurationInput(challengeObj.taskAmount);
+		setAmountInput(challengeObj.taskAmount);
+		setXpInput(challengeObj.taskXP);
+		setPeriodInput(challengeObj.period);
+		setIsTemplateInput(challengeObj.isTemplate);
+	}, [challengeObj])
 
-	const submitForm = (event) => {
-		event.preventDefault();
-		const value = isTimeTask ? durationInput : amountInput;
-		if ((selectedActivity.isReportingIncremental && value > 0) || !selectedActivity.isReportingIncremental) {
-			const newChallenge = Object.assign(blankChallenge,{
-				goalId: selectedGoal.id,
-				taskLabel: labelInput,
-				taskActivityId: selectedActivity.id,
-				taskAmount: value,
-				taskVariation: selectedVariation,
-				taskXP: xpInput,
-				period: periodInput,
-				isTemplate: isTemplateInput
-			});
-			dispatch(addChallenge(newChallenge));
-			resetForm();
-			setParentOpen(false);
-		}
-	}
+	useEffect(()=>{
+		setChallengeObj(Object.assign({...challengeObj}, {taskLabel: labelInput}));
+	}, [labelInput])
+
+	useEffect(()=>{
+		setChallengeObj(Object.assign({...challengeObj}, {goalId: selectedGoal.id}));
+	}, [selectedGoal])
+
+	useEffect(()=>{
+		setChallengeObj(Object.assign({...challengeObj}, {taskVariation: selectedVariation}));
+	}, [selectedVariation])
+
+	useEffect(()=>{
+		setChallengeObj(Object.assign({...challengeObj}, {taskAmount: isTimeTask ? durationInput : amountInput}));
+	}, [isTimeTask, durationInput, amountInput])
+
+	useEffect(()=>{
+		setChallengeObj(Object.assign({...challengeObj}, {taskXP: xpInput}));
+	}, [xpInput])
+
+	useEffect(()=>{
+		setChallengeObj(Object.assign({...challengeObj}, {period: periodInput}));
+	}, [periodInput])
+
+	useEffect(()=>{
+		setChallengeObj(Object.assign({...challengeObj}, {isTemplate: isTemplateInput}));
+	}, [isTemplateInput])
+
+	useEffect(()=>{
+		setChallengeObj(Object.assign({...challengeObj}, {taskActivityId: selectedActivity.id}));
+		setIsTimeTask(selectedActivity.type === 'time');
+	}, [selectedActivity])
 
 	return (
-		<form onSubmit={submitForm} className='text-sm flex flex-col justify-center gap-2'>
+		<>
 			<h2 className='-mb-1.5 flex gap-2'>Label
 				<span className="pt-0.5 flex gap-1 text-xs text-zinc-400 font-mono">
 					{labelInsert.map((l,i)=><span key={i}>{l}</span>)}
@@ -104,11 +113,7 @@ function InputChallenge({ firstActivity, firstGoal, period, labelInsert, setPare
 			<InputPeriodSelector period={periodInput} setParentPeriod={setPeriodInput} />
 			<h2 className='-mb-1.5'>Recurring (template)</h2>
 			<InputBool bool={isTemplateInput} setParentBool={setIsTemplateInput} />
-			<div className='flex gap-3 ml-auto mt-1'>
-				<InputResetButton resetFunc={resetForm} />
-				<InputSubmitButton submitFunc={submitForm} />
-			</div>
-		</form>
+		</>
 	)
 
 }

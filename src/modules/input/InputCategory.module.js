@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { connect, useDispatch } from 'react-redux';
 import InputResetButton from '../../elements/input/InputResetButton.element';
 import InputSubmitButton from '../../elements/input/InputSubmitButton.element';
@@ -15,46 +15,41 @@ const mapStateToProps = (state, ownProps) => {
 }
 
 
-function InputCategory({ base, setParentOpen }) {
+function InputCategory({ base, categoryObj, setCategoryObj }) {
 
 	const dispatch = useDispatch();
 
-	const [nameInput, setNameInput] = useState(base.name);
-	const [iconInput, setIconInput] = useState(base.icon);
-	const [descriptionInput, setDescriptionInput] = useState(base.description);
+	const [nameInput, setNameInput] = useState(categoryObj.name);
+	const [iconInput, setIconInput] = useState(categoryObj.icon);
+	const [descriptionInput, setDescriptionInput] = useState(categoryObj.description);
 
-	const resetForm = () => {
-		setNameInput(base.name);
-		setIconInput(base.icon);
-		setDescriptionInput(base.description);
-	}
+	useEffect(() => {
+		setNameInput(categoryObj.name);
+		setIconInput(categoryObj.icon);
+		setDescriptionInput(categoryObj.description);
+	}, [categoryObj])
 
-	const submitForm = (event) => {
-		event.preventDefault();
+	useEffect(()=> {
+		setCategoryObj(Object.assign({...categoryObj}, { name: nameInput }))
+	}, [nameInput])
 
-		const newCategory = Object.assign(base,{
-			name: nameInput,
-			icon: iconInput,
-			description: descriptionInput
-		});
-		dispatch(addCategory(newCategory));
-		resetForm();
-		setParentOpen(false);
-	}
+	useEffect(()=> {
+		setCategoryObj(Object.assign({...categoryObj}, { icon: iconInput }))
+	}, [iconInput])
+
+	useEffect(()=> {
+		setCategoryObj(Object.assign({...categoryObj}, { description: descriptionInput }))
+	}, [descriptionInput])
 
 	return (
-		<form onSubmit={submitForm} className='text-sm flex flex-col justify-center gap-2'>
+		<>
 			<h2 className='-mb-1.5 flex gap-2'>Name</h2>
 			<InputText text={nameInput} setParentText={setNameInput} />
 			<h2 className='-mb-1.5 flex gap-2'>Icon</h2>
 			<InputText text={iconInput} setParentText={setIconInput} short={true} />
 			<h2 className='-mb-1.5 flex gap-2'>Description</h2>
 			<InputText text={descriptionInput} setParentText={setDescriptionInput} />
-			<div className='flex gap-3 ml-auto mt-1'>
-				<InputResetButton resetFunc={resetForm} />
-				<InputSubmitButton submitFunc={submitForm} />
-			</div>
-		</form>
+		</>
 	)
 
 }

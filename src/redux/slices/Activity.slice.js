@@ -119,7 +119,7 @@ const initialState = {
 	base: {
 		id: 0,
 		label: '',
-		type: '', 
+		type: 'counter', 
 		unit: '',
 		isReportingIncremental: true,
 		variations: '',

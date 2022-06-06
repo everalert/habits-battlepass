@@ -1,19 +1,19 @@
 import { Dialog, Tab } from '@headlessui/react';
-import InputActivity from '../input/InputActivity.module';
-import InputCategory from '../input/InputCategory.module';
-import InputChallenge from "../input/InputChallenge.module";
-import InputGoal from "../input/InputGoal.module";
+import InputActivityAdd from '../input/InputActivityAdd.module';
+import InputCategoryAdd from '../input/InputCategoryAdd.module';
+import InputChallengeAdd from '../input/InputChallengeAdd.module';
+import InputGoalAdd from '../input/InputGoalAdd.module';
 import InputLogAdd from '../input/InputLogAdd.module';
-import InputSeason from '../input/InputSeason.module';
+import InputSeasonAdd from '../input/InputSeasonAdd.module';
 
 export default function DialogAddEntry({ isOpen, setIsOpen }) {
 
 	const tabs = [
-		{ name:'Season',    content: <InputSeason setParentOpen={setIsOpen} /> },
-		{ name:'Category',  content: <InputCategory setParentOpen={setIsOpen} /> },
-		{ name:'Activity',  content: <InputActivity setParentOpen={setIsOpen} /> },
-		{ name:'Goal',      content: <InputGoal setParentOpen={setIsOpen} /> },
-		{ name:'Challenge', content: <InputChallenge setParentOpen={setIsOpen} /> },
+		{ name:'Season',    content: <InputSeasonAdd setParentOpen={setIsOpen} /> },
+		{ name:'Category',  content: <InputCategoryAdd setParentOpen={setIsOpen} /> },
+		{ name:'Activity',  content: <InputActivityAdd setParentOpen={setIsOpen} /> },
+		{ name:'Goal',      content: <InputGoalAdd setParentOpen={setIsOpen} /> },
+		{ name:'Challenge', content: <InputChallengeAdd setParentOpen={setIsOpen} /> },
 		{ name:'Log',       content: <InputLogAdd setParentOpen={setIsOpen} /> },
 	]
 	
