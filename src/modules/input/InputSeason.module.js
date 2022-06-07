@@ -6,6 +6,7 @@ import InputDateTime from "../../elements/input/InputDateTime.element";
 import InputDuration from "../../elements/input/InputDuration.element";
 import InputText from "../../elements/input/InputText.element";
 import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
+import { Dialog, Tab } from '@headlessui/react';
 
 
 const mapStateToProps = (state, ownProps) => {
@@ -41,6 +42,13 @@ function InputSeason({ seasonObj, setSeasonObj }) {
 	const [curLvInput, setCurLvInput] = useState(seasonObj.currentLevel);
 	const [curXPInput, setCurXPInput] = useState(seasonObj.currentXP);
 
+	const rewards = [
+		{ title: 'Tier 1', label: r1LaInput, labelF: setR1LaInput, level: r1LeInput, levelF: setR1LeInput, claim: r1CInput, claimF: setR1CInput },
+		{ title: 'Tier 2', label: r2LaInput, labelF: setR2LaInput, level: r2LeInput, levelF: setR2LeInput, claim: r2CInput, claimF: setR2CInput },
+		{ title: 'Tier 3', label: r3LaInput, labelF: setR3LaInput, level: r3LeInput, levelF: setR3LeInput, claim: r3CInput, claimF: setR3CInput },
+		{ title: 'Tier 4', label: r4LaInput, labelF: setR4LaInput, level: r4LeInput, levelF: setR4LeInput, claim: r4CInput, claimF: setR4CInput },
+	]
+	
 	useEffect(() => {
 		setTitleInput(seasonObj.title);
 		setDescriptionInput(seasonObj.description);
@@ -151,30 +159,41 @@ function InputSeason({ seasonObj, setSeasonObj }) {
 			<InputDateTime timestamp={startInput} setParentTimestamp={setStartInput} /> 
 			<h2 className='-mb-1.5 flex gap-2'>Duration</h2>
 			<InputDuration timestamp={lengthInput} setParentTimestamp={setLengthInput} showDay={true} />
-			<h2 className='-mb-1.5 flex gap-2'>Reward 1</h2>
-			<InputText text={r1LaInput} setParentText={setR1LaInput} />
-			<div className="flex items-center gap-2"><InputAmount amount={r1LeInput} setParentAmount={setR1LeInput} /> Level</div>
-			<div className="flex items-center gap-2"><InputBool bool={r1CInput} setParentBool={setR1CInput} /> Reward Claimed</div>
-			<h2 className='-mb-1.5 flex gap-2'>Reward 2</h2>
-			<InputText text={r2LaInput} setParentText={setR2LaInput} />
-			<div className="flex items-center gap-2"><InputAmount amount={r2LeInput} setParentAmount={setR2LeInput} /> Level</div>
-			<div className="flex items-center gap-2"><InputBool bool={r2CInput} setParentBool={setR2CInput} /> Reward Claimed</div>
-			<h2 className='-mb-1.5 flex gap-2'>Reward 3</h2>
-			<InputText text={r3LaInput} setParentText={setR3LaInput} />
-			<div className="flex items-center gap-2"><InputAmount amount={r3LeInput} setParentAmount={setR3LeInput} /> Level</div>
-			<div className="flex items-center gap-2"><InputBool bool={r3CInput} setParentBool={setR3CInput} /> Reward Claimed</div>
-			<h2 className='-mb-1.5 flex gap-2'>Reward 4</h2>
-			<InputText text={r4LaInput} setParentText={setR4LaInput} />
-			<div className="flex items-center gap-2"><InputAmount amount={r4LeInput} setParentAmount={setR4LeInput} /> Level</div>
-			<div className="flex items-center gap-2"><InputBool bool={r4CInput} setParentBool={setR4CInput} /> Reward Claimed</div>
-			<h2 className='-mb-1.5 flex gap-2'>Max Level</h2>
-			<InputAmount amount={lvMaxInput} setParentAmount={setLvMaxInput} />
-			<h2 className='-mb-1.5 flex gap-2'>XP Per Level</h2>
-			<InputAmount amount={lvXPInput} setParentAmount={setLvXPInput} />
-			<h2 className='-mb-1.5 flex gap-2'>Color 1</h2>
-			<InputText text={col1Input} setParentText={setCol1Input} />
-			<h2 className='-mb-1.5 flex gap-2'>Color 2</h2>
-			<InputText text={col2Input} setParentText={setCol2Input} />
+			<h2 className={`-mb-1.5 flex gap-2`}>Rewards</h2>
+			<Tab.Group>
+				<Tab.List className="flex flex-wrap gap-1 select-none">
+					{ rewards.map((r,i) => <Tab key={i}>
+						{({ selected }) => <h2 className={`-mb-1.5 py-1 px-2 flex rounded ${selected?'bg-zinc-600':'bg-zinc-800 text-zinc-400 hover:text-zinc-200'}`}>{r.title}</h2>}
+					</Tab>)}
+				</Tab.List>
+				<Tab.Panels className="mt-1">
+					{ rewards.map((r,i) => <Tab.Panel key={i}>
+						<InputText text={r.label} setParentText={r.labelF} />
+						<div className="flex items-center mt-1 gap-2"><InputAmount amount={r.level} setParentAmount={r.levelF} /> Level</div>
+						<div className="flex items-center mt-1 gap-2"><InputBool bool={r.claim} setParentBool={r.claimF} /> Reward Claimed</div>
+					</Tab.Panel>) }
+				</Tab.Panels>
+			</Tab.Group>
+			<div className="flex gap-2">
+				<div>
+					<h2 className='flex gap-2'>Max Level</h2>
+					<InputAmount amount={lvMaxInput} setParentAmount={setLvMaxInput} />
+				</div>
+				<div>
+					<h2 className='flex gap-2'>XP Per Level</h2>
+					<InputAmount amount={lvXPInput} setParentAmount={setLvXPInput} />
+				</div>
+			</div>
+			<div className="flex gap-2">
+				<div>
+					<h2 className='flex gap-2'>Color 1</h2>
+					<InputText text={col1Input} setParentText={setCol1Input} short={true} />
+				</div>
+				<div>
+					<h2 className='flex gap-2'>Color 2</h2>
+					<InputText text={col2Input} setParentText={setCol2Input} short={true} />
+				</div>
+			</div>
 			<h2 className='-mb-1.5 flex gap-2'>Current XP</h2>
 			<InputAmount amount={curXPInput} setParentAmount={setCurXPInput} />
 			<h2 className='-mb-1.5 flex gap-2'>Current Level</h2>
