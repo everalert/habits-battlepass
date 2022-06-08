@@ -25,19 +25,20 @@ export function GetActivityUnitPrecision(activity) {
 	}
 }
 
-export function FormatActivityValue(activity, value, timeFormatFunction = SecondsToHMMSS) {
+export function FormatActivityValue(activity, value, timeFormatFunction = SecondsToHMMSS, sign = true) {
 	let output = { value: 0, unit: '' }
+	const v = sign ? value : Math.abs(value);
 	switch (activity.type) {
 		case 'time':
-			output.value = timeFormatFunction(value);
+			output.value = timeFormatFunction(v);
 			break;
 		case 'weight':
-			output.value = value;
+			output.value = FormatNumber(v);
 			output.unit = 'Kg';
 			break;
 		case 'counter':
 		default:
-			output.value = FormatNumber(value);
+			output.value = FormatNumber(v);
 			output.unit = activity.unit;
 			break;
 	}

@@ -43,7 +43,7 @@ const mapStateToProps = (state, ownProps) => {
 		goalLagValue: lagResult.value,
 		goalLagUnit: lagResult.unit,
 		goalLagProjectedResultDeltaRaw: lagProjectedResultDeltaRaw,
-		goalLagProjectedResultDelta: FormatActivityValue(lagActivity, lagProjectedResultDeltaRaw).value,
+		goalLagProjectedResultDelta: FormatActivityValue(lagActivity, lagProjectedResultDeltaRaw, undefined, false).value,
 		goalLagProjectedDir: lagProjectedResult-goal.goalLagStartValue,
 		goalSuccessXp: GetGoalSuccessXp(goal, season),
 		goalProjectedXpDelta: goal.currentXP-goalProjectedXp,
