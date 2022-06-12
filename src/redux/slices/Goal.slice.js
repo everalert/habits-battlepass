@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { replaceRecords } from "./Manager.slice"
 import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
+import { applySeasonXP } from "./Season.slice";
 
 const initialState = {
 	opts: {
@@ -113,6 +114,16 @@ export const GoalSlice = createSlice({
 		deleteGoal: (state, action) => {
 			state.goals = state.goals.filter(g => g.id !== action.payload.id)
 		},
+		applyGoalXP: (state, action) => {
+			const i = state.goals.findIndex(g => g.id === action.payload.id)
+			if (i >= 0) {
+				state.goals[i].currentXP += action.payload.xp;
+				action.asyncDispatch(applySeasonXP({
+					id: state.goals[i].seasonId,
+					xp: action.payload.xp
+				}))
+			}
+		}
 	},
 	extraReducers: (builder) => {
 		builder.addCase(replaceRecords, (state, action) => {
@@ -121,6 +132,6 @@ export const GoalSlice = createSlice({
 	}
 })
 
-export const { addGoal, editGoal, deleteGoal } = GoalSlice.actions
+export const { addGoal, editGoal, deleteGoal, applyGoalXP } = GoalSlice.actions
 
 export default GoalSlice.reducer
