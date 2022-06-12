@@ -86,6 +86,13 @@ export const SeasonSlice = createSlice({
 		},
 		setLengthInDays: (state, action) => {
 			state.seasons[action.payload.seasonId].length = 86400 * action.payload.days
+		},
+		applySeasonXP: (state, action) => {
+			const i = state.seasons.findIndex(s => s.id === action.payload.id)
+			if (i >= 0) {
+				state.seasons[i].currentXP += action.payload.xp;
+				state.seasons[i].currentLevel = Math.floor(state.seasons[i].currentXP/state.seasons[i].levelXP);
+			}
 		}
 	},
 	extraReducers: (builder) => {
@@ -95,6 +102,6 @@ export const SeasonSlice = createSlice({
 	}
 })
 
-export const { addSeason, editSeason, deleteSeason, setLengthInDays } = SeasonSlice.actions
+export const { addSeason, editSeason, deleteSeason, setLengthInDays, applySeasonXP } = SeasonSlice.actions
 
 export default SeasonSlice.reducer
