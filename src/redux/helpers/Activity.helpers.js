@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { FormatNumber, SecondsToHMMSS } from "../../helpers/Math.helper";
 
 export function GetActivityById(id) {
-	return useSelector((state) => state.activity.activities.find(a => a.id === id))
+	return useSelector((state) => state.data.activity.activities.find(a => a.id === id))
 }
 
 export function GetActivityUnit(activity) {

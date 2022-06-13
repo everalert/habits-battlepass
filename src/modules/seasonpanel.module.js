@@ -1,11 +1,17 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-
+import { connect } from 'react-redux'
 import RadialBar from '../elements/RadialBar.element'
 import { GetCurrentUnixTimestamp } from '../helpers/Math.helper'
 
-export default function SeasonPanel() {
-	const season = useSelector((state) => state.season.seasons[state.season.active])
+
+const mapStateToProps = (state, ownProps) => {
+	return {
+		season: state.data.season.seasons[state.data.season.active],
+		...ownProps
+	}
+}
+
+
+function SeasonPanel({ season }) {
 	const timeNow = GetCurrentUnixTimestamp()
 	const timeEnd = season.start+season.length
 	const timeRemain = timeEnd-timeNow
@@ -28,3 +34,5 @@ export default function SeasonPanel() {
 		</div>
 	)
 }
+
+export default connect(mapStateToProps)(SeasonPanel);

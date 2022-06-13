@@ -21,6 +21,21 @@ export function GetWeekOfSeason(season) {
 	return GetPeriodOfSeason(season, 604800);
 }
 
+export function GetPeriodOfSeasonAtTimestamp(season, timestamp, periodInSeconds) {
+	const periodNum = Math.floor((timestamp-season.start)/periodInSeconds)
+	const periodStart = season.start+periodNum*periodInSeconds
+	const periodEnd = periodStart+periodInSeconds
+	return { no: (periodNum+1), start: periodStart, end: periodEnd }
+}
+
+export function GetDayOfSeasonAtTimestamp(season, timestamp) {
+	return GetPeriodOfSeasonAtTimestamp(season, timestamp, 86400);
+}
+
+export function GetWeekOfSeasonAtTimestamp(season, timestamp) {
+	return GetPeriodOfSeasonAtTimestamp(season, timestamp, 604800);
+}
+
 export function GetSeasonProgressRatioAtTime(season, unixTimestamp) {
 	const { start, length } = season
 	return (unixTimestamp-start)/(length)

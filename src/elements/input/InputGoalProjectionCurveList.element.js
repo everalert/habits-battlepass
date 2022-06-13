@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		projectionCurveList: state.goal.opts.projectionCurve,
+		projectionCurveList: state.data.goal.opts.projectionCurve,
 		...ownProps
 	}
 }

@@ -12,11 +12,11 @@ import InputText from "../../elements/input/InputText.element";
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		activity: state.activity.activities.find(a => a.id === ownProps.challengeObj.taskActivityId),
-		activities: state.activity.activities,
-		goal: state.goal.goals.find(g => g.id === ownProps.challengeObj.goalId),
-		goals: state.goal.goals,
-		...state.challenge.opts,
+		activity: state.data.activity.activities.find(a => a.id === ownProps.challengeObj.taskActivityId),
+		activities: state.data.activity.activities,
+		goal: state.data.goal.goals.find(g => g.id === ownProps.challengeObj.goalId),
+		goals: state.data.goal.goals,
+		...state.data.challenge.opts,
 		...ownProps
 	}
 }

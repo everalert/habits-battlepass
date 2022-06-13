@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { connect, useDispatch } from 'react-redux';
 import InputResetSubmitCombo from '../../elements/input/InputResetSubmitCombo.element';
-import { addLog } from '../../redux/slices/Log.slice';
+import { addLog } from '../../redux/data/Data.slice';
 import InputLog from "./InputLog.module";
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		blankLog: Object.assign({...state.log.base}, {
-			activityId: Math.max(state.log.base.activityId, state.activity.activities[0].id)
+		blankLog: Object.assign({...state.data.log.base}, {
+			activityId: Math.max(state.data.log.base.activityId, state.data.activity.activities[0].id)
 		}),
-		activities: state.activity.activities,
+		activities: state.data.activity.activities,
 		...ownProps
 	}
 }

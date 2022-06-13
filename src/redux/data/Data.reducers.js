@@ -1,0 +1,191 @@
+import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
+import { applyGoalXP, applySeasonXP } from "./Data.slice";
+import { GetDayOfSeasonAtTimestamp, GetWeekOfSeasonAtTimestamp } from "../helpers/Season.helper";
+import { GetLogEndValueForPeriod } from "../helpers/Log.helper";
+
+
+function updateChallengeProgress(state, { logDelta, logActivityId, logTimestamp, logs }, asyncDispatch) {
+	const activity = state.activity.activities.find(a => a.id === logActivityId);
+	const c = state.challenge.challenges.filter(c => c.taskActivityId === logActivityId);
+	c.forEach(c => {
+		const goal = state.goal.goals.find(g => g.id === c.goalId);
+		const season = state.season.seasons.find(s => s.id === goal.seasonId);
+		const period = c.period === 'daily' ? GetDayOfSeasonAtTimestamp(season, logTimestamp) : GetWeekOfSeasonAtTimestamp(season, logTimestamp);
+		const filteredLogs = logs.filter(l => l.timestamp < period.end && l.timestamp >= period.start);
+		const endValue = GetLogEndValueForPeriod(filteredLogs, activity.id, activity.isReportingIncremental, period.start, period.end);
+		const startValue = endValue-logDelta;
+		if (endValue >= c.taskAmount && startValue < c.taskAmount) {
+			asyncDispatch(applyGoalXP({ id: goal.id, xp: c.taskXP }));
+			asyncDispatch(applySeasonXP({ id: goal.seasonId, xp: c.taskXP }));
+		}
+		if (endValue < c.taskAmount && startValue >= c.taskAmount) {
+			asyncDispatch(applyGoalXP({ id: goal.id, xp: -c.taskXP }));
+			asyncDispatch(applySeasonXP({ id: goal.seasonId, xp: -c.taskXP }));
+		}
+	});
+}
+
+
+export default {
+
+	replaceRecords: (state, action) => {
+		state.season.seasons = action.payload.seasons;
+		state.category.categories = action.payload.categories;
+		state.goal.goals = action.payload.goals;
+		state.activity.activities = action.payload.activities;
+		state.challenge.challenges = action.payload.challenges;
+		state.log.logs = action.payload.logs;
+	},
+
+	addSeason: (state, action) => {
+		const newSeason = Object.assign(
+			{ ...state.season.base },
+			{ ...action.payload },
+			{ id: GetCurrentUnixTimestamp() }
+		)
+		state.season.seasons.push(newSeason);
+	},
+	editSeason: (state, action) => {
+		const i = state.season.seasons.findIndex(l => l.id === action.payload.id);
+		const newSeason = Object.assign(
+			{ ...state.season.seasons[i] },
+			action.payload.update
+		);
+		state.season.seasons[i] = newSeason;
+	},
+	deleteSeason: (state, action) => {
+		state.season.seasons = state.season.seasons.filter(s => s.id !== action.payload.id)
+	},
+	applySeasonXP: (state, action) => {
+		const i = state.season.seasons.findIndex(s => s.id === action.payload.id)
+		if (i >= 0) {
+			state.season.seasons[i].currentXP += action.payload.xp;
+			state.season.seasons[i].currentLevel = Math.floor(state.season.seasons[i].currentXP/state.season.seasons[i].levelXP);
+		}
+	},
+	
+	addCategory: (state, action) => {
+		const newCategory = Object.assign(
+			{ ...state.category.base },
+			{ ...action.payload },
+			{ id: GetCurrentUnixTimestamp() }
+		)
+		state.category.categories.push(newCategory);
+	},
+	editCategory: (state, action) => {
+		const i = state.category.categories.findIndex(l => l.id === action.payload.id);
+		const newCategory = Object.assign(
+			{ ...state.category.categories[i] },
+			action.payload.update
+		);
+		state.category.categories[i] = newCategory;
+	},
+	deleteCategory: (state, action) => {
+		state.category.categories = state.category.categories.filter(c => c.id !== action.payload.id)
+	},
+	
+	addGoal: (state, action) => {
+		const newGoal = Object.assign(
+			{ ...state.goal.base },
+			{ ...action.payload },
+			{ id: GetCurrentUnixTimestamp() }
+		)
+		state.goal.goals.push(newGoal);
+	},
+	editGoal: (state, action) => {
+		const i = state.goal.goals.findIndex(l => l.id === action.payload.id);
+		const newGoal = Object.assign(
+			{ ...state.goal.goals[i] },
+			action.payload.update
+		);
+		state.goal.goals[i] = newGoal;
+	},
+	deleteGoal: (state, action) => {
+		state.goal.goals = state.goal.goals.filter(g => g.id !== action.payload.id)
+	},
+	applyGoalXP: (state, action) => {
+		const i = state.goal.goals.findIndex(g => g.id === action.payload.id)
+		if (i >= 0)
+			state.goal.goals[i].currentXP += action.payload.xp;
+	},
+
+	addActivity: (state, action) => {
+		const newActivity = Object.assign(
+			{ ...state.activity.base },
+			{ ...action.payload },
+			{ id: GetCurrentUnixTimestamp() }
+		)
+		state.activity.activities.push(newActivity);
+	},
+	editActivity: (state, action) => {
+		const i = state.activity.activities.findIndex(l => l.id === action.payload.id);
+		const newActivity = Object.assign(
+			{ ...state.activity.activities[i] },
+			action.payload.update
+		);
+		state.activity.activities[i] = newActivity;
+	},
+	deleteActivity: (state, action) => {
+		state.activity.activities = state.activity.activities.filter(a => a.id !== action.payload.id)
+	},
+	
+	addChallenge: (state, action) => {
+		const newChallenge = Object.assign(
+			{ ...state.challenge.base },
+			{ ...action.payload },
+			{ id: GetCurrentUnixTimestamp() }
+		)
+		state.challenge.challenges.push(newChallenge);
+	},
+	editChallenge: (state, action) => {
+		const i = state.challenge.challenges.findIndex(l => l.id === action.payload.id);
+		const newChallenge = Object.assign(
+			{ ...state.challenge.challenges[i] },
+			action.payload.update
+		);
+		state.challenge.challenges[i] = newChallenge;
+	},
+	deleteChallenge: (state, action) => {
+		state.challenge.challenges = state.challenge.challenges.filter(c => c.id !== action.payload.id)
+	},
+	
+	addLog: (state, action) => {
+		const newLog = Object.assign(
+			{ ...state.log.base },
+			action.payload,
+			{ id: GetCurrentUnixTimestamp() }
+		)
+		state.log.logs.push(newLog);
+		updateChallengeProgress(state, {
+			logDelta: newLog.value,
+			logActivityId: newLog.activityId,
+			logTimestamp: newLog.timestamp,
+			logs: state.log.logs.filter(l => l.activityId === newLog.activityId)
+		}, action.asyncDispatch);
+	},
+	editLog: (state, action) => {
+		const i = state.log.logs.findIndex(l => l.id === action.payload.id);
+		const oldValue = state.log.logs[i].value;
+		const newLog = Object.assign(
+			{ ...state.log.logs[i] },
+			action.payload.update
+		);
+		state.log.logs[i] = newLog;
+		updateChallengeProgress(state, {
+			logDelta: newLog.value-oldValue,
+			logActivityId: newLog.activityId,
+			logTimestamp: newLog.timestamp,
+			logs: state.log.logs.filter(l => l.activityId === newLog.activityId)
+		}, action.asyncDispatch);
+	},
+	deleteLog: (state, action) => {
+		const oldLog = state.log.logs.find(l => l.id === action.payload.id);
+		state.log.logs = state.log.logs.filter(l => l.id !== action.payload.id);
+		updateChallengeProgress(state, {
+			logDelta: -oldLog.value,
+			logActivityId: oldLog.activityId,
+			logTimestamp: oldLog.timestamp,
+			logs: state.log.logs.filter(l => l.activityId === oldLog.activityId)
+		}, action.asyncDispatch);
+	},
+};

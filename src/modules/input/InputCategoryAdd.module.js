@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { connect, useDispatch } from 'react-redux';
 import InputResetSubmitCombo from "../../elements/input/InputResetSubmitCombo.element";
-import { addCategory } from "../../redux/slices/Category.slice";
+import { addCategory } from "../../redux/data/Data.slice";
 import InputCategory from "./InputCategory.module";
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		blankCategory: { ...state.category.base },
+		blankCategory: { ...state.data.category.base },
 		...ownProps
 	}
 }

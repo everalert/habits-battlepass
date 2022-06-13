@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { connect, useDispatch } from 'react-redux';
 import InputActivityList from "../../elements/input/InputActivityList.element";
 import InputResetSubmitDeleteCombo from "../../elements/input/InputResetSubmitDeleteCombo.element";
-import { deleteActivity, editActivity } from "../../redux/slices/Activity.slice";
+import { deleteActivity, editActivity } from "../../redux/data/Data.slice";
 import InputActivity from "./InputActivity.module";
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		firstActivity: state.activity.activities[0],
+		firstActivity: state.data.activity.activities[0],
 		...ownProps
 	}
 }

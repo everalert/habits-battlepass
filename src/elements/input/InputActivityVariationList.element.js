@@ -1,15 +1,12 @@
 import { Listbox } from '@headlessui/react';
-import { CheckIcon, ChevronDoubleRightIcon, PlusIcon, RefreshIcon, SelectorIcon } from '@heroicons/react/solid';
+import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 import { useEffect, useState } from "react";
-import { connect, useDispatch } from 'react-redux';
-import { GetCurrentUnixTimestamp } from '../../helpers/Math.helper';
-import { PrepareNewLog } from "../../redux/helpers/Log.helper";
-import { addLog } from '../../redux/slices/Log.slice';
+import { connect } from 'react-redux';
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		activities: state.activity.activities,
+		activities: state.data.activity.activities,
 		...ownProps
 	}
 }

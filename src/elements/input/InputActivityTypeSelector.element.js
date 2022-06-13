@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		typeList: state.activity.opts.type,
+		typeList: state.data.activity.opts.type,
 		...ownProps
 	}
 }

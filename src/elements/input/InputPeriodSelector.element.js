@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		periodList: state.challenge.opts.period,
+		periodList: state.data.challenge.opts.period,
 		...ownProps
 	}
 }

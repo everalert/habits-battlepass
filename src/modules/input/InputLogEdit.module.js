@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { connect, useDispatch } from 'react-redux';
 import InputLogList from "../../elements/input/InputLogList.element";
 import InputResetSubmitDeleteCombo from "../../elements/input/InputResetSubmitDeleteCombo.element";
-import { deleteLog, editLog } from '../../redux/slices/Log.slice';
+import { deleteLog, editLog } from '../../redux/data/Data.slice';
 import InputLog from "./InputLog.module";
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		firstLog: state.log.logs[0],
-		activities: state.activity.activities,
+		firstLog: state.data.log.logs[0],
+		activities: state.data.activity.activities,
 		...ownProps
 	}
 }

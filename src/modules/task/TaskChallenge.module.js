@@ -9,8 +9,8 @@ import { GetLogEndValueForPeriod } from "../../redux/helpers/Log.helper";
 const mapStateToProps = (state, ownProps) => {
 	const activityId = ownProps.task.taskActivityId;
 	return {
-		logs: state.log.logs.filter(l => l.activityId === activityId),
-		activity: state.activity.activities.find(a => a.id === activityId),
+		logs: state.data.log.logs.filter(l => l.activityId === activityId),
+		activity: state.data.activity.activities.find(a => a.id === activityId),
 		...ownProps
 	}
 }

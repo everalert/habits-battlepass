@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 import { connect, useDispatch } from 'react-redux';
-import InputResetButton from '../../elements/input/InputResetButton.element';
-import InputSubmitButton from '../../elements/input/InputSubmitButton.element';
 import InputText from "../../elements/input/InputText.element";
-import { addCategory } from "../../redux/slices/Category.slice";
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		base: { ...state.category.base },
-		...state.category.opts,
+		base: { ...state.data.category.base },
+		...state.data.category.opts,
 		...ownProps
 	}
 }

@@ -20,8 +20,8 @@ export default store => next => action => {
 	const actionWithAsyncDispatch =
 		Object.assign({}, action, { asyncDispatch });
 
-	const r = next(actionWithAsyncDispatch);
+	next(actionWithAsyncDispatch);
 	syncActivityFinished = true;
 	flushQueue();
-	return r;
+	return;
 };

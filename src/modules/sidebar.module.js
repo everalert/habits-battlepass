@@ -2,27 +2,28 @@ import { ClipboardCheckIcon, DocumentAddIcon, DocumentDownloadIcon, DotsCircleHo
 import { useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { ExportDataToODS, ImportDataFromODS } from '../helpers/ODS.helper';
-import { replaceRecords } from '../redux/slices/Manager.slice';
+import { applyGoalXP } from '../redux/data/Data.slice';
+import { replaceRecords } from '../redux/data/Data.slice';
 import DialogAddEntry from './dialog/DialogAddEntry.module';
 import DialogEditEntry from './dialog/DialogEditEntry.module';
 
 const mapStateToProps = (state) => {
 	return {
 		data: {
-			seasons: state.season.seasons,
-			categories: state.category.categories,
-			goals: state.goal.goals,
-			challenges: state.challenge.challenges,
-			activities: state.activity.activities,
-			logs: state.log.logs
+			seasons: state.data.season.seasons,
+			categories: state.data.category.categories,
+			goals: state.data.goal.goals,
+			challenges: state.data.challenge.challenges,
+			activities: state.data.activity.activities,
+			logs: state.data.log.logs
 		},
 		bases: {
-			seasons: state.season.base,
-			categories: state.category.base,
-			goals: state.goal.base,
-			challenges: state.challenge.base,
-			activities: state.activity.base,
-			logs: state.log.base
+			seasons: state.data.season.base,
+			categories: state.data.category.base,
+			goals: state.data.goal.base,
+			challenges: state.data.challenge.base,
+			activities: state.data.activity.base,
+			logs: state.data.log.base
 		}
 	}
 };

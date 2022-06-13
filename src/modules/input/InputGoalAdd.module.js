@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { connect, useDispatch } from 'react-redux';
 import InputResetSubmitCombo from "../../elements/input/InputResetSubmitCombo.element";
-import { addGoal } from "../../redux/slices/Goal.slice";
+import { addGoal } from "../../redux/data/Data.slice";
 import InputGoal from "./InputGoal.module";
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		blankGoal: Object.assign({...state.goal.base}, {
-			seasonId: Math.max(state.goal.base.seasonId, state.season.seasons[0].id),
-			categoryId: Math.max(state.goal.base.categoryId, state.category.categories[0].id),
-			goalLagActivityId: Math.max(state.goal.base.goalLagActivityId, state.activity.activities[0].id),
-			goalLeadActivityId: Math.max(state.goal.base.goalLeadActivityId, state.activity.activities[0].id),
+		blankGoal: Object.assign({...state.data.goal.base}, {
+			seasonId: Math.max(state.data.goal.base.seasonId, state.data.season.seasons[0].id),
+			categoryId: Math.max(state.data.goal.base.categoryId, state.data.category.categories[0].id),
+			goalLagActivityId: Math.max(state.data.goal.base.goalLagActivityId, state.data.activity.activities[0].id),
+			goalLeadActivityId: Math.max(state.data.goal.base.goalLeadActivityId, state.data.activity.activities[0].id),
 		}),
 		...ownProps
 	}

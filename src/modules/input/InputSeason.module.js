@@ -1,3 +1,4 @@
+import { Tab } from '@headlessui/react';
 import { useEffect, useState } from "react";
 import { connect } from 'react-redux';
 import InputAmount from "../../elements/input/InputAmount.element";
@@ -5,13 +6,11 @@ import InputBool from "../../elements/input/InputBool.element";
 import InputDateTime from "../../elements/input/InputDateTime.element";
 import InputDuration from "../../elements/input/InputDuration.element";
 import InputText from "../../elements/input/InputText.element";
-import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
-import { Dialog, Tab } from '@headlessui/react';
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		...state.season.opts,
+		...state.data.season.opts,
 		...ownProps
 	}
 }

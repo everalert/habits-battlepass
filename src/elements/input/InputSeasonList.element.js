@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		seasons: state.season.seasons,
+		seasons: state.data.season.seasons,
 		...ownProps
 	}
 }

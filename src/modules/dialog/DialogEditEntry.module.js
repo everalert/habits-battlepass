@@ -11,12 +11,12 @@ import InputSeasonEdit from '../input/InputSeasonEdit.module';
 const mapStateToProps = (state, ownProps) => {
 	return {
 		firsts: {
-			season:    state.season.seasons[0],
-			category:  state.category.categories[0],
-			activity:  state.activity.activities[0],
-			goal:      state.goal.goals[0],
-			challenge: state.challenge.challenges[0],
-			log:       state.log.logs[0],
+			season:    state.data.season.seasons[0],
+			category:  state.data.category.categories[0],
+			activity:  state.data.activity.activities[0],
+			goal:      state.data.goal.goals[0],
+			challenge: state.data.challenge.challenges[0],
+			log:       state.data.log.logs[0],
 		},
 		...ownProps
 	}

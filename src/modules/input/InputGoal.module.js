@@ -12,14 +12,14 @@ import InputText from "../../elements/input/InputText.element";
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		season: state.season.seasons.find(s => s.id === ownProps.goalObj.seasonId),
-		seasons: state.season.seasons,
-		category: state.category.categories.find(c => c.id === ownProps.goalObj.categoryId),
-		categories: state.category.categories,
-		activityLG: state.activity.activities.find(l => l.id === ownProps.goalObj.goalLagActivityId),
-		activityLE: state.activity.activities.find(l => l.id === ownProps.goalObj.goalLeadActivityId),
-		activities: state.activity.activities,
-		...state.goal.opts,
+		season: state.data.season.seasons.find(s => s.id === ownProps.goalObj.seasonId),
+		seasons: state.data.season.seasons,
+		category: state.data.category.categories.find(c => c.id === ownProps.goalObj.categoryId),
+		categories: state.data.category.categories,
+		activityLG: state.data.activity.activities.find(l => l.id === ownProps.goalObj.goalLagActivityId),
+		activityLE: state.data.activity.activities.find(l => l.id === ownProps.goalObj.goalLeadActivityId),
+		activities: state.data.activity.activities,
+		...state.data.goal.opts,
 		...ownProps
 	}
 }

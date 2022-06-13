@@ -10,8 +10,8 @@ import InputDuration from '../../elements/input/InputDuration.element';
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		activity: state.activity.activities.find(a => a.id === ownProps.logObj.activityId),
-		activities: state.activity.activities,
+		activity: state.data.activity.activities.find(a => a.id === ownProps.logObj.activityId),
+		activities: state.data.activity.activities,
 		...ownProps
 	}
 }

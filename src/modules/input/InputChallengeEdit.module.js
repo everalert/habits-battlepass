@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { connect, useDispatch } from 'react-redux';
 import InputChallengeList from "../../elements/input/InputChallengeList.element";
 import InputResetSubmitDeleteCombo from "../../elements/input/InputResetSubmitDeleteCombo.element";
-import { deleteChallenge, editChallenge } from "../../redux/slices/Challenge.slice";
+import { deleteChallenge, editChallenge } from "../../redux/data/Data.slice";
 import InputChallenge from "./InputChallenge.module";
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		firstChallenge: state.challenge.challenges[0],
-		activities: state.activity.activities,
+		firstChallenge: state.data.challenge.challenges[0],
+		activities: state.data.activity.activities,
 		...ownProps
 	}
 }

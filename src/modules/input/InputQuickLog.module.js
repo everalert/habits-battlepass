@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from 'react-redux';
 import { PrepareNewLog } from "../../redux/helpers/Log.helper";
-import { addLog } from '../../redux/slices/Log.slice';
+import { addLog } from '../../redux/data/Data.slice';
 import InputAmount from '../../elements/input/InputAmount.element';
 import InputAmountIncrementButton from '../../elements/input/InputAmountButton.element';
 import InputDuration from '../../elements/input/InputDuration.element';

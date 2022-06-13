@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { connect, useDispatch } from 'react-redux';
 import InputResetSubmitCombo from "../../elements/input/InputResetSubmitCombo.element";
-import { addActivity } from "../../redux/slices/Activity.slice";
+import { addActivity } from "../../redux/data/Data.slice";
 import InputActivity from "./InputActivity.module";
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		blankActivity: { ...state.activity.base },
+		blankActivity: { ...state.data.activity.base },
 		...ownProps
 	}
 }

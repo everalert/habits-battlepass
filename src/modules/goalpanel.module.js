@@ -16,12 +16,12 @@ import TaskCollection from './task/TaskCollection.module'
 
 const mapStateToProps = (state, ownProps) => {
 	const timestamp = GetCurrentUnixTimestamp();
-	const season = state.season.seasons[state.season.active];
+	const season = state.data.season.seasons[state.data.season.active];
 	const goal = ownProps.goal;
-	const activities = state.activity.activities;
-	const challenges = state.challenge.challenges;
-	const logs = state.log.logs;
-	const lagActivity = state.activity.activities.find(a => a.id === goal.goalLagActivityId);
+	const activities = state.data.activity.activities;
+	const challenges = state.data.challenge.challenges;
+	const logs = state.data.log.logs;
+	const lagActivity = state.data.activity.activities.find(a => a.id === goal.goalLagActivityId);
 	const lagPrecision = GetActivityUnitPrecision(lagActivity);
 	const lagResultRaw = RoundN(GetLogEndValueForPeriod(logs, lagActivity.id, lagActivity.isReportingIncremental, season.start, season.start+season.length), lagPrecision);
 	const lagResult = FormatActivityValue(lagActivity, lagResultRaw);

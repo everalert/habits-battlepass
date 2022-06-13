@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { connect, useDispatch } from 'react-redux';
 import InputGoalList from "../../elements/input/InputGoalList.element";
 import InputResetSubmitDeleteCombo from "../../elements/input/InputResetSubmitDeleteCombo.element";
-import { deleteGoal, editGoal } from "../../redux/slices/Goal.slice";
+import { deleteGoal, editGoal } from "../../redux/data/Data.slice";
 import InputGoal from "./InputGoal.module";
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		firstGoal: state.goal.goals[0],
+		firstGoal: state.data.goal.goals[0],
 		...ownProps
 	}
 }

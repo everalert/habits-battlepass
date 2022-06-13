@@ -2,7 +2,7 @@ import { useSelector } from "react-redux";
 import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
 
 export function PrepareNewLog(timestamp = GetCurrentUnixTimestamp()) {
-	const base = {...useSelector((state) => state.log.base)};
+	const base = {...useSelector((state) => state.data.log.base)};
 	return Object.assign(base, { timestamp:timestamp });
 }
 

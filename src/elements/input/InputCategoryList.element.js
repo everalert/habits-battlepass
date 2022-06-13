@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		categories: state.category.categories,
+		categories: state.data.category.categories,
 		...ownProps
 	}
 }

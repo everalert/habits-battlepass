@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { connect, useDispatch } from 'react-redux';
 import InputResetSubmitCombo from "../../elements/input/InputResetSubmitCombo.element";
-import { addSeason } from "../../redux/slices/Season.slice";
+import { addSeason } from "../../redux/data/Data.slice";
 import InputSeason from "./InputSeason.module";
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		blankSeason: { ...state.season.base },
+		blankSeason: { ...state.data.season.base },
 		...ownProps
 	}
 }

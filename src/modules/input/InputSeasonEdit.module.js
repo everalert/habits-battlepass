@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { connect, useDispatch } from 'react-redux';
 import InputResetSubmitDeleteCombo from "../../elements/input/InputResetSubmitDeleteCombo.element";
 import InputSeasonList from "../../elements/input/InputSeasonList.element";
-import { deleteSeason, editSeason } from "../../redux/slices/Season.slice";
+import { deleteSeason, editSeason } from "../../redux/data/Data.slice";
 import InputSeason from "./InputSeason.module";
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		firstSeason: state.season.seasons[0] ,
-		...state.season.opts,
+		firstSeason: state.data.season.seasons[0] ,
+		...state.data.season.opts,
 		...ownProps
 	}
 }

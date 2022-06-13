@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { connect, useDispatch } from 'react-redux';
 import InputCategoryList from "../../elements/input/InputCategoryList.element";
 import InputResetSubmitDeleteCombo from "../../elements/input/InputResetSubmitDeleteCombo.element";
-import { deleteCategory, editCategory } from "../../redux/slices/Category.slice";
+import { deleteCategory, editCategory } from "../../redux/data/Data.slice";
 import InputCategory from "./InputCategory.module";
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		firstCategory: state.category.categories[0],
+		firstCategory: state.data.category.categories[0],
 		...ownProps
 	}
 }
