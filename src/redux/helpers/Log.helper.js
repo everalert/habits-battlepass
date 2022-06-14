@@ -7,10 +7,12 @@ export function PrepareNewLog(timestamp = GetCurrentUnixTimestamp()) {
 }
 
 export function GetLogsByActivityIdForPeriod(logs, activityId, startTime = 0, endTime = GetCurrentUnixTimestamp()) {
-	return logs.filter(l => l.activityId === activityId && l.timestamp >= startTime && l.timestamp < endTime)
+	return logs.length ? logs.filter(l => l.activityId === activityId && l.timestamp >= startTime && l.timestamp < endTime) : []
 } 
 
 export function GetLogEndValueForPeriod(logs, activityId, activityIsIncremental, startTime = 0, endTime = GetCurrentUnixTimestamp()) {
+	if (logs.length === 0)
+		return 0;
 	if (activityIsIncremental) {
 		let total = 0;
 		const filteredLogs = GetLogsByActivityIdForPeriod(logs, activityId, startTime, endTime);
