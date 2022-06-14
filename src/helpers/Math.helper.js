@@ -49,6 +49,6 @@ export function clamp(n, min, max) {
 }
 
 export function strToFloat(str) {
-	let newAmount = str.replace(/[^0-9\.]+/g, '').match(/([0-9]+\.)?[0-9]+/);
+	let newAmount = `0${str}`.replace(/[^0-9\.]+/g, '').match(/([0-9]+\.)?[0-9]+/);
 	return newAmount!==null ? parseFloat(newAmount) : 0;
 }
