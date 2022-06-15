@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { connect, useDispatch } from 'react-redux';
 import InputCategoryList from "../../elements/input/InputCategoryList.element";
-import InputResetSubmitDeleteCombo from "../../elements/input/InputResetSubmitDeleteCombo.element";
-import { deleteCategory, editCategory } from "../../redux/data/Data.slice";
+import InputResetSubmitDeleteCopyCombo from "../../elements/input/InputResetSubmitDeleteCopyCombo.element";
+import { copyCategory, deleteCategory, editCategory } from "../../redux/data/Data.slice";
 import InputCategory from "./InputCategory.module";
 
 
@@ -41,6 +41,10 @@ function InputCategoryEdit({ firstCategory, setParentOpen }) {
 		dispatch(deleteCategory(selectedCategory));
 	}
 
+	const copyFunc = () => {
+		dispatch(copyCategory({ id: selectedCategory.id }))
+	}
+
 	return (
 		<form onSubmit={submitForm} className='text-sm flex flex-col justify-center gap-2'>
 		<div className="mb-3 pb-3 border-b-2 border-zinc-800">
@@ -48,7 +52,7 @@ function InputCategoryEdit({ firstCategory, setParentOpen }) {
 		</div>
 		<InputCategory categoryObj={newCategory} setCategoryObj={updateNewCategory} />
 		<div className="mt-3 pt-3 border-t-2 border-zinc-800">
-			<InputResetSubmitDeleteCombo resetFunc={resetForm} submitFunc={submitForm} deleteFunc={deleteFunc} />
+			<InputResetSubmitDeleteCopyCombo resetFunc={resetForm} submitFunc={submitForm} deleteFunc={deleteFunc} copyFunc={copyFunc} />
 		</div>
 		</form>
 	)

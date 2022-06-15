@@ -11,12 +11,11 @@ export const DataSlice = createSlice({
 
 export const { 
 	replaceRecords,
-	addSeason, editSeason, deleteSeason, applySeasonXP,
-	addCategory, editCategory, deleteCategory,
-	addGoal, editGoal, deleteGoal, applyGoalXP,
-	addActivity, editActivity, deleteActivity,
-	addChallenge, editChallenge, deleteChallenge, 
-	addLog, editLog, deleteLog
+	addSeason, addCategory, addGoal, addActivity, addChallenge, addLog,
+	editSeason, editCategory, editGoal, editActivity, editChallenge, editLog,
+	deleteSeason, deleteCategory, deleteGoal, deleteActivity, deleteChallenge, deleteLog,
+	copySeason, copyCategory, copyGoal, copyActivity, copyChallenge, copyLog,
+	applyGoalXP, applySeasonXP,
 } = DataSlice.actions
 
 

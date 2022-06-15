@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { connect, useDispatch } from 'react-redux';
-import InputResetSubmitDeleteCombo from "../../elements/input/InputResetSubmitDeleteCombo.element";
+import InputResetSubmitDeleteCopyCombo from "../../elements/input/InputResetSubmitDeleteCopyCombo.element";
 import InputSeasonList from "../../elements/input/InputSeasonList.element";
-import { deleteSeason, editSeason } from "../../redux/data/Data.slice";
+import { copySeason, deleteSeason, editSeason } from "../../redux/data/Data.slice";
 import InputSeason from "./InputSeason.module";
 
 
@@ -42,6 +42,10 @@ function InputSeasonEdit({ firstSeason, setParentOpen }) {
 		dispatch(deleteSeason(selectedSeason));
 	}
 
+	const copyFunc = () => {
+		dispatch(copySeason({ id: selectedSeason.id }))
+	}
+
 	return (
 		<form onSubmit={submitForm} className='text-sm flex flex-col justify-center gap-2'>
 			<div className="mb-3 pb-3 border-b-2 border-zinc-800">
@@ -49,7 +53,7 @@ function InputSeasonEdit({ firstSeason, setParentOpen }) {
 			</div>
 			<InputSeason seasonObj={newSeason} setSeasonObj={updateNewSeason} />
 			<div className="mt-3 pt-3 border-t-2 border-zinc-800">
-				<InputResetSubmitDeleteCombo resetFunc={resetForm} submitFunc={submitForm} deleteFunc={deleteFunc} />
+				<InputResetSubmitDeleteCopyCombo resetFunc={resetForm} submitFunc={submitForm} deleteFunc={deleteFunc} copyFunc={copyFunc} />
 			</div>
 		</form>
 	)

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { connect, useDispatch } from 'react-redux';
 import InputChallengeList from "../../elements/input/InputChallengeList.element";
-import InputResetSubmitDeleteCombo from "../../elements/input/InputResetSubmitDeleteCombo.element";
-import { deleteChallenge, editChallenge } from "../../redux/data/Data.slice";
+import InputResetSubmitDeleteCopyCombo from "../../elements/input/InputResetSubmitDeleteCopyCombo.element";
+import { copyChallenge, deleteChallenge, editChallenge } from "../../redux/data/Data.slice";
 import InputChallenge from "./InputChallenge.module";
 
 
@@ -45,6 +45,10 @@ function InputChallengeEdit({ firstChallenge, activities, setParentOpen }) {
 		dispatch(deleteChallenge(selectedChallenge));
 	}
 
+	const copyFunc = () => {
+		dispatch(copyChallenge({ id: selectedChallenge.id }))
+	}
+
 	return (
 		<form onSubmit={submitForm} className='text-sm flex flex-col justify-center gap-2'>
 		<div className="mb-3 pb-3 border-b-2 border-zinc-800">
@@ -52,7 +56,7 @@ function InputChallengeEdit({ firstChallenge, activities, setParentOpen }) {
 		</div>
 		<InputChallenge challengeObj={newChallenge} setChallengeObj={updateNewChallenge} />
 		<div className="mt-3 pt-3 border-t-2 border-zinc-800">
-			<InputResetSubmitDeleteCombo resetFunc={resetForm} submitFunc={submitForm} deleteFunc={deleteFunc} />
+			<InputResetSubmitDeleteCopyCombo resetFunc={resetForm} submitFunc={submitForm} deleteFunc={deleteFunc} copyFunc={copyFunc} />
 		</div>
 		</form>
 	)
