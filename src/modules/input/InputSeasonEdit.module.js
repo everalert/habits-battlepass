@@ -1,24 +1,26 @@
 import { useEffect, useState } from "react";
 import { connect, useDispatch } from 'react-redux';
+import InputCopyButton from "../../elements/input/InputCopyButton.element";
+import InputEnableButton from "../../elements/input/InputEnableButton.element";
 import InputResetSubmitDeleteCopyCombo from "../../elements/input/InputResetSubmitDeleteCopyCombo.element";
 import InputSeasonList from "../../elements/input/InputSeasonList.element";
-import { copySeason, deleteSeason, editSeason } from "../../redux/data/Data.slice";
+import { copySeason, deleteSeason, editSeason, setActiveSeason } from "../../redux/data/Data.slice";
 import InputSeason from "./InputSeason.module";
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		firstSeason: state.data.season.seasons[0] ,
+		activeSeason: state.data.season.seasons[state.data.season.active] ,
 		...state.data.season.opts,
 		...ownProps
 	}
 }
 
 
-function InputSeasonEdit({ firstSeason, setParentOpen }) {
+function InputSeasonEdit({ activeSeason, setParentOpen }) {
 
 	const dispatch = useDispatch();
-	const [selectedSeason, setSelectedSeason] = useState(firstSeason);
+	const [selectedSeason, setSelectedSeason] = useState(activeSeason);
 
 	const [newSeason, updateNewSeason] = useState({...selectedSeason});
 	
@@ -46,10 +48,17 @@ function InputSeasonEdit({ firstSeason, setParentOpen }) {
 		dispatch(copySeason({ id: selectedSeason.id }))
 	}
 
+	const enableFunc = () => {
+		dispatch(setActiveSeason({ id: selectedSeason.id }))
+	}
+
 	return (
 		<form onSubmit={submitForm} className='text-sm flex flex-col justify-center gap-2'>
-			<div className="mb-3 pb-3 border-b-2 border-zinc-800">
-				<InputSeasonList selectedSeason={selectedSeason} setParentSeason={setSelectedSeason} />
+			<div className="flex gap-2 mb-3 pb-3 border-b-2 border-zinc-800">
+				<div className="grow">
+					<InputSeasonList selectedSeason={selectedSeason} setParentSeason={setSelectedSeason} />
+				</div>
+				<InputEnableButton enableFunc={enableFunc} />
 			</div>
 			<InputSeason seasonObj={newSeason} setSeasonObj={updateNewSeason} />
 			<div className="mt-3 pt-3 border-t-2 border-zinc-800">

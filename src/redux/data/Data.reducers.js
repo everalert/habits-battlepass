@@ -41,6 +41,9 @@ export default {
 		state.challenge.challenges = action.payload.challenges;
 		state.log.logs = action.payload.logs;
 	},
+	setActiveSeason: (state, action) => {
+		state.season.active	= state.season.seasons.findIndex(s => s.id === action.payload.id);
+	},
 
 
 	addSeason: (state, action) => {

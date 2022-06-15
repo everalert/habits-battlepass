@@ -10,7 +10,7 @@ export const DataSlice = createSlice({
 })
 
 export const { 
-	replaceRecords,
+	replaceRecords, setActiveSeason,
 	addSeason, addCategory, addGoal, addActivity, addChallenge, addLog,
 	editSeason, editCategory, editGoal, editActivity, editChallenge, editLog,
 	deleteSeason, deleteCategory, deleteGoal, deleteActivity, deleteChallenge, deleteLog,
