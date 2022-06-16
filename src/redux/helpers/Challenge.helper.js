@@ -48,3 +48,7 @@ export function GetChallengeProgressForPeriod(logs, isIncremental, challenge, pe
 	}
 	return { done: done, xp: xp };
 }
+
+export function IsChallengeOfLog( logVariation, challengeVariation) {
+	return (challengeVariation === '' ? true : logVariation === challengeVariation)
+}

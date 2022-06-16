@@ -2,6 +2,7 @@ import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
 import { applyGoalXP, applySeasonXP } from "./Data.slice";
 import { GetDayOfSeasonAtTimestamp, GetWeekOfSeasonAtTimestamp } from "../helpers/Season.helper";
 import { GetLogEndValueForPeriod } from "../helpers/Log.helper";
+import { IsChallengeOfLog } from "../helpers/Challenge.helper";
 
 
 
@@ -9,14 +10,14 @@ function makeCopyString(str) {
 	return `Copy of ${str}`
 }
 
-function updateChallengeProgress(state, { logDelta, logActivityId, logTimestamp, logs }, asyncDispatch) {
+function updateChallengeProgress(state, { logDelta, logActivityId, logVariation, logTimestamp, logs }, asyncDispatch) {
 	const activity = state.activity.activities.find(a => a.id === logActivityId);
-	const c = state.challenge.challenges.filter(c => c.taskActivityId === logActivityId);
+	const c = state.challenge.challenges.filter(c => c.taskActivityId === logActivityId && IsChallengeOfLog(logVariation, c.taskVariation));
 	c.forEach(c => {
 		const goal = state.goal.goals.find(g => g.id === c.goalId);
 		const season = state.season.seasons.find(s => s.id === goal.seasonId);
 		const period = c.period === 'daily' ? GetDayOfSeasonAtTimestamp(season, logTimestamp) : GetWeekOfSeasonAtTimestamp(season, logTimestamp);
-		const filteredLogs = logs.filter(l => l.timestamp < period.end && l.timestamp >= period.start);
+		const filteredLogs = logs.filter(l => l.timestamp < period.end && l.timestamp >= period.start && IsChallengeOfLog(l.variation, c.taskVariation));
 		const endValue = GetLogEndValueForPeriod(filteredLogs, activity.id, activity.isReportingIncremental, period.start, period.end);
 		const startValue = endValue-logDelta;
 		if (endValue >= c.taskAmount && startValue < c.taskAmount) {
@@ -96,6 +97,7 @@ export default {
 		updateChallengeProgress(state, {
 			logDelta: newLog.value,
 			logActivityId: newLog.activityId,
+			logVariation: newLog.variation,
 			logTimestamp: newLog.timestamp,
 			logs: state.log.logs.filter(l => l.activityId === newLog.activityId)
 		}, action.asyncDispatch);
@@ -153,6 +155,7 @@ export default {
 		updateChallengeProgress(state, {
 			logDelta: newLog.value-oldValue,
 			logActivityId: newLog.activityId,
+			logVariation: newLog.variation,
 			logTimestamp: newLog.timestamp,
 			logs: state.log.logs.filter(l => l.activityId === newLog.activityId)
 		}, action.asyncDispatch);
@@ -180,6 +183,7 @@ export default {
 		updateChallengeProgress(state, {
 			logDelta: -oldLog.value,
 			logActivityId: oldLog.activityId,
+			logVariation: oldLog.variation,
 			logTimestamp: oldLog.timestamp,
 			logs: state.log.logs.filter(l => l.activityId === oldLog.activityId)
 		}, action.asyncDispatch);
@@ -234,6 +238,7 @@ export default {
 		updateChallengeProgress(state, {
 			logDelta: newLog.value,
 			logActivityId: newLog.activityId,
+			logVariation: newLog.variation,
 			logTimestamp: newLog.timestamp,
 			logs: state.log.logs.filter(l => l.activityId === newLog.activityId)
 		}, action.asyncDispatch);

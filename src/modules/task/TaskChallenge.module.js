@@ -18,7 +18,7 @@ const mapStateToProps = (state, ownProps) => {
 
 function TaskChallenge({ logs, activity, task, periodObj, timeFunc }) {
 
-	const logEndValue = GetLogEndValueForPeriod(logs, activity.id, activity.isReportingIncremental, periodObj.start, periodObj.end);
+	const logEndValue = GetLogEndValueForPeriod(logs, activity.id, activity.isReportingIncremental, periodObj.start, periodObj.end, task.taskVariation);
 	const target = FormatActivityValue(activity, task.taskAmount, timeFunc);
 	const progress = FormatActivityValue(activity, logEndValue, timeFunc);
 	const completionRate = Math.min(logEndValue,task.taskAmount)/task.taskAmount*100;
@@ -41,7 +41,7 @@ function TaskChallenge({ logs, activity, task, periodObj, timeFunc }) {
 						style={{left:`${-100+completionRate}%`}}></div>
 				</div>
 			</div>
-			<InputQuickLog activity={activity} variation={task.variation} />
+			<InputQuickLog activity={activity} variation={task.taskVariation} />
 		</div>
 	);
 
