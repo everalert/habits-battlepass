@@ -1,20 +1,41 @@
 import Sidebar from '../src/modules/Sidebar.module'
 import Scoreboard from '../src/modules/Scoreboard.module'
-import { connect } from 'react-redux'
+import { connect, useDispatch } from 'react-redux'
+import { ImportDataFromODS, SourceToODS } from '../src/helpers/ODS.helper'
+import { replaceRecords } from '../src/redux/data/Data.slice'
 
 
 const mapStateToProps = (state) => {
+	const season = state.data.season.seasons[state.data.season.active];
 	return {
-		seasonId: state.data.season.seasons[state.data.season.active].id
+		seasonId: season ? season.id : -1,
+		bases: {
+			seasons: state.data.season.base,
+			categories: state.data.category.base,
+			goals: state.data.goal.base,
+			challenges: state.data.challenge.base,
+			activities: state.data.activity.base,
+			logs: state.data.log.base
+		}
 	}
 }
 
 
-function Home({ seasonId }) {
+function Home({ seasonId, bases }) {
+
+	const dispatch = useDispatch();
+
+	if (seasonId === -1)
+		SourceToODS('/data/default.ods').then(file => {
+			ImportDataFromODS(file, bases).then(response => {
+				if (response !== false)
+					dispatch(replaceRecords(response));
+			});
+		});
 
 	return (
 		<div>
-			<Scoreboard seasonId={seasonId} />
+			{ seasonId >= 0 && <Scoreboard seasonId={seasonId} />}
 			<Sidebar/>
 		</div>
 	)

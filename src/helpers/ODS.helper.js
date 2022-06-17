@@ -1,6 +1,16 @@
 import * as XLSX from 'xlsx';
 import { GetCurrentTimeString } from './Math.helper';
 
+
+export function SourceToODS(src){
+	const filename = src.match(/([^/]+)$/g);
+	const type = "application/vnd.oasis.opendocument.spreadsheet";
+    return ( fetch(src)
+        .then(response => response.arrayBuffer())
+        .then(buffer => new File([buffer], filename, { type }))
+	)
+}
+
 export function ExportDataToODS(data) {
 	const workbook = XLSX.utils.book_new();
 	const keys = Object.keys(data);
