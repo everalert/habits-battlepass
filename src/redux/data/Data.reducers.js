@@ -1,9 +1,7 @@
 import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
-import { applyGoalXP, applySeasonXP } from "./Data.slice";
-import { GetDayOfSeasonAtTimestamp, GetWeekOfSeasonAtTimestamp } from "../helpers/Season.helper";
-import { GetLogEndValueForPeriod } from "../helpers/Log.helper";
 import { IsChallengeOfLog } from "../helpers/Challenge.helper";
-
+import { getChallengeEndValueAtTimestamp, getListsFromDataState } from "./Data.helpers";
+import { applyGoalXP, applySeasonXP } from "./Data.slice";
 
 
 function makeCopyString(str) {
@@ -11,22 +9,18 @@ function makeCopyString(str) {
 }
 
 function updateChallengeProgress(state, { logDelta, logActivityId, logVariation, logTimestamp, logs }, asyncDispatch) {
-	const activity = state.activity.activities.find(a => a.id === logActivityId);
 	const c = state.challenge.challenges.filter(c => c.taskActivityId === logActivityId && IsChallengeOfLog(logVariation, c.taskVariation));
 	c.forEach(c => {
-		const goal = state.goal.goals.find(g => g.id === c.goalId);
-		const season = state.season.seasons.find(s => s.id === goal.seasonId);
-		const period = c.period === 'daily' ? GetDayOfSeasonAtTimestamp(season, logTimestamp) : GetWeekOfSeasonAtTimestamp(season, logTimestamp);
-		const filteredLogs = logs.filter(l => l.timestamp < period.end && l.timestamp >= period.start && IsChallengeOfLog(l.variation, c.taskVariation));
-		const endValue = GetLogEndValueForPeriod(filteredLogs, activity.id, activity.isReportingIncremental, period.start, period.end);
+		const { id: goalId, seasonId } = state.goal.goals.find(g => g.id === c.goalId);
+		const endValue = getChallengeEndValueAtTimestamp(c, logTimestamp, getListsFromDataState(state));
 		const startValue = endValue-logDelta;
 		if (endValue >= c.taskAmount && startValue < c.taskAmount) {
-			asyncDispatch(applyGoalXP({ id: goal.id, xp: c.taskXP }));
-			asyncDispatch(applySeasonXP({ id: goal.seasonId, xp: c.taskXP }));
+			asyncDispatch(applyGoalXP({ id: goalId, xp: c.taskXP }));
+			asyncDispatch(applySeasonXP({ id: seasonId, xp: c.taskXP }));
 		}
 		if (endValue < c.taskAmount && startValue >= c.taskAmount) {
-			asyncDispatch(applyGoalXP({ id: goal.id, xp: -c.taskXP }));
-			asyncDispatch(applySeasonXP({ id: goal.seasonId, xp: -c.taskXP }));
+			asyncDispatch(applyGoalXP({ id: goalId, xp: -c.taskXP }));
+			asyncDispatch(applySeasonXP({ id: seasonId, xp: -c.taskXP }));
 		}
 	});
 }

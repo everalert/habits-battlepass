@@ -33,14 +33,16 @@ export function GetGoalSuccessXp(goal, season) {
 
 export function GetGoalProgressForPeriod(season, goal, challenges, activities, logs, periodName) {
 	const period = periodName === 'daily' ? GetDayOfSeason(season) : GetWeekOfSeason(season); 
-	const filteredchallenges = GetAllChallengesForGoalOfPeriod(challenges, goal.id, periodName);
+	const filteredChallenges = GetAllChallengesForGoalOfPeriod(challenges, goal.id, periodName);
 	let done = 0;
 	let xp = 0;
-	filteredchallenges.forEach(c => {
+	filteredChallenges.forEach(c => {
 		const isIncremental = activities.find(a => a.id === c.taskActivityId).isReportingIncremental;
 		const progress = GetChallengeProgressForPeriod(logs, c, isIncremental, period.start, period.end);
 		xp += progress.xp;
 		done += Number(progress.done);
 	});
-	return { xp: xp, done: done};
+	const output = { xp, done };
+	console.log(output);
+	return output;
 }

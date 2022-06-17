@@ -6,7 +6,7 @@ import { GetCurrentUnixTimestamp, RoundN } from '../helpers/Math.helper'
 import InputQuickLog from '../modules/input/InputQuickLog.module'
 import { FormatActivityValue, GetActivityUnitPrecision } from '../redux/helpers/Activity.helpers'
 import { GetAllDailyChallengesForGoal, GetAllWeeklyChallengesForGoal } from '../redux/helpers/Challenge.helper'
-import { GetGoalProgressForPeriod, GetGoalProjectedResultAtTime, GetGoalProjectedXpAtTime, GetGoalSuccessXp } from '../redux/helpers/Goal.helper'
+import { GetGoalProjectedResultAtTime, GetGoalProjectedXpAtTime, GetGoalSuccessXp } from '../redux/helpers/Goal.helper'
 import { GetLogEndValueForPeriod } from '../redux/helpers/Log.helper'
 import { GetDayOfSeason, GetWeekOfSeason } from '../redux/helpers/Season.helper'
 import StatPar from './stat/StatPar.module'
@@ -18,7 +18,6 @@ const mapStateToProps = (state, ownProps) => {
 	const timestamp = GetCurrentUnixTimestamp();
 	const season = state.data.season.seasons[state.data.season.active];
 	const goal = ownProps.goal;
-	const activities = state.data.activity.activities;
 	const challenges = state.data.challenge.challenges;
 	const logs = state.data.log.logs;
 	const lagActivity = state.data.activity.activities.find(a => a.id === goal.goalLagActivityId);
@@ -29,14 +28,13 @@ const mapStateToProps = (state, ownProps) => {
 	const lagProjectedResultDeltaRaw = lagResultRaw-lagProjectedResult;
 	const goalProjectedXp = Math.round(GetGoalProjectedXpAtTime(goal, season, timestamp));
 	return {
-		season: season,
-		challenges: challenges,
+		timestamp,
+		season,
+		challenges,
 		dayOfSeason: GetDayOfSeason(season),
 		weekOfSeason: GetWeekOfSeason(season),
 		goalDailyTasks: GetAllDailyChallengesForGoal(challenges, goal.id),
 		goalWeeklyTasks: GetAllWeeklyChallengesForGoal(challenges, goal.id),
-		goalDailyProgress: GetGoalProgressForPeriod(season, goal, challenges, activities, logs, 'daily'),
-		goalWeeklyProgress: GetGoalProgressForPeriod(season, goal, challenges, activities, logs, 'weekly'),
 		goalLagActivity: lagActivity,
 		goalLagResultRaw: lagResultRaw,
 		goalLagProjectedResult: lagProjectedResult,
@@ -53,13 +51,12 @@ const mapStateToProps = (state, ownProps) => {
 
 
 function GoalPanel({
+		timestamp,
 		goal,
 		dayOfSeason,
 		weekOfSeason,
 		goalDailyTasks,
 		goalWeeklyTasks,
-		goalDailyProgress,
-		goalWeeklyProgress,
 		goalLagActivity,
 		goalLagValue,
 		goalLagUnit,
@@ -90,8 +87,8 @@ function GoalPanel({
 				<InputQuickLog activity={goalLagActivity} variation={goal.goalLagActivityVariation} />
 				<StatPar abs={goal.currentXP} rel={goalProjectedXpDelta} relRaw={goalProjectedXpDelta} relDir={1} unit='XP' />
 				<StatPar abs={goalLagValue} rel={goalLagProjectedResultDelta} relRaw={goalLagProjectedResultDeltaRaw} relDir={goalLagProjectedDir} unit={goalLagUnit} />
-				<StatTaskProgress over={goalDailyProgress.done} under={goalDailyTasks.length} value={goalDailyProgress.xp} unit='XP' label={`DAY ${dayOfSeason.no}`} />
-				<StatTaskProgress over={goalWeeklyProgress.done} under={goalWeeklyTasks.length} value={goalWeeklyProgress.xp} unit='XP' label={`WEEK ${weekOfSeason.no}`} />
+				<StatTaskProgress label={`DAY ${dayOfSeason.no}`} challenges={goalDailyTasks} timestamp={timestamp} />
+				<StatTaskProgress label={`WEEK ${weekOfSeason.no}`} challenges={goalWeeklyTasks} timestamp={timestamp} />
 			</div>
 			<div className="flex flex-col gap-6">
 				<TaskCollection tasks={goalDailyTasks} periodObj={dayOfSeason} />
