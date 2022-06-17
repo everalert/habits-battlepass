@@ -1,4 +1,5 @@
 import * as XLSX from 'xlsx';
+import { GetCurrentTimeString } from './Math.helper';
 
 export function ExportDataToODS(data) {
 	const workbook = XLSX.utils.book_new();
@@ -7,7 +8,7 @@ export function ExportDataToODS(data) {
 		const worksheet = XLSX.utils.json_to_sheet(data[k])
 		XLSX.utils.book_append_sheet(workbook, worksheet, k);
 	});
-	XLSX.writeFile(workbook, 'battlepass-scoreboard.ods');
+	XLSX.writeFile(workbook, `battlepass-scoreboard-${GetCurrentTimeString()}.ods`);
 }
 
 export async function ImportDataFromODS(file, bases) {

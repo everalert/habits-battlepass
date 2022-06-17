@@ -2,6 +2,14 @@ export function GetCurrentUnixTimestamp() {
 	return Math.floor(Date.now()/1000)
 }
 
+export function GetCurrentTimeString() {
+	const date = new Date();
+	const str = (new Date(date.getTime()-date.getTimezoneOffset()*60000))
+		.toISOString()
+		.replace(/[-TZ:.]+/g, '');
+	return `${str.slice(0,8)}-${str.slice(8,12)}`;
+}
+
 export function SecondsToTimeObject(seconds) {
 	return {
 		d: Math.floor(seconds/86400),
