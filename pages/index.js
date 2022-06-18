@@ -3,6 +3,8 @@ import Scoreboard from '../src/modules/Scoreboard.module'
 import { connect, useDispatch } from 'react-redux'
 import { ImportDataFromODS, SourceToODS } from '../src/helpers/ODS.helper'
 import { replaceRecords } from '../src/redux/data/Data.slice'
+import { incRenderTick } from '../src/redux/meta/Meta.slice'
+import { useEffect } from 'react'
 
 
 const mapStateToProps = (state) => {
@@ -24,6 +26,10 @@ const mapStateToProps = (state) => {
 function Home({ seasonId, bases }) {
 
 	const dispatch = useDispatch();
+
+	useEffect(()=>{
+		const tick = setInterval(()=>dispatch(incRenderTick()), 1000);
+	}, [])
 
 	if (seasonId === -1)
 		SourceToODS('/data/default.ods').then(file => {

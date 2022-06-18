@@ -5,6 +5,7 @@ import SeasonPanel from './SeasonPanel.module'
 
 const mapStateToProps = (state, ownProps) => {
 	return {
+		renderTick: state.meta.renderTick,
 		goals: state.data.goal.goals.filter(g => g.seasonId === ownProps.seasonId),
 		...ownProps
 	}
