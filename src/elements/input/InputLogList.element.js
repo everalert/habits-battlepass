@@ -1,18 +1,20 @@
 import { Listbox } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
-import { useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 import { connect } from 'react-redux';
 
 
 const mapStateToProps = (state, ownProps) => {
 	return {
-		logs: state.data.log.logs,
+		logs: [...state.data.log.logs].sort((a,b) => b.timestamp - a.timestamp),
 		...ownProps
 	}
 }
 
 
 function InputLogList({ logs, selectedLog, setParentLog }) {
+
+	const sortedLogs = useMemo(() => logs.sort((a,b) => b.timestamp - a.timestamp), [logs]);
 
 	useEffect(()=>{
 		if (!logs.includes(selectedLog))
@@ -29,7 +31,7 @@ function InputLogList({ logs, selectedLog, setParentLog }) {
 					</span>
 				</Listbox.Button>
 				<Listbox.Options className='absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded bg-white py-1 text-base ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm'>
-					{logs.map((l) => (
+					{sortedLogs.map((l) => (
 						<Listbox.Option key={l.id} value={l} className={({ active }) => `relative cursor-default select-none py-1 pl-10 pr-4 ${active ? 'bg-zinc-200 text-zinc-900' : 'text-zinc-600'}`}>
 							{({ selected }) => (<>
 								<span className={`block truncate ${selected ? 'font-medium' : 'font-normal'}`}>{`${l.timestamp} - ${l.value}`}</span>
