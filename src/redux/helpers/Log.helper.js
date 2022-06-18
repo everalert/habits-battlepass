@@ -20,6 +20,9 @@ export function GetLogEndValueForPeriod(logs, activityId, activityIsIncremental,
 		filteredLogs.forEach(l => { total = total+l.value })
 		return total;
 	} else {
-		return GetLogsByActivityIdForPeriod(logs, activityId, 0, endTime).pop().value;
+		return GetLogsByActivityIdForPeriod(logs, activityId, 0, endTime)
+			.sort((a,b) => a.timestamp - b.timestamp)
+			.pop()
+			.value;
 	}
 }
