@@ -44,3 +44,8 @@ export function FormatActivityValue(activity, value, timeFormatFunction = Second
 	}
 	return output;
 }
+
+export function ActivityValueString(activity, value, timeFormatFunction = SecondsToHMMSS, sign = true) {
+	const format = FormatActivityValue(activity, value, timeFormatFunction, sign);
+	return `${format.value}${format.unit}`;
+}

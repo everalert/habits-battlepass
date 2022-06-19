@@ -2,12 +2,17 @@ export function GetCurrentUnixTimestamp() {
 	return Math.floor(Date.now()/1000)
 }
 
-export function GetCurrentTimeString() {
+export function GetTimeString(timestamp, showSeconds = false) {
 	const date = new Date();
-	const str = (new Date(date.getTime()-date.getTimezoneOffset()*60000))
+	const str = (new Date(timestamp*1000-date.getTimezoneOffset()*60000))
 		.toISOString()
 		.replace(/[-TZ:.]+/g, '');
-	return `${str.slice(0,8)}-${str.slice(8,12)}`;
+	return `${str.slice(0,8)}-${str.slice(8,12+(showSeconds?2:0))}`;
+}
+
+export function GetCurrentTimeString(showSeconds = false) {
+	const date = new Date();
+	return GetTimeString(date.getTime()/1000, showSeconds);
 }
 
 export function SecondsToTimeObject(seconds) {
