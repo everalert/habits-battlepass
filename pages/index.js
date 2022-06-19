@@ -28,7 +28,7 @@ function Home({ seasonId, bases }) {
 	const dispatch = useDispatch();
 
 	useEffect(()=>{
-		const tick = setInterval(()=>dispatch(incRenderTick()), 1000);
+		const tick = setInterval(()=>dispatch(incRenderTick()), 10000);
 	}, [])
 
 	if (seasonId === -1)
