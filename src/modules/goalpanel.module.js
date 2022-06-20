@@ -1,18 +1,19 @@
+import { Tab } from '@headlessui/react'
+import { ChevronUpIcon } from '@heroicons/react/solid'
 import { connect } from 'react-redux'
 import GoalPanelHeader from '../elements/goalPanel/GoalPanelHeader.element'
 import LineChart from '../elements/LineChart.element'
-import RadialBar from '../elements/RadialBar.element'
-import { GetCurrentUnixTimestamp, RoundN } from '../helpers/Math.helper'
+import { FormatNumber, GetCurrentUnixTimestamp, RoundN, SecondsToMinutes } from '../helpers/Math.helper'
 import InputQuickLog from '../modules/input/InputQuickLog.module'
 import { FormatActivityValue, GetActivityUnitPrecision } from '../redux/helpers/Activity.helpers'
 import { GetAllDailyChallengesForGoal, GetAllWeeklyChallengesForGoal } from '../redux/helpers/Challenge.helper'
-import { GetGoalProjectedResultAtTime, GetGoalProjectedXpAtTime, GetGoalSuccessXp } from '../redux/helpers/Goal.helper'
+import { GetGoalProjectedResultAtTime, GetGoalProjectedXpAtTime } from '../redux/helpers/Goal.helper'
 import { GetLogEndValueForPeriod } from '../redux/helpers/Log.helper'
 import { GetDayOfSeason, GetWeekOfSeason } from '../redux/helpers/Season.helper'
 import GoalProgressBar from './goal/GoalProgressBar.module'
 import StatPar from './stat/StatPar.module'
 import StatTaskProgress from './stat/StatTaskProgress.module'
-import TaskCollection from './task/TaskCollection.module'
+import TaskChallenge from './task/TaskChallenge.module'
 
 
 const mapStateToProps = (state, ownProps) => {
@@ -64,12 +65,19 @@ function GoalPanel({
 		goalLagProjectedResultDelta,
 		goalLagProjectedDir,
 		goalProjectedXpDelta }) {
+	
+	const timeFunc = s => FormatNumber(Math.floor(SecondsToMinutes(s)))
+
+	const challengePages = [
+		{ label:'DAILY', tasks:goalDailyTasks, period:dayOfSeason },
+		{ label:'WEEKLY', tasks:goalWeeklyTasks, period:weekOfSeason },
+	]
 
 	return (
-		<div>
+		<div className='relative w-[19rem] overflow-hidden'>
 			<GoalPanelHeader goal={goal} lagActivity={goalLagActivity} />
 			<GoalProgressBar goal={goal} />
-			<div className='mx-auto outline outline-1 outline-gray-800 rounded-lg'><LineChart/></div>
+			<div className='mx-2 outline outline-1 outline-gray-800 rounded-lg'><LineChart/></div>
 			<div className="grid grid-cols-2 gap-y-4 px-4 py-8 group relative">
 				<InputQuickLog activity={goalLagActivity} variation={goal.goalLagActivityVariation} />
 				<StatPar abs={goal.currentXP} rel={goalProjectedXpDelta} relRaw={goalProjectedXpDelta} relDir={1} unit='XP' />
@@ -77,9 +85,24 @@ function GoalPanel({
 				<StatTaskProgress label={`DAY ${dayOfSeason.no}`} challenges={goalDailyTasks} timestamp={timestamp} />
 				<StatTaskProgress label={`WEEK ${weekOfSeason.no}`} challenges={goalWeeklyTasks} timestamp={timestamp} />
 			</div>
-			<div className="flex flex-col gap-6">
-				<TaskCollection tasks={goalDailyTasks} periodObj={dayOfSeason} />
-				<TaskCollection tasks={goalWeeklyTasks} periodObj={weekOfSeason} />
+			<div className="absolute -bottom-80 left-[0.5rem] flex flex-col gap-6 hover:bottom-0 transition-all">
+				<ChevronUpIcon className='absolute w-4 h-4 -top-4 left-1/2 -ml-2 fill-zinc-400' />
+				<Tab.Group as='div' defaultIndex={0} className="rounded-t-lg bg-black outline outline-2 outline-zinc-900">
+					<Tab.List className="flex flex-wrap justify-center h-8 mx-4 gap-1 select-none">
+						{ challengePages.map((p,i) => 
+							<Tab as='div' key={i} className={`mt-2`}>
+								{({selected}) => <span className={`${selected?'bg-zinc-700 font-medium':'bg-zinc-900'} text-zinc-300 py-0.5 px-2 rounded`}>{p.label}</span>}
+							</Tab>
+						) }
+					</Tab.List>
+					<Tab.Panels className="">
+						{ challengePages.map((p,i) => 
+							<Tab.Panel as='div' key={i} className='w-[18rem] h-72 mx-auto p-2 flex flex-col gap-2'>
+								{ p.tasks.map(t => (<TaskChallenge key={t.id} task={t} periodObj={p.period} timeFunc={timeFunc} />))}
+							</Tab.Panel>
+						) }
+					</Tab.Panels>
+				</Tab.Group>
 			</div>
 		</div>
 	)
