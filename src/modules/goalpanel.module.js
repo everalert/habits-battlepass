@@ -2,7 +2,6 @@ import { Tab } from '@headlessui/react'
 import { ChevronUpIcon } from '@heroicons/react/solid'
 import { connect } from 'react-redux'
 import GoalPanelHeader from '../elements/goalPanel/GoalPanelHeader.element'
-import LineChart from '../elements/LineChart.element'
 import { FormatNumber, GetCurrentUnixTimestamp, RoundN, SecondsToMinutes } from '../helpers/Math.helper'
 import InputQuickLog from '../modules/input/InputQuickLog.module'
 import { FormatActivityValue, GetActivityUnitPrecision } from '../redux/helpers/Activity.helpers'
@@ -11,6 +10,7 @@ import { GetGoalProjectedResultAtTime, GetGoalProjectedXpAtTime } from '../redux
 import { GetLogEndValueForPeriod } from '../redux/helpers/Log.helper'
 import { GetDayOfSeason, GetWeekOfSeason } from '../redux/helpers/Season.helper'
 import GoalProgressBar from './goal/GoalProgressBar.module'
+import GoalProgressGraph from './goal/GoalProgressGraph.module'
 import StatPar from './stat/StatPar.module'
 import StatTaskProgress from './stat/StatTaskProgress.module'
 import TaskChallenge from './task/TaskChallenge.module'
@@ -77,7 +77,9 @@ function GoalPanel({
 		<div className='relative w-[19rem] overflow-hidden'>
 			<GoalPanelHeader goal={goal} lagActivity={goalLagActivity} />
 			<GoalProgressBar goal={goal} />
-			<div className='mx-2 outline outline-1 outline-gray-800 rounded-lg'><LineChart/></div>
+			<div className='mx-2 h-32 outline outline-1 outline-zinc-800 rounded'>
+				<GoalProgressGraph goal={goal} />
+			</div>
 			<div className="grid grid-cols-2 gap-y-4 px-4 py-8 group relative">
 				<InputQuickLog activity={goalLagActivity} variation={goal.goalLagActivityVariation} />
 				<StatPar abs={goal.currentXP} rel={goalProjectedXpDelta} relRaw={goalProjectedXpDelta} relDir={1} unit='XP' />

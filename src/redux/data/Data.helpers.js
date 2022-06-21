@@ -14,6 +14,10 @@ export const getListsFromDataState = (state) => {
 	}
 }
 
+export const filterLogsByActivity = (logs, activityId, variation = '') => {
+	return logs.filter(l => l.activityId === activityId && IsChallengeOfLog(l.variation, variation));
+}
+
 export const getChallengeEndValueAtTimestamp = (challenge, timestamp, { logs, activities, goals, seasons }) => {
 	const activity = activities.find(a => a.id === challenge.taskActivityId);
 	const goal = goals.find(g => g.id === challenge.goalId);
