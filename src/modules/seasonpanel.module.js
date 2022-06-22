@@ -1,7 +1,8 @@
 import { connect } from 'react-redux'
-import RadialBar from '../elements/RadialBar.element'
 import { GetCurrentUnixTimestamp } from '../helpers/Math.helper'
 import SeasonIcon from './season/SeasonIcon.module'
+import SeasonProgressBarLevel from './season/SeasonProgressBarLevel.module'
+import SeasonProgressBarTotal from './season/SeasonProgressBarTotal.module'
 
 
 const mapStateToProps = (state, ownProps) => {
@@ -19,13 +20,9 @@ function SeasonPanel({ season }) {
 	return (
 		<div className="lg:w-96 my-12 text-center mx-auto">
 			<div className="relative w-72 h-72 mx-auto mb-6">
-				<div className="iconProgressBar">
-					<RadialBar size={288} value={season.currentXP} thickness={36} />
-				</div>
+				<SeasonProgressBarTotal seasonId={season.id} />
 				<SeasonIcon/>
-				<div className="w-48 h-48 absolute top-12 left-12">
-					<RadialBar size={192} value={season.currentXP%season.levelXP} max={season.levelXP} thickness={8} corner={1} delay={250} />
-				</div>
+				<SeasonProgressBarLevel seasonId={season.id} />
 				<div className="w-72 h-48 absolute top-20 left-0 text-9xl text-center text-black font-bold font-mono">{season.currentLevel}</div>
 			</div>
 			<h1 className='text-3xl font-bold tracking-widest uppercase'>{season.title}</h1>

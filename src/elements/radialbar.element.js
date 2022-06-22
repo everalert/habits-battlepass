@@ -1,94 +1,49 @@
-import React from "react";
-import { useD3 } from '../hooks/useD3';
 import * as d3 from 'd3';
+import { useState } from 'react';
+import { clamp } from '../helpers/Math.helper';
 
-export default function RadialBar(props) {
-	const data = {
-		name: 'XP',
-		value: props.value ? props.value : 50000,
-		maxValue: props.max ? props.max : 100000,
-		interval: props.ivl ? Math.max(props.ivl, 0) : 0
-	};
-	const size = props.size ? props.size : 192;
-	const arcWidth = props.thickness ? Math.min(props.thickness, size) : 64;
-	const delay = props.delay ? Math.max(props.delay, 0) : 0;
 
-	const arcCornerRadius = props.corner ? Math.max(props.corner, 0) : 2;
+const offset = { x:12, y:0 }
 
-	const ref = useD3(
-		(svg) => {
-			const PI = Math.PI;
-			const outerRadius = size/2;
-			const innerRadius = outerRadius-arcWidth;
 
-			let svg2 = svg.select('.arc-container')
-				.attr('transform', 'translate(' + size / 2 + ',' + size / 2 + ')')
-				.select('.arcs');
+export default function RadialBar({ value, max, thickness, corner, label }) {
 
-			let scale = d3.scaleLinear()
-				.domain([0, data.interval>0 ? data.interval : data.maxValue])
-				.range([0, 2 * PI]);
+	const outerRadius = 64;
+	const innerRadius = thickness ? outerRadius-clamp(thickness, 0.01, 0.9)*outerRadius : 48;
+	const arcCornerRadius = corner ? Math.max(corner, 0) : 2;
+	
+	const arc = d3.arc()
+	.innerRadius(innerRadius)
+	.outerRadius(outerRadius)
+	.cornerRadius(arcCornerRadius)
+	.startAngle(0)
+	.endAngle(-2 * Math.PI * value/max)
 
-			let arcGen = d3.arc()
-				.startAngle(0)
-				.innerRadius(innerRadius)
-				.outerRadius(outerRadius)
-				.cornerRadius(arcCornerRadius);
+	const [popup, setPopup] = useState({ x:0, y:0, hidden:true });
 
-			let arcTween = (d) => {
-				return (t) => {
-					const angle = d3.interpolate(d.startAngle, d.endAngle)(t);
-					arcGen.endAngle(angle);
-					return arcGen(null);
-				}
-			}
+	const updatePopup = (e) => {
+		setPopup({ x:e.clientX+offset.x, y:e.clientY+offset.y, hidden:false });
+	}
 
-			let colTween = (d) => {
-				return (t) => {
-					const colour = d3.interpolate(64, data.value/data.maxValue*63+64)(t);
-					return `rgb(${colour},${colour},${colour})`;
-				}
-			}
+	const hidePopup = () => setPopup(Object.assign({}, popup, { hidden:true }));
 
-			let radialAxis = svg2
-				.attr('class', 'r axis')
-				.selectAll('g')
-				.data(data)
-				.enter().append('g');
-			
-			radialAxis.append('circle')
-				.attr('r', outerRadius)
-				.style('fill','none');
-
-			let arcs = svg2.append('g')
-				.attr('class', 'data')
-				.selectAll('path')
-				.data([{startAngle:0, endAngle:-scale(data.value^data.interval)}])
-				.enter().append('path')
-				.attr('class', 'arc')
-				.attr('fill', "#000")
-				//.attr('d', arcGen)
-			
-			arcs.transition()
-				.delay(delay)
-				.duration(1000)
-				.attrTween("fill", colTween)
-				.attrTween('d', arcTween);
-			
-			// arcs.on('mousemove', showTooltip)
-			// arcs.on('mouseout', hideTooltip)
-			},
-			[data.length]
-		);
-
-	  return (
-		<svg ref={ref} style={{
-			height: size,
-			width: size,
-		}}>
-			<g className='arc-container'>
-				<g className='arcs'/>
+	return (<>
+		<svg
+			className='h-full w-full'
+			viewBox="0 0 128 128"
+		>
+			<g
+				className='arc-container translate-x-16 translate-y-16'
+				onMouseMove={updatePopup}
+				onMouseLeave={hidePopup}
+			>
+				<path d={arc()} className='fill-blue-700' />
 			</g>
 		</svg>
-	  );
+		<div
+			className={`fixed rounded px-2 py-0.5 text-zinc-300 bg-black/75 ${popup.hidden ? 'hidden' : ''}`}
+			style={{left:popup.x, top:popup.y}}>
+				{`${value} ${label}`}
+		</div>
+	</>);
 }
