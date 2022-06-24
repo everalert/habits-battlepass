@@ -14,6 +14,10 @@ import GoalProgressGraph from './goal/GoalProgressGraph.module'
 import StatPar from './stat/StatPar.module'
 import StatTaskProgress from './stat/StatTaskProgress.module'
 import TaskChallenge from './task/TaskChallenge.module'
+import { useSpring, animated } from '@react-spring/web'
+
+
+const AnimatedStatPar = animated(StatPar);
 
 
 const mapStateToProps = (state, ownProps) => {
@@ -43,7 +47,6 @@ const mapStateToProps = (state, ownProps) => {
 		goalLagValue: lagResult.value,
 		goalLagUnit: lagResult.unit,
 		goalLagProjectedResultDeltaRaw: lagProjectedResultDeltaRaw,
-		goalLagProjectedResultDelta: FormatActivityValue(lagActivity, lagProjectedResultDeltaRaw, undefined, false).value,
 		goalLagProjectedDir: lagProjectedResult-goal.goalLagStartValue,
 		goalProjectedXpDelta: goal.currentXP-goalProjectedXp,
 		...ownProps,
@@ -59,10 +62,9 @@ function GoalPanel({
 		goalDailyTasks,
 		goalWeeklyTasks,
 		goalLagActivity,
-		goalLagValue,
+		goalLagResultRaw,
 		goalLagUnit,
 		goalLagProjectedResultDeltaRaw,
-		goalLagProjectedResultDelta,
 		goalLagProjectedDir,
 		goalProjectedXpDelta }) {
 	
@@ -73,6 +75,14 @@ function GoalPanel({
 		{ label:'WEEKLY', tasks:goalWeeklyTasks, period:weekOfSeason },
 	]
 
+	const { aXpAbs, aXpRel, aLagAbs, aLagRel, aLagDir } = useSpring({
+		aXpAbs: goal.currentXP,
+		aXpRel: goalProjectedXpDelta,
+		aLagAbs: goalLagResultRaw,
+		aLagRel: goalLagProjectedResultDeltaRaw,
+		aLagDir: goalLagProjectedDir
+	})
+
 	return (
 		<div className='relative w-[19rem] overflow-hidden'>
 			<GoalPanelHeader goal={goal} lagActivity={goalLagActivity} />
@@ -82,8 +92,22 @@ function GoalPanel({
 			</div>
 			<div className="grid grid-cols-2 gap-y-4 px-4 py-8 group relative">
 				<InputQuickLog activity={goalLagActivity} variation={goal.goalLagActivityVariation} />
-				<StatPar abs={goal.currentXP} rel={goalProjectedXpDelta} relRaw={goalProjectedXpDelta} relDir={1} unit='XP' />
-				<StatPar abs={goalLagValue} rel={goalLagProjectedResultDelta} relRaw={goalLagProjectedResultDeltaRaw} relDir={goalLagProjectedDir} unit={goalLagUnit} />
+				<AnimatedStatPar
+					abs={aXpAbs}
+					absDecimals={0}
+					rel={aXpRel}
+					relRaw={aXpRel}
+					relDir={1}
+					relDecimals={0}
+					unit='XP' />
+				<AnimatedStatPar
+					abs={aLagAbs.to(x => FormatActivityValue(goalLagActivity, x, undefined, false, 1).value)}
+					absDecimals={1}
+					rel={aLagRel.to(x => FormatActivityValue(goalLagActivity, x, undefined, false, 1).value)}
+					relRaw={aLagRel}
+					relDir={aLagDir}
+					relDecimals={1}
+					unit={goalLagUnit} />
 				<StatTaskProgress label={`DAY ${dayOfSeason.no}`} challenges={goalDailyTasks} timestamp={timestamp} />
 				<StatTaskProgress label={`WEEK ${weekOfSeason.no}`} challenges={goalWeeklyTasks} timestamp={timestamp} />
 			</div>

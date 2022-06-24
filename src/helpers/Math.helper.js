@@ -43,8 +43,8 @@ export function RoundN(number, n) {
 	return parseFloat(number.toFixed(n))
 }
 
-export function FormatNumber(number) {
-	return number.toLocaleString(undefined);
+export function FormatNumber(number, decimals = 0) {
+	return number.toLocaleString(undefined, {minimumFractionDigits: decimals, maximumFractionDigits: decimals});
 }
 
 export function strPadZero(n, len, str = '0') {

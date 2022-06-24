@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import { useState } from 'react';
 import { clamp } from '../helpers/Math.helper';
+import { useSpring, animated } from '@react-spring/web'
 
 
 const offset = { x:12, y:0 }
@@ -8,16 +9,20 @@ const offset = { x:12, y:0 }
 
 export default function RadialBar({ value, max, thickness, corner, label }) {
 
+	const { completion } = useSpring({ completion: value/max })
+
 	const outerRadius = 64;
 	const innerRadius = thickness ? outerRadius-clamp(thickness, 0.01, 0.9)*outerRadius : 48;
 	const arcCornerRadius = corner ? Math.max(corner, 0) : 2;
 	
-	const arc = d3.arc()
-	.innerRadius(innerRadius)
-	.outerRadius(outerRadius)
-	.cornerRadius(arcCornerRadius)
-	.startAngle(0)
-	.endAngle(-2 * Math.PI * value/max)
+	const arc = (completion) => { 
+		return d3.arc()
+			.innerRadius(innerRadius)
+			.outerRadius(outerRadius)
+			.cornerRadius(arcCornerRadius)
+			.startAngle(0)
+			.endAngle(-2 * Math.PI * (completion%1))()
+	}
 
 	const [popup, setPopup] = useState({ x:0, y:0, hidden:true });
 
@@ -37,7 +42,7 @@ export default function RadialBar({ value, max, thickness, corner, label }) {
 				onMouseMove={updatePopup}
 				onMouseLeave={hidePopup}
 			>
-				<path d={arc()} className='fill-blue-700' />
+				<animated.path d={completion.to(x => { return arc(x) })} className='fill-blue-700'/>
 			</g>
 		</svg>
 		<div
