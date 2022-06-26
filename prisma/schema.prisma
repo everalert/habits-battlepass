@@ -1,0 +1,120 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "cockroachdb"
+    url      = env("DATABASE_URL")
+}
+
+model Category {
+    id          String  @id @default(cuid())
+    name        String
+    icon        String
+    description String?
+    goals       Goal[]
+}
+
+model Season {
+    id           String   @id @default(cuid())
+    start        DateTime @default(now())
+    length       Int      @default(7862400) // 91 days
+    title        String
+    description  String?
+    levelGoal    Int      @default(100)
+    levelMax     Int
+    levelXP      Int      @default(10000)
+    currentXP    Int      @default(0)
+    currentLevel Int      @default(0)
+    color1       String?
+    color2       String?
+    rewards      Reward[]
+    goals        Goal[]
+}
+
+model Goal {
+    id                 String                 @id @default(cuid())
+    season             Season                 @relation(fields: [seasonId], references: [id])
+    seasonId           String
+    category           Category               @relation(fields: [categoryId], references: [id])
+    categoryId         String
+    lagActivity        ActivityVariationCombo @relation(fields: [lagActivityId], references: [id])
+    lagActivityId      String
+    lagStartValue      Float
+    lagEndValue        Float
+    lagProjectionCurve String?
+    note               String?
+    currentXP          Int                    @default(0)
+    seasonXpRatio      Float                  @default(0.25)
+    challenges         Challenge[]
+}
+
+model Challenge {
+    id         String                 @id @default(cuid())
+    goal       Goal                   @relation(fields: [goalId], references: [id])
+    goalId     String
+    activity   ActivityVariationCombo @relation(fields: [activityId], references: [id])
+    activityId String
+    label      String                 @default("{UNIT} of {ACTIVITY}")
+    target     Float
+    taskXP     Int
+    period     String
+    isTemplate Boolean                @default(true)
+    note       String?
+}
+
+model Activity {
+    id              String                   @id @default(cuid())
+    unit            ActivityUnit             @relation(fields: [unitId], references: [id])
+    unitId          String
+    label           String
+    isCumulative    Boolean                  @default(true)
+    note            String?
+    variations      ActivityVariation[]
+    variationCombos ActivityVariationCombo[]
+}
+
+model Log {
+    id         String                 @id @default(cuid())
+    activity   ActivityVariationCombo @relation(fields: [activityId], references: [id])
+    activityId String
+    timestamp  DateTime               @default(now())
+    value      Float
+    note       String?
+}
+
+model Reward {
+    id        String  @id @default(cuid())
+    season    Season  @relation(fields: [seasonId], references: [id])
+    seasonId  String
+    label     String
+    level     Int
+    isClaimed Boolean @default(false)
+    note      String?
+}
+
+model ActivityUnit {
+    id       String     @id @default(cuid())
+    type     String
+    unit     String?
+    activity Activity[]
+}
+
+model ActivityVariation {
+    id             String                   @id @default(cuid())
+    label          String
+    activity       Activity                 @relation(fields: [activityId], references: [id])
+    activityId     String
+    activityCombos ActivityVariationCombo[]
+}
+
+model ActivityVariationCombo {
+    id          String            @id @default(cuid())
+    activity    Activity          @relation(fields: [activityId], references: [id])
+    activityId  String
+    variation   ActivityVariation @relation(fields: [variationId], references: [id])
+    variationId String
+    goals       Goal[]
+    logs        Log[]
+    challenges  Challenge[]
+}
