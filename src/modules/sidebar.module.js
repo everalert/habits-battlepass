@@ -1,4 +1,4 @@
-import { ClipboardCheckIcon, DocumentAddIcon, DocumentDownloadIcon, DotsCircleHorizontalIcon, HomeIcon, MenuIcon, PlusCircleIcon } from '@heroicons/react/solid';
+import { ClipboardCheckIcon, DocumentAddIcon, DocumentDownloadIcon, DotsCircleHorizontalIcon, HomeIcon, MenuIcon, PlusCircleIcon, UserAddIcon } from '@heroicons/react/solid';
 import { useState } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { ExportDataToODS, ImportDataFromODS } from '../helpers/ODS.helper';
@@ -6,6 +6,7 @@ import { applyGoalXP } from '../redux/data/Data.slice';
 import { replaceRecords } from '../redux/data/Data.slice';
 import DialogAddEntry from './dialog/DialogAddEntry.module';
 import DialogEditEntry from './dialog/DialogEditEntry.module';
+import DialogUserAdd from './dialog/DialogUserAdd.module';
 
 const mapStateToProps = (state) => {
 	return {
@@ -33,6 +34,8 @@ const Sidebar = ({data, bases}) => {
 	const [addDialogOpen, setAddDialogOpen] = useState(false);
 	const [editDialogOpen, setEditDialogOpen] = useState(false);
 
+	const [addUserDialogOpen, setAddUserDialogOpen] = useState(false);
+
 	const dispatch = useDispatch();
 
 	const onDragOver = (e) => {
@@ -58,11 +61,13 @@ const Sidebar = ({data, bases}) => {
 				<DotsCircleHorizontalIcon className='w-8 h-8 hover:cursor-pointer' onClick={()=>setEditDialogOpen(true)}/>
 			</div>
 			<div className='bg-red-900/25 rounded-lg p-1 flex flex-col gap-1'>
+				<UserAddIcon className='w-8 h-8 hover:cursor-pointer'  onClick={()=>setAddUserDialogOpen(true)}/>
 				<DocumentAddIcon className='w-8 h-8' onDrop={onDrop} onDragOver={onDragOver}/>
 				<DocumentDownloadIcon className='w-8 h-8 hover:cursor-pointer' onClick={()=>ExportDataToODS(data)}/>
 			</div>
 			<DialogAddEntry isOpen={addDialogOpen} setIsOpen={setAddDialogOpen} />
 			<DialogEditEntry isOpen={editDialogOpen} setIsOpen={setEditDialogOpen} />
+			<DialogUserAdd isOpen={addUserDialogOpen} setIsOpen={setAddUserDialogOpen} />
 		</nav>
 	)
 }
