@@ -48,7 +48,7 @@ export default function RadialBar({ value, max, thickness, corner, label }) {
 		<div
 			className={`fixed rounded px-2 py-0.5 text-zinc-300 bg-black/75 ${popup.hidden ? 'hidden' : ''}`}
 			style={{left:popup.x, top:popup.y}}>
-				{`${value} ${label}`}
+				{`${value%max} ${label}`}
 		</div>
 	</>);
 }
