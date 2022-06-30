@@ -21,7 +21,7 @@ export default function DialogUserAdd({ isOpen, setIsOpen }) {
 		e.preventDefault()
 		try {
 			const body = { username, password, email }
-			const res = await fetch(`/api/user/new`, {
+			const res = await fetch(`/api/user`, {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify(body),
@@ -34,14 +34,6 @@ export default function DialogUserAdd({ isOpen, setIsOpen }) {
 		resetForm();
 		// setParentOpen(false);
 	}
-
-	// const submitForm = (event) => {
-	// 	event.preventDefault();
-	// 	const { user, error } = useSWR(`/api/user/create`)
-	// 	setId(id);
-	// 	resetForm();
-	// 	// setParentOpen(false);
-	// }
 
 	return (
 		<Dialog open={isOpen} onClose={setIsOpen}>
