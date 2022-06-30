@@ -8,16 +8,16 @@ datasource db {
 }
 
 model User {
-    id          String     @id @default(cuid())
-    username    String     @unique
-    password    String
-    email       String     @unique
+    id         String     @id @default(cuid())
+    username   String     @unique
+    password   String
+    email      String     @unique
     // loginKey    String?
     // loginExpiry DateTime?
-    seasons     Season[]
-    logs        Log[]
-    categories  Category[]
-    activities  Activity[]
+    seasons    Season[]
+    logs       Log[]
+    categories Category[]
+    activities Activity[]
 }
 
 model Category {
@@ -82,8 +82,8 @@ model Challenge {
 
 model Activity {
     id              String                   @id @default(cuid())
-    unit            ActivityUnit             @relation(fields: [unitId], references: [id])
-    unitId          String
+    unit            ActivityUnit?            @relation(fields: [unitId], references: [id])
+    unitId          String?
     label           String
     isCumulative    Boolean                  @default(true)
     note            String?
@@ -117,7 +117,7 @@ model Reward {
 model ActivityUnit {
     id       String     @id @default(cuid())
     type     String
-    unit     String?
+    unit     String     @unique
     activity Activity[]
 }
 
@@ -127,6 +127,8 @@ model ActivityVariation {
     activity       Activity                 @relation(fields: [activityId], references: [id])
     activityId     String
     activityCombos ActivityVariationCombo[]
+
+    @@unique(fields: [activityId, label])
 }
 
 model ActivityVariationCombo {
@@ -138,4 +140,6 @@ model ActivityVariationCombo {
     goals       Goal[]
     logs        Log[]
     challenges  Challenge[]
+
+    @@unique(fields: [activityId, variationId])
 }
