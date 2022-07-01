@@ -13,13 +13,13 @@ const reducers = {
 }
 
 
-export const MetaSlice = createSlice({
-	name: 'Meta',
+export const UISlice = createSlice({
+	name: 'UI',
 	initialState,
 	reducers
 })
 
-export const { incRenderTick } = MetaSlice.actions
+export const { incRenderTick } = UISlice.actions
 
 
-export default MetaSlice.reducer
+export default UISlice.reducer

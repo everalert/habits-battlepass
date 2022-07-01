@@ -3,7 +3,7 @@ import Scoreboard from '../src/modules/Scoreboard.module'
 import { connect, useDispatch } from 'react-redux'
 import { ImportDataFromODS, SourceToODS } from '../src/helpers/ODS.helper'
 import { replaceRecords } from '../src/redux/data/Data.slice'
-import { incRenderTick } from '../src/redux/meta/Meta.slice'
+import { incRenderTick } from '../src/redux/ui/UI.slice'
 import { useEffect } from 'react'
 
 
