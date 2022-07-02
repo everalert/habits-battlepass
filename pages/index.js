@@ -1,15 +1,17 @@
-import Sidebar from '../src/modules/Sidebar.module'
-import Scoreboard from '../src/modules/Scoreboard.module'
+import { useEffect } from 'react'
 import { connect, useDispatch } from 'react-redux'
 import { ImportDataFromODS, SourceToODS } from '../src/helpers/ODS.helper'
+import Login from '../src/modules/Login.module'
+import Scoreboard from '../src/modules/Scoreboard.module'
+import Sidebar from '../src/modules/Sidebar.module'
 import { replaceRecords } from '../src/redux/data/Data.slice'
 import { incRenderTick } from '../src/redux/ui/UI.slice'
-import { useEffect } from 'react'
 
 
 const mapStateToProps = (state) => {
 	const season = state.data.season.seasons[state.data.season.active];
 	return {
+		isLoggedIn: state.data.login !== null,
 		seasonId: season ? season.id : -1,
 		bases: {
 			seasons: state.data.season.base,
@@ -23,7 +25,7 @@ const mapStateToProps = (state) => {
 }
 
 
-function Home({ seasonId, bases }) {
+function Home({ isLoggedIn, seasonId, bases }) {
 
 	const dispatch = useDispatch();
 
@@ -40,8 +42,9 @@ function Home({ seasonId, bases }) {
 		});
 
 	return (
-		<div>
-			{ seasonId >= 0 && <Scoreboard seasonId={seasonId} />}
+		<div className='mx-auto my-8'>
+			{ isLoggedIn && seasonId >= 0 && <Scoreboard seasonId={seasonId} /> }
+			{ !isLoggedIn && <Login/> }
 			<Sidebar/>
 		</div>
 	)

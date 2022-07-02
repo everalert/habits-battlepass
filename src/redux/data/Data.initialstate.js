@@ -2,6 +2,7 @@ import { GetCurrentUnixTimestamp } from "../../helpers/Math.helper";
 
 
 export default {
+	login: null,
 	season: {
 		active: 0,
 		opts: {},

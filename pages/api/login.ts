@@ -9,30 +9,17 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
 		case 'POST':
 			handlePOST(req, res);
 			return;
-		case 'GET':
-			handleGET(req, res);
-			return;
 		default:
 			throw new Error(`HTTP ${req.method} method is not supported at this route.`)
 	}
 }
 
 async function handlePOST(req: NextApiRequest, res: NextApiResponse) {
-	const { username, password, email } = req.body;
-	const hash = bcryptjs.hashSync(password, bcryptjs.genSaltSync())
-	const create = await prisma.user.create({
-		data: {
-			username: username,
-			password: hash,
-			email: email,
-		},
-	})
-	res.json(create);
-}
-
-async function handleGET(req: NextApiRequest, res: NextApiResponse) {
-	const { id, username, email } = req.query;
+	const { id, username, password, email } = req.body;
 	const where: Object | null = id ? { id } : username ? { username } : email ? { email } : { id:'' };
 	const getUser: User | null  = await prisma.user.findUnique({ where });
-	res.json(getUser);
+	if (getUser !== null && bcryptjs.compareSync(password as string, getUser.password))
+		res.json(getUser);
+	else
+		res.json({ id:null });
 }

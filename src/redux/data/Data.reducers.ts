@@ -28,6 +28,13 @@ function updateChallengeProgress(state, { logDelta, logActivityId, logVariation,
 
 export default {
 
+	login: (state, action) => {
+		state.login = action.payload.user
+	},
+	logout: (state) => {
+		state.login = null
+	},
+
 	replaceRecords: (state, action) => {
 		state.season.seasons = action.payload.seasons;
 		state.category.categories = action.payload.categories;

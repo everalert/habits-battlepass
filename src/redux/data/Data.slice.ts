@@ -10,6 +10,7 @@ export const DataSlice = createSlice({
 })
 
 export const { 
+	login, logout,
 	replaceRecords, setActiveSeason,
 	addSeason, addCategory, addGoal, addActivity, addChallenge, addLog,
 	editSeason, editCategory, editGoal, editActivity, editChallenge, editLog,
