@@ -117,8 +117,10 @@ model Reward {
 model ActivityUnit {
     id       String     @id @default(cuid())
     type     String
-    unit     String     @unique
+    unit     String?
     activity Activity[]
+
+    @@unique(fields: [type, unit])
 }
 
 model ActivityVariation {
