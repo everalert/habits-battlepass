@@ -23,11 +23,13 @@ model User {
 model Category {
     id          String  @id @default(cuid())
     name        String
-    icon        String
+    icon        String?
     description String?
     user        User    @relation(fields: [userId], references: [id])
     userId      String
     goals       Goal[]
+
+    @@unique(fields: [userId, name])
 }
 
 model Season {
@@ -37,7 +39,7 @@ model Season {
     title        String
     description  String?
     levelGoal    Int      @default(100)
-    levelMax     Int
+    levelMax     Int      @default(120)
     levelXP      Int      @default(10000)
     currentXP    Int      @default(0)
     currentLevel Int      @default(0)
@@ -47,6 +49,8 @@ model Season {
     userId       String
     rewards      Reward[]
     goals        Goal[]
+
+    @@unique([userId, start, length])
 }
 
 model Goal {
@@ -62,8 +66,10 @@ model Goal {
     lagProjectionCurve String?
     note               String?
     currentXP          Int                    @default(0)
-    seasonXpRatio      Float                  @default(0.25)
+    seasonXPWeight     Float                  @default(1)
     challenges         Challenge[]
+
+    @@unique([lagActivityId, seasonId])
 }
 
 model Challenge {
@@ -78,6 +84,8 @@ model Challenge {
     period     String
     isTemplate Boolean                @default(true)
     note       String?
+
+    @@unique([goalId, activityId, target])
 }
 
 model Activity {
@@ -86,11 +94,14 @@ model Activity {
     unitId          String?
     label           String
     isCumulative    Boolean                  @default(true)
+    type            String? //primary,secondary,padding
     note            String?
     user            User                     @relation(fields: [userId], references: [id])
     userId          String
     variations      ActivityVariation[]
     variationCombos ActivityVariationCombo[]
+
+    @@unique([userId, label])
 }
 
 model Log {
@@ -102,6 +113,8 @@ model Log {
     timestamp  DateTime               @default(now())
     value      Float
     note       String?
+
+    @@unique([userId, activityId, timestamp])
 }
 
 model Reward {
@@ -112,6 +125,8 @@ model Reward {
     level     Int
     isClaimed Boolean @default(false)
     note      String?
+
+    @@unique([seasonId, label])
 }
 
 model ActivityUnit {
@@ -134,11 +149,11 @@ model ActivityVariation {
 }
 
 model ActivityVariationCombo {
-    id          String            @id @default(cuid())
-    activity    Activity          @relation(fields: [activityId], references: [id])
+    id          String             @id @default(cuid())
+    activity    Activity           @relation(fields: [activityId], references: [id])
     activityId  String
-    variation   ActivityVariation @relation(fields: [variationId], references: [id])
-    variationId String
+    variation   ActivityVariation? @relation(fields: [variationId], references: [id])
+    variationId String?
     goals       Goal[]
     logs        Log[]
     challenges  Challenge[]
