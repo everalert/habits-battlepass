@@ -7,6 +7,8 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+
+
 model User {
     id         String     @id @default(cuid())
     username   String     @unique
@@ -20,17 +22,21 @@ model User {
     activities Activity[]
 }
 
+
+
 model Category {
     id          String  @id @default(cuid())
     name        String
     icon        String?
     description String?
-    user        User    @relation(fields: [userId], references: [id])
+    user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId      String
     goals       Goal[]
 
     @@unique([userId, name])
 }
+
+
 
 model Season {
     id           String   @id @default(cuid())
@@ -45,7 +51,7 @@ model Season {
     currentLevel Int      @default(0)
     color1       String?
     color2       String?
-    user         User     @relation(fields: [userId], references: [id])
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId       String
     rewards      Reward[]
     goals        Goal[]
@@ -53,15 +59,25 @@ model Season {
     @@unique([userId, start, length])
 }
 
-enum GoalProjectionCurve {
-    LINEAR
+model Reward {
+    id        String  @id @default(cuid())
+    season    Season  @relation(fields: [seasonId], references: [id], onDelete: Cascade)
+    seasonId  String
+    label     String
+    level     Int
+    isClaimed Boolean @default(false)
+    note      String?
+
+    @@unique([seasonId, label])
 }
+
+
 
 model Goal {
     id                 String                 @id @default(cuid())
-    season             Season                 @relation(fields: [seasonId], references: [id])
+    season             Season                 @relation(fields: [seasonId], references: [id], onDelete: Cascade)
     seasonId           String
-    category           Category               @relation(fields: [categoryId], references: [id])
+    category           Category               @relation(fields: [categoryId], references: [id], onDelete: Cascade)
     categoryId         String
     lagActivity        ActivityVariationCombo @relation(fields: [lagActivityId], references: [id])
     lagActivityId      String
@@ -76,11 +92,17 @@ model Goal {
     @@unique([lagActivityId, seasonId])
 }
 
+enum GoalProjectionCurve {
+    LINEAR
+}
+
+
+
 model Challenge {
     id           String                 @id @default(cuid())
-    goal         Goal                   @relation(fields: [goalId], references: [id])
+    goal         Goal                   @relation(fields: [goalId], references: [id], onDelete: Cascade)
     goalId       String
-    activity     ActivityVariationCombo @relation(fields: [activityId], references: [id])
+    activity     ActivityVariationCombo @relation(fields: [activityId], references: [id], onDelete: Cascade)
     activityId   String
     label        String                 @default("{UNIT} of {ACTIVITY}")
     target       Float
@@ -93,6 +115,14 @@ model Challenge {
     @@unique([goalId, activityId, target])
 }
 
+enum ChallengePeriod {
+    DAILY
+    WEEKLY
+    CUSTOM
+}
+
+
+
 model Activity {
     id              String                   @id @default(cuid())
     unit            ActivityUnit?            @relation(fields: [unitId], references: [id])
@@ -101,43 +131,12 @@ model Activity {
     isCumulative    Boolean                  @default(true)
     type            ActivityType? //primary,secondary,padding
     note            String?
-    user            User                     @relation(fields: [userId], references: [id])
+    user            User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
     userId          String
     variations      ActivityVariation[]
     variationCombos ActivityVariationCombo[]
 
     @@unique([userId, label])
-}
-
-model Log {
-    id         String                 @id @default(cuid())
-    user       User                   @relation(fields: [userId], references: [id])
-    userId     String
-    activity   ActivityVariationCombo @relation(fields: [activityId], references: [id])
-    activityId String
-    timestamp  DateTime               @default(now())
-    value      Float
-    note       String?
-
-    @@unique([userId, activityId, timestamp])
-}
-
-model Reward {
-    id        String  @id @default(cuid())
-    season    Season  @relation(fields: [seasonId], references: [id])
-    seasonId  String
-    label     String
-    level     Int
-    isClaimed Boolean @default(false)
-    note      String?
-
-    @@unique([seasonId, label])
-}
-
-enum ChallengePeriod {
-    DAILY
-    WEEKLY
-    CUSTOM
 }
 
 enum ActivityType {
@@ -158,7 +157,7 @@ model ActivityUnit {
 model ActivityVariation {
     id             String                   @id @default(cuid())
     label          String
-    activity       Activity                 @relation(fields: [activityId], references: [id])
+    activity       Activity                 @relation(fields: [activityId], references: [id], onDelete: Cascade)
     activityId     String
     activityCombos ActivityVariationCombo[]
 
@@ -167,13 +166,28 @@ model ActivityVariation {
 
 model ActivityVariationCombo {
     id          String             @id @default(cuid())
-    activity    Activity           @relation(fields: [activityId], references: [id])
+    activity    Activity           @relation(fields: [activityId], references: [id], onDelete: Cascade)
     activityId  String
-    variation   ActivityVariation? @relation(fields: [variationId], references: [id])
+    variation   ActivityVariation? @relation(fields: [variationId], references: [id], onDelete: Cascade)
     variationId String?
     goals       Goal[]
     logs        Log[]
     challenges  Challenge[]
 
     @@unique([activityId, variationId])
+}
+
+
+
+model Log {
+    id         String                 @id @default(cuid())
+    user       User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    userId     String
+    activity   ActivityVariationCombo @relation(fields: [activityId], references: [id], onDelete: Cascade)
+    activityId String
+    timestamp  DateTime               @default(now())
+    value      Float
+    note       String?
+
+    @@unique([userId, activityId, timestamp])
 }
