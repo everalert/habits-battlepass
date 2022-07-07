@@ -77,17 +77,18 @@ model Goal {
 }
 
 model Challenge {
-    id         String                 @id @default(cuid())
-    goal       Goal                   @relation(fields: [goalId], references: [id])
-    goalId     String
-    activity   ActivityVariationCombo @relation(fields: [activityId], references: [id])
-    activityId String
-    label      String                 @default("{UNIT} of {ACTIVITY}")
-    target     Float
-    taskXP     Int
-    period     String
-    isTemplate Boolean                @default(true)
-    note       String?
+    id           String                 @id @default(cuid())
+    goal         Goal                   @relation(fields: [goalId], references: [id])
+    goalId       String
+    activity     ActivityVariationCombo @relation(fields: [activityId], references: [id])
+    activityId   String
+    label        String                 @default("{UNIT} of {ACTIVITY}")
+    target       Float
+    xp           Int
+    period       ChallengePeriod        @default(DAILY)
+    customPeriod Int?
+    isTemplate   Boolean                @default(true)
+    note         String?
 
     @@unique([goalId, activityId, target])
 }
@@ -98,7 +99,7 @@ model Activity {
     unitId          String?
     label           String
     isCumulative    Boolean                  @default(true)
-    type            String? //primary,secondary,padding
+    type            ActivityType? //primary,secondary,padding
     note            String?
     user            User                     @relation(fields: [userId], references: [id])
     userId          String
@@ -131,6 +132,18 @@ model Reward {
     note      String?
 
     @@unique([seasonId, label])
+}
+
+enum ChallengePeriod {
+    DAILY
+    WEEKLY
+    CUSTOM
+}
+
+enum ActivityType {
+    PRIMARY
+    SECONDARY
+    PADDING
 }
 
 model ActivityUnit {
