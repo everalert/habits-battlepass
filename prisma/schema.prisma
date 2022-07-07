@@ -29,7 +29,7 @@ model Category {
     userId      String
     goals       Goal[]
 
-    @@unique(fields: [userId, name])
+    @@unique([userId, name])
 }
 
 model Season {
@@ -53,6 +53,10 @@ model Season {
     @@unique([userId, start, length])
 }
 
+enum GoalProjectionCurve {
+    LINEAR
+}
+
 model Goal {
     id                 String                 @id @default(cuid())
     season             Season                 @relation(fields: [seasonId], references: [id])
@@ -63,7 +67,7 @@ model Goal {
     lagActivityId      String
     lagStartValue      Float
     lagEndValue        Float
-    lagProjectionCurve String?
+    lagProjectionCurve GoalProjectionCurve    @default(LINEAR)
     note               String?
     currentXP          Int                    @default(0)
     seasonXPWeight     Float                  @default(1)
@@ -135,7 +139,7 @@ model ActivityUnit {
     unit     String?
     activity Activity[]
 
-    @@unique(fields: [type, unit])
+    @@unique([type, unit])
 }
 
 model ActivityVariation {
@@ -145,7 +149,7 @@ model ActivityVariation {
     activityId     String
     activityCombos ActivityVariationCombo[]
 
-    @@unique(fields: [activityId, label])
+    @@unique([activityId, label])
 }
 
 model ActivityVariationCombo {
@@ -158,5 +162,5 @@ model ActivityVariationCombo {
     logs        Log[]
     challenges  Challenge[]
 
-    @@unique(fields: [activityId, variationId])
+    @@unique([activityId, variationId])
 }
